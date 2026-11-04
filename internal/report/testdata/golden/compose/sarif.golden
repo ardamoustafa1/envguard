@@ -1,0 +1,633 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "EnvGuard",
+          "version": "test",
+          "informationUri": "https://github.com/ardamoustafa1/envguard",
+          "rules": [
+            {
+              "id": "EG001",
+              "name": "missing-variable",
+              "shortDescription": {
+                "text": "A variable declared in a template or required by the schema is missing from an environment's real env file."
+              },
+              "fullDescription": {
+                "text": "A variable declared in a template or required by the schema is missing from an environment's real env file. Anything that reads the variable in that environment gets no value. That usually fails only at runtime, or silently falls back to a default."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md",
+              "help": {
+                "text": "A variable declared in a template or required by the schema is missing from an environment's real env file. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md",
+                "markdown": "# EG001 missing-variable\n\n**Default severity:** error\n\nA variable declared in a template or required by the schema is missing from an environment's real env file.\n\n## What it detects\n\nEach real env file is compared with the templates that apply to its\nenvironment: the app's default templates (`.env.example`, `.env.sample`, ...)\nplus the environment's own templates (`.env.production.example`).\n\n- A template variable is *required* if the template gives it a non-empty\n  value, or if its line is not marked `# optional`. Only `KEY= # optional`\n  declares an optional variable, and EG001 skips those.\n- A schema variable with `required: true` is required in the environments it\n  lists (all if none), in app roots that reference it and in the root app.\n  Template-based findings come first; a schema finding is not duplicated.\n- Local override files (`.env.local`, `.env.production.local`) are skipped,\n  and so are environments without a real file: a missing `.env` is never\n  reported.\n- With `--process-env`, the process environment is checked instead of the\n  env files.\n\n## Why it matters\n\nAnything that reads the variable in that environment gets no value. That\nusually fails only at runtime, or silently falls back to a default.\n\n## Bad example\n\n```dotenv\n# .env.example\nDATABASE_URL=\nLOG_LEVEL= # optional\n```\n\n```dotenv\n# .env.production\nLOG_LEVEL=info\n```\n\n```text\n.env.production\n  ✗ error    EG001  DATABASE_URL is declared in .env.example but missing from .env.production\n```\n\n## Good example\n\n```dotenv\n# .env.production\nDATABASE_URL=postgres://db.internal/app\nLOG_LEVEL=info\n```\n\n## How to fix\n\n1. Add the variable to the env file named in the finding (`DATABASE_URL=`)\n   and set its value.\n2. If the variable is not needed there, mark it optional in the template\n   (`DATABASE_URL= # optional`), or narrow `environments:` of the schema\n   variable.\n\n## How to suppress\n\nThe finding lists the template declaration as a related location, so an\ninline directive on the line above the declaration in the template silences\nit for every env file:\n\n```dotenv\n# .env.example\n# envguard-ignore EG001 -- only set in production\nSENTRY_DSN=\n```\n\nA file-level `# envguard-ignore-file EG001` in the real env file (or in the\ntemplate) silences the rule for that file. In `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG001: warning   # or info, or off\nignore:\n  - rule: EG001\n    path: \".env.development\"\n    variable: SENTRY_DSN\n    reason: error reporting is disabled in development\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG002",
+              "name": "undocumented-variable",
+              "shortDescription": {
+                "text": "A real env file sets a variable that no template or schema documents."
+              },
+              "fullDescription": {
+                "text": "A real env file sets a variable that no template or schema documents. Teammates, CI and deploy targets learn which variables exist from the templates. An undocumented variable is missing wherever the local file is not copied."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md",
+              "help": {
+                "text": "A real env file sets a variable that no template or schema documents. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md",
+                "markdown": "# EG002 undocumented-variable\n\n**Default severity:** warning\n\nA real env file sets a variable that no template or schema documents.\n\n## What it detects\n\n- A variable in a real env file (`.env`, `.env.production`, ...) counts as\n  documented if any template of the same app root, or of an enclosing app\n  root (for example a shared `.env.example` at the root of a monorepo),\n  declares it, or if `.envguard.yaml` declares it under `variables:`.\n- When the app has no template at all, the file is reported once\n  (\"defines N variables but no template documents them\") instead of once per\n  variable, and the fix contains a starter template.\n\n## Why it matters\n\nTeammates, CI and deploy targets learn which variables exist from the\ntemplates. An undocumented variable is missing wherever the local file is not\ncopied.\n\n## Bad example\n\n```dotenv\n# .env.example\nDATABASE_URL=\n```\n\n```dotenv\n# .env\nDATABASE_URL=postgres://localhost/app\nFEATURE_FLAG=on\n```\n\n```text\n.env\n  2:1  ⚠ warning  EG002  FEATURE_FLAG is set in .env but not documented in any template\n```\n\n## Good example\n\n```dotenv\n# .env.example\nDATABASE_URL=\nFEATURE_FLAG=\n```\n\n## How to fix\n\n1. Add `KEY=` to the template, with an empty or placeholder value, never the\n   real one.\n2. Or remove the variable from the env file if nothing uses it.\n\n## How to suppress\n\nPut an inline directive on the line above the variable in the real env file,\nor a file-level directive anywhere in it:\n\n```dotenv\n# .env\n# envguard-ignore EG002 -- personal debugging switch\nMY_LOCAL_FLAG=1\n```\n\n```dotenv\n# envguard-ignore-file EG002\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG002: info   # or warning, or off\nignore:\n  - rule: EG002\n    path: \".env.local\"\n    variable: MY_LOCAL_FLAG\n    reason: developer-only setting\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG003",
+              "name": "used-but-undeclared",
+              "shortDescription": {
+                "text": "The code reads an environment variable that no env file, template, schema, Compose file or workflow declares."
+              },
+              "fullDescription": {
+                "text": "The code reads an environment variable that no env file, template, schema, Compose file or workflow declares. Nothing tells a new teammate, a CI job or a fresh deploy target that the variable must be set, so the code reads an empty value at runtime. When the code has a default, nothing breaks, but the variable is invisible to anyone configuring the app and the default may be wrong for production."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md",
+              "help": {
+                "text": "The code reads an environment variable that no env file, template, schema, Compose file or workflow declares. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md",
+                "markdown": "# EG003 used-but-undeclared\n\n**Default severity:** error (info when the code has a default, or the repository declares nothing)\n\nThe code reads an environment variable that no env file, template, schema, Compose file or workflow declares.\n\n## What it detects\n\nThe scanner finds reads in JavaScript/TypeScript (`process.env.X`,\ndestructuring, `import.meta.env`, Deno, Bun), Python, Go (including\n`env:\"X\"` struct tags), Ruby, PHP, Rust, Java/Kotlin, C#, Elixir and shell\nscripts. Matches inside comments and strings are ignored.\n\n- A variable is declared if any env file or template anywhere in the\n  repository, a schema variable, a Compose definition or a workflow `env:`\n  entry declares it (repository-wide, so a monorepo can share one template).\n- One finding per app root and variable, at the first usage, with up to\n  three more usages as related locations.\n- **Severity.** `error` when the code needs the value. `info` when every\n  read is optional: it supplies a default (`|| \"x\"`, `os.getenv(\"X\", \"d\")`),\n  compares the value (`process.env.ANALYZE === \"true\"`, `os.Getenv(\"DEBUG\") == \"1\"`),\n  or uses an API that cannot fail (Laravel's `env()` returns null). Also\n  `info` when the repository declares no variable anywhere (no env file,\n  template, Compose or workflow `env:` entry, or schema): a CLI or library\n  that reads a few optional variables has nothing to disagree with, so you\n  get a suggestion to document them, not a failing build.\n- Never reported: dynamic lookups such as `process.env[name]`; names the\n  scanner only inferred (Go `envPrefix` structs); variables the OS, the shell,\n  a test runner or a platform provides (`PATH`, `HOME`, `XDG_*`, `LC_*`,\n  `EDITOR`, `CI`, `NODE_ENV`, `VITEST`, `GITHUB_*`, `VERCEL`, `VERCEL_*`,\n  `AWS_REGION`, ...; `PORT` only with a default; AWS credentials are\n  deliberately not on this list); names in `scanner.ignore_variables`.\n\n## Why it matters\n\nNothing tells a new teammate, a CI job or a fresh deploy target that the\nvariable must be set, so the code reads an empty value at runtime. When the\ncode has a default, nothing breaks, but the variable is invisible to anyone\nconfiguring the app and the default may be wrong for production.\n\n## Bad example\n\n```js\n// src/app.js\nconst db = connect(process.env.DATABASE_URL);\n```\n\n```text\nsrc/app.js\n  2:32  ✗ error    EG003  DATABASE_URL is read by the code but not declared in any env file, template or schema\n```\n\n## Good example\n\n```dotenv\n# .env.example\nDATABASE_URL=\n```\n\n## How to fix\n\n1. Add `NAME=` to the app's template (the finding names the exact file).\n   If the code works without it, write `NAME= # optional`.\n2. Set the variable in each real env file.\n3. If the platform provides it, add it to `scanner.ignore_variables`:\n\n```yaml\nversion: 1\nscanner:\n  ignore_variables: [RAILWAY_*, DYNO]\n```\n\n## How to suppress\n\nThis finding points at source code, so an inline `# envguard-ignore EG003`\nor `# envguard-ignore-file EG003` in an env file has no effect on it. Use\n`scanner.ignore_variables` (above) or `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG003: warning   # or info, or off (it is info when the read is optional)\nignore:\n  - rule: EG003\n    path: \"scripts/**\"\n    variable: DEPLOY_TOKEN\n    reason: provided by the deploy runner\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG004",
+              "name": "declared-but-unused",
+              "shortDescription": {
+                "text": "A template declares a variable that no code, env file reference, Compose file or workflow reads."
+              },
+              "fullDescription": {
+                "text": "A template declares a variable that no code, env file reference, Compose file or workflow reads. Unused variables make templates longer and send people looking for values nothing needs. They are often left over after a refactor."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG004-declared-but-unused.md",
+              "help": {
+                "text": "A template declares a variable that no code, env file reference, Compose file or workflow reads. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG004-declared-but-unused.md",
+                "markdown": "# EG004 declared-but-unused\n\n**Default severity:** info\n\nA template declares a variable that no code, env file reference, Compose file or workflow reads.\n\n## What it detects\n\nA template variable is reported when nothing reads it:\n\n- no code usage anywhere in the repository,\n- no `${VAR}` reference in an env file,\n- no Compose `environment:` entry or interpolation, and no workflow\n  reference.\n\nEG004 stays silent when it cannot know what is read:\n\n- App roots where the scanner found no env var usage at all are skipped:\n  their language is probably not supported, and every variable would look\n  unused.\n- When the code hands the whole environment to a validator\n  (`schema.parse(process.env)`, `createEnv({ runtimeEnv: process.env })`,\n  `function load(source = process.env)`), the names live in a schema, so the\n  rule is skipped in the whole repository.\n- When an app has dynamic lookups (`process.env[name]`), the finding says so,\n  because those lookups may read the variable.\n\n`envguard check --verbose` explains each skip. Variables read through a Go\n`envPrefix` struct (caarlos0/env) count as read: every name in such a file is\ncombined with every prefix of the file. django-environ calls (`env(\"X\")`,\n`env.bool(\"X\")`) are recognized in every module of an app whose dependency\nfiles name `django-environ`. Well-known platform variables and\n`scanner.ignore_variables` are never reported. Schema-only variables are not\nchecked yet.\n\n**Known blind spots** (the variable is read, but EG004 cannot see it): reads\nin Rails `config/*.yml` files through ERB (`\u003c%= ENV[\"X\"] %\u003e`), reads by a\nframework or library itself (`RAILS_MASTER_KEY`, Laravel's `BCRYPT_ROUNDS`),\nand reads in languages the scanner does not know. List such variables in\n`scanner.ignore_variables`.\n\n## Why it matters\n\nUnused variables make templates longer and send people looking for values\nnothing needs. They are often left over after a refactor.\n\n## Bad example\n\n```dotenv\n# .env.example\nDATABASE_URL=\nLEGACY_CACHE_HOST=\n```\n\n```text\n.env.example\n  2:1  • info     EG004  LEGACY_CACHE_HOST is declared in .env.example but never read by the code, env files, Compose files or workflows\n```\n\n## Good example\n\n```dotenv\n# .env.example\nDATABASE_URL=\n```\n\n## How to fix\n\n1. Remove the variable from the template and the real env files.\n2. If a tool outside the scanned code reads it (Prisma's `schema.prisma`, a\n   Dockerfile, a framework), add it to `scanner.ignore_variables`.\n\n## How to suppress\n\nPut an inline directive on the line above the declaration in the template,\nor a file-level directive in the template:\n\n```dotenv\n# .env.example\n# envguard-ignore EG004 -- read by prisma/schema.prisma\nDIRECT_URL=\n```\n\n```dotenv\n# envguard-ignore-file EG004\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG004: off   # or warning, or info\nignore:\n  - rule: EG004\n    path: \"infra/**\"\n    variable: DIRECT_URL\n    reason: read by Prisma, not by scanned code\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG005",
+              "name": "empty-required-value",
+              "shortDescription": {
+                "text": "A required variable is present but empty in a real env file or the process environment."
+              },
+              "fullDescription": {
+                "text": "A required variable is present but empty in a real env file or the process environment. An empty value usually counts as \"set\" and passes presence checks, then fails later: empty URLs, empty credentials, zero ports."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG005-empty-required-value.md",
+              "help": {
+                "text": "A required variable is present but empty in a real env file or the process environment. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG005-empty-required-value.md",
+                "markdown": "# EG005 empty-required-value\n\n**Default severity:** warning\n\nA required variable is present but empty in a real env file or the process environment.\n\n## What it detects\n\n- A key whose value is empty (or only whitespace) in a real env file, while\n  an applicable template requires it. The template convention is the same as\n  for EG001: a variable is required if the template gives it a non-empty\n  value, or if its line is not marked `# optional`.\n- A schema variable with `required: true` that is empty in an environment\n  where it is required.\n- When a key is defined more than once, only the last definition (the one\n  loaders use) is checked.\n- With `--process-env`, empty variables in the process environment.\n\n## Why it matters\n\nAn empty value usually counts as \"set\" and passes presence checks, then fails\nlater: empty URLs, empty credentials, zero ports.\n\n## Bad example\n\n```dotenv\n# .env.example\nDATABASE_URL=\nPORT=3000\n```\n\n```dotenv\n# .env\nDATABASE_URL=\nPORT=3000\n```\n\n```text\n.env\n  1:1  ⚠ warning  EG005  DATABASE_URL is empty in .env but required by .env.example\n```\n\n## Good example\n\n```dotenv\n# .env\nDATABASE_URL=postgres://localhost/app\nPORT=3000\n```\n\n## How to fix\n\n1. Set a value in the env file named in the finding.\n2. If an empty value is intentional and the template value is empty, mark the\n   template line optional: `DATABASE_URL= # optional`.\n\n## How to suppress\n\nPut an inline directive on the line above the empty entry in the real env\nfile, or a file-level directive in it:\n\n```dotenv\n# .env\n# envguard-ignore EG005 -- filled in by the entrypoint script\nDATABASE_URL=\n```\n\n```dotenv\n# envguard-ignore-file EG005\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG005: info   # or warning, or off\nignore:\n  - rule: EG005\n    path: \".env.test\"\n    variable: DATABASE_URL\n    reason: tests use an in-memory database\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG006",
+              "name": "duplicate-key",
+              "shortDescription": {
+                "text": "The same key is defined more than once in one env file or template."
+              },
+              "fullDescription": {
+                "text": "The same key is defined more than once in one env file or template. Most loaders (dotenv, python-dotenv, Docker) silently use the last definition. Editing the first one then has no effect, and the file says two different things."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG006-duplicate-key.md",
+              "help": {
+                "text": "The same key is defined more than once in one env file or template. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG006-duplicate-key.md",
+                "markdown": "# EG006 duplicate-key\n\n**Default severity:** warning\n\nThe same key is defined more than once in one env file or template.\n\n## What it detects\n\n- Every repeated definition of a key in a real env file or template is\n  reported at its own line; the other definitions are listed as related\n  locations.\n- When the values differ, the evidence shows them in masked form. Values of\n  sensitive variables are never shown.\n\n## Why it matters\n\nMost loaders (dotenv, python-dotenv, Docker) silently use the last\ndefinition. Editing the first one then has no effect, and the file says two\ndifferent things.\n\n## Bad example\n\n```dotenv\n# .env\nAPI_URL=http://localhost:8080\nLOG_LEVEL=info\nAPI_URL=http://localhost:9090\n```\n\n```text\n.env\n  3:1  ⚠ warning  EG006  API_URL is defined 2 times in .env (lines 1 and 3)\n```\n\n## Good example\n\n```dotenv\n# .env\nAPI_URL=http://localhost:9090\nLOG_LEVEL=info\n```\n\n## How to fix\n\nKeep one definition, the one with the value you intend, and delete the\nothers.\n\n## How to suppress\n\nPut an inline directive on the line above the repeated definition, or a\nfile-level directive in the file:\n\n```dotenv\n# .env\nAPI_URL=http://localhost:8080\n# envguard-ignore EG006 -- overrides the line above on purpose\nAPI_URL=http://localhost:9090\n```\n\n```dotenv\n# envguard-ignore-file EG006\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG006: info   # or warning, or off\nignore:\n  - rule: EG006\n    path: \"legacy/**\"\n    variable: API_URL\n    reason: generated file, the last value wins by design\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG007",
+              "name": "syntax-error",
+              "shortDescription": {
+                "text": "An env file, Compose file or workflow cannot be parsed, or an env file line cannot be parsed reliably."
+              },
+              "fullDescription": {
+                "text": "An env file, Compose file or workflow cannot be parsed, or an env file line cannot be parsed reliably. Env loaders skip or misread malformed lines, so the affected variable ends up with a wrong value or none at all, often without any error message. An invalid Compose file or workflow is refused by the tool that reads it."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md",
+              "help": {
+                "text": "An env file, Compose file or workflow cannot be parsed, or an env file line cannot be parsed reliably. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md",
+                "markdown": "# EG007 syntax-error\n\n**Default severity:** error (warning for suspicious but valid syntax)\n\nAn env file, Compose file or workflow cannot be parsed, or an env file line cannot be parsed reliably.\n\n## What it detects\n\n- Env files and templates: invalid keys (allowed: letters, digits, `_`, `.`,\n  `-`; no leading digit), a missing `=`, unterminated quotes, invalid escape\n  sequences in double quotes, and text after a closing quote. These are\n  errors.\n- Env files and templates: unquoted values containing whitespace, and\n  malformed `envguard-ignore` directives. These are warnings.\n- Env files that cannot be read, or that are larger than 1 MiB.\n- Compose files and GitHub Actions workflows that are not valid YAML.\n\nMessages never repeat the offending text; they name the key (when it is\nvalid) and the position.\n\n## Why it matters\n\nEnv loaders skip or misread malformed lines, so the affected variable ends up\nwith a wrong value or none at all, often without any error message. An\ninvalid Compose file or workflow is refused by the tool that reads it.\n\n## Bad example\n\n```dotenv\n# .env\n1PORT=3000\nGREETING=hello world\nUNTERMINATED=\"abc\n```\n\n```text\n.env\n  2:1  ✗ error    EG007  key must not start with a digit\n.env\n  3:15  ⚠ warning  EG007  GREETING: unquoted value contains whitespace\n.env\n  4:14  ✗ error    EG007  UNTERMINATED: unterminated double quote\n```\n\n## Good example\n\n```dotenv\n# .env\nPORT=3000\nGREETING=\"hello world\"\nUNTERMINATED=\"abc\"\n```\n\n## How to fix\n\nEvery finding includes a specific hint. Typical fixes:\n\n1. Quote values that contain spaces.\n2. Close the quote.\n3. Use `\\\\` for a literal backslash in double quotes, or use single quotes.\n4. For YAML files, fix indentation, unclosed quotes or brackets, and tabs.\n\n## How to suppress\n\nA directive applies to the next assignment line even when it is malformed,\nso it can silence a single problem; a file-level directive covers the file:\n\n```dotenv\n# .env\n# envguard-ignore EG007 -- parsed by a custom loader\nGREETING=hello world\n```\n\n```dotenv\n# envguard-ignore-file EG007\n```\n\nFindings in Compose files and workflows cannot be silenced inline; use\n`.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG007: warning   # or info, or off\nignore:\n  - rule: EG007\n    path: \"fixtures/**\"\n    reason: intentionally broken test fixtures\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG008",
+              "name": "env-file-committed",
+              "shortDescription": {
+                "text": "A real env file (not a template) is tracked by git."
+              },
+              "fullDescription": {
+                "text": "A real env file (not a template) is tracked by git. Everyone with access to the repository, its forks and every clone can read the values, and they stay in git history even after the file is deleted."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG008-env-file-committed.md",
+              "help": {
+                "text": "A real env file (not a template) is tracked by git. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG008-env-file-committed.md",
+                "markdown": "# EG008 env-file-committed\n\n**Default severity:** error\n\nA real env file (not a template) is tracked by git.\n\n## What it detects\n\n- Uses `git ls-files` in the scanned root to find real env files\n  (`.env`, `.env.production`, `.env.local`, ...) that are tracked.\n- Templates (`.env.example`, ...) are meant to be committed and are never\n  reported.\n- When git is not installed or the root is not a repository, the rule is\n  skipped; `check --verbose` says why.\n\n## Why it matters\n\nEveryone with access to the repository, its forks and every clone can read\nthe values, and they stay in git history even after the file is deleted.\n\n## Bad example\n\n```console\n# shell\n$ git ls-files\n.env.example\n.env.production\n```\n\n```text\n.env.production\n  ✗ error    EG008  .env.production is a real env file and is committed to git\n```\n\n## Good example\n\n```gitignore\n# .gitignore\n.env*\n!*.example\n```\n\n```console\n# shell\n$ git ls-files\n.env.example\n.gitignore\n```\n\n## How to fix\n\n1. Stop tracking the file and keep your local copy:\n   `git rm --cached .env.production`\n2. Ignore it, for example with `.env*` and `!*.example` in the root\n   `.gitignore`.\n3. **Rotate every secret in the file.** The values are still in git history,\n   and in every clone and fork. Deleting the file, or even rewriting history,\n   does not make them secret again.\n\n## How to suppress\n\nThe finding points at the whole file, so a line directive does not apply. A\nfile-level directive in the env file works:\n\n```dotenv\n# .env.ci\n# envguard-ignore-file EG008 -- contains only public CI settings\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG008: warning   # or info, or off\nignore:\n  - rule: EG008\n    path: \"e2e/.env.test\"\n    reason: committed test settings, no secrets\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG009",
+              "name": "env-file-not-ignored",
+              "shortDescription": {
+                "text": "A real env file is not tracked by git, but no `.gitignore` rule covers it."
+              },
+              "fullDescription": {
+                "text": "A real env file is not tracked by git, but no `.gitignore` rule covers it. The next `git add .` or `git commit -a` commits it, and the values end up in history, forks and CI logs."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG009-env-file-not-ignored.md",
+              "help": {
+                "text": "A real env file is not tracked by git, but no `.gitignore` rule covers it. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG009-env-file-not-ignored.md",
+                "markdown": "# EG009 env-file-not-ignored\n\n**Default severity:** warning\n\nA real env file is not tracked by git, but no `.gitignore` rule covers it.\n\n## What it detects\n\n- Asks git (`git check-ignore --stdin`, one batched call) whether each\n  untracked real env file is ignored.\n- Tracked files are EG008's job; templates are never reported.\n- The rule is skipped when git is unavailable or the root is not a\n  repository.\n\n## Why it matters\n\nThe next `git add .` or `git commit -a` commits it, and the values end up in\nhistory, forks and CI logs.\n\n## Bad example\n\n```gitignore\n# .gitignore\nnode_modules/\n```\n\n```text\n.env\n  ⚠ warning  EG009  .env is not ignored by git; `git add .` would commit it\n```\n\n## Good example\n\n```gitignore\n# .gitignore\nnode_modules/\n.env*\n!*.example\n```\n\n## How to fix\n\n1. Add the file, or a pattern covering all env files except templates, to\n   `.gitignore`.\n2. Confirm with `git check-ignore -v .env`.\n\n## How to suppress\n\nThe finding points at the whole file, so a line directive does not apply. A\nfile-level directive in the env file works:\n\n```dotenv\n# .env.ci\n# envguard-ignore-file EG009 -- meant to be committed, no secrets\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG009: info   # or warning, or off\nignore:\n  - rule: EG009\n    path: \"examples/**\"\n    reason: demo projects with fake values\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG010",
+              "name": "possible-secret-in-template",
+              "shortDescription": {
+                "text": "A template, or a real env file that git tracks, contains a value that looks like a real credential."
+              },
+              "fullDescription": {
+                "text": "A template, or a real env file that git tracks, contains a value that looks like a real credential. Templates are committed and shared with everyone who can read the repository. A real credential there is leaked, and it stays in git history."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md",
+              "help": {
+                "text": "A template, or a real env file that git tracks, contains a value that looks like a real credential. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md",
+                "markdown": "# EG010 possible-secret-in-template\n\n**Default severity:** error\n\nA template, or a real env file that git tracks, contains a value that looks like a real credential.\n\n## What it detects\n\nEvery entry of every template, and of every git-tracked real env file, is\nchecked against known credential formats: AWS access key IDs; GitHub tokens\n(`ghp_`, `gho_`, `ghu_`, `ghs_`, `ghr_`, `github_pat_`); Slack tokens and\nwebhooks; Stripe live keys (test keys do not count); OpenAI- and\nAnthropic-style `sk-` keys; Google `AIza` keys; SendGrid keys; Twilio API\nkeys; PEM private keys; JWTs; URLs with an embedded password.\n\n- Under sensitive names (`*_SECRET`, `*_TOKEN`, `*_KEY`, ...), a value of 20\n  or more characters without spaces and with Shannon entropy of at least 3.5\n  also counts.\n- Obvious placeholders never count: empty values, `changeme`, `your-...`,\n  `\u003c...\u003e`, `xxxx...`, `***`, `example`, `dummy`, `test`, `placeholder`,\n  `replace-me`, `todo`, the key name itself, localhost URLs and local\n  development credentials.\n- The message names the detected kind; the value is never printed.\n\n## Why it matters\n\nTemplates are committed and shared with everyone who can read the\nrepository. A real credential there is leaked, and it stays in git history.\n\n## Bad example\n\n```dotenv\n# .env.example\nGITHUB_TOKEN=ghp_\u003cthe rest of a real 36-character token\u003e\nDATABASE_URL=postgres://app:\u003ca real password\u003e@db.example.com/app\n```\n\n```text\n.env.example\n  2:14  ✗ error    EG010  GITHUB_TOKEN in .env.example looks like a GitHub personal access token\n```\n\n## Good example\n\n```dotenv\n# .env.example\nGITHUB_TOKEN=\nDATABASE_URL=postgres://user:password@localhost:5432/app\n```\n\n## How to fix\n\n1. Replace the value with an empty one or an obvious placeholder\n   (`API_KEY=\u003cyour-api-key\u003e`).\n2. If it was a real credential, rotate it: it has been exposed, and it stays\n   in git history.\n\n## How to suppress\n\nPrefer an obvious placeholder. For a deliberate fake, put an inline\ndirective on the line above it, or a file-level directive in the file:\n\n```dotenv\n# .env.example\n# envguard-ignore EG010 -- documented demo token, revoked\nDEMO_TOKEN=\u003cdemo token\u003e\n```\n\n```dotenv\n# envguard-ignore-file EG010\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG010: warning   # or info, or off\nignore:\n  - rule: EG010\n    path: \"docs/examples/**\"\n    variable: DEMO_TOKEN\n    reason: revoked token used in documentation\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG011",
+              "name": "compose-undefined-variable",
+              "shortDescription": {
+                "text": "A Compose file interpolates an undefined variable without a default, or a required `env_file` does not exist."
+              },
+              "fullDescription": {
+                "text": "A Compose file interpolates an undefined variable without a default, or a required `env_file` does not exist. Compose replaces an unset variable with an empty string and only prints a warning, so the container starts with a broken value. `${VAR:?message}` makes `docker compose up` abort, and so does a missing required `env_file`."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md",
+              "help": {
+                "text": "A Compose file interpolates an undefined variable without a default, or a required `env_file` does not exist. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md",
+                "markdown": "# EG011 compose-undefined-variable\n\n**Default severity:** warning\n\nA Compose file interpolates an undefined variable without a default, or a required `env_file` does not exist.\n\n## What it detects\n\n1. A Compose file interpolates `${VAR}` (or `${VAR:?message}`) without a\n   default, and nothing defines `VAR`. Compose reads the `.env` file next to\n   the Compose file for interpolation. The variable counts as defined if that\n   `.env` file, a template in the same directory or in the app root and its\n   ancestors, or the schema declares it. If that `.env` does not exist, the\n   message says so and only templates and the schema count. One finding per\n   Compose file and variable.\n2. A required `env_file:` entry points to a file that does not exist.\n\nNot reported: references with a default (`${VAR:-x}`, `${VAR-x}`,\n`${VAR:+x}`), `$$` escapes, well-known host variables such as `HOME`,\n`scanner.ignore_variables`, and `env_file` entries with `required: false`.\n\n## Why it matters\n\nCompose replaces an unset variable with an empty string and only prints a\nwarning, so the container starts with a broken value. `${VAR:?message}`\nmakes `docker compose up` abort, and so does a missing required `env_file`.\n\n## Bad example\n\n```yaml\n# docker-compose.yml\nservices:\n  db:\n    image: postgres:16\n    environment:\n      POSTGRES_PASSWORD: ${DB_PASSWORD}\n  api:\n    env_file: ./api.env\n```\n\n```text\ndocker-compose.yml\n  6:28  ⚠ warning  EG011  docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in .env (the file Compose reads) or any template\ndocker-compose.yml\n  8:15  ⚠ warning  EG011  service api: env_file api.env does not exist\n```\n\n## Good example\n\n```yaml\n# docker-compose.yml\nservices:\n  db:\n    image: postgres:16\n    environment:\n      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}\n  api:\n    env_file:\n      - path: ./api.env\n        required: false\n```\n\n## How to fix\n\n1. Define the variable in the `.env` next to the Compose file and document it\n   in a template (`DB_PASSWORD=` in `.env.example`).\n2. Or give it a default: `${DB_PASSWORD:-value}`.\n3. For a missing `env_file`, create it (for example from its template) or\n   make it optional with the long syntax and `required: false`.\n\n## How to suppress\n\nThe finding points at the Compose file, so an inline `# envguard-ignore\nEG011` or `# envguard-ignore-file EG011` in an env file does not silence it.\nUse `scanner.ignore_variables` for variables the host provides, or\n`.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG011: info   # or warning, or off\nignore:\n  - rule: EG011\n    path: \"deploy/compose.*.yaml\"\n    variable: IMAGE_TAG\n    reason: set by the release pipeline\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG012",
+              "name": "ci-secret-undocumented",
+              "shortDescription": {
+                "text": "A GitHub Actions workflow references `secrets.X` or `vars.X` that no template or schema documents."
+              },
+              "fullDescription": {
+                "text": "A GitHub Actions workflow references `secrets.X` or `vars.X` that no template or schema documents. Whoever sets up a fork, a new environment or a new repository has to discover the secret by reading workflow files. A missing one usually shows up as a failed deploy."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md",
+              "help": {
+                "text": "A GitHub Actions workflow references `secrets.X` or `vars.X` that no template or schema documents. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md",
+                "markdown": "# EG012 ci-secret-undocumented\n\n**Default severity:** info\n\nA GitHub Actions workflow references `secrets.X` or `vars.X` that no template or schema documents.\n\n## What it detects\n\n- References are collected from `${{ ... }}` expressions and `if:`\n  conditions in `.github/workflows/*.yml` and `*.yaml`.\n- A name counts as documented if any template in the repository declares it,\n  or `.envguard.yaml` declares it under `variables:`.\n- One finding per name, at its first reference, with up to three more\n  references as related locations.\n- `GITHUB_TOKEN` is provided by GitHub and is never reported; neither are\n  names in `scanner.ignore_variables`.\n\n## Why it matters\n\nWhoever sets up a fork, a new environment or a new repository has to\ndiscover the secret by reading workflow files. A missing one usually shows up\nas a failed deploy.\n\n## Bad example\n\n```yaml\n# .github/workflows/deploy.yml\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - run: ./deploy.sh\n        env:\n          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}\n```\n\n```text\n.github/workflows/deploy.yml\n  8:27  • info     EG012  workflows use secret DEPLOY_KEY, but no template or schema documents it\n```\n\n## Good example\n\n```dotenv\n# .env.example\n# CI: set in GitHub → Settings → Secrets and variables → Actions (Secrets tab)\nDEPLOY_KEY=\n```\n\n## How to fix\n\n1. Document it in a template, as above, with a comment saying where to set\n   it.\n2. Or declare it under `variables:` in `.envguard.yaml`.\n\n## How to suppress\n\nThe finding points at a workflow file, so an inline `# envguard-ignore\nEG012` or `# envguard-ignore-file EG012` in an env file does not silence it.\nUse `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG012: off   # or warning, or info\nignore:\n  - rule: EG012\n    path: \".github/workflows/**\"\n    variable: CODECOV_TOKEN\n    reason: only used by the coverage upload step\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG013",
+              "name": "environment-drift",
+              "shortDescription": {
+                "text": "Templates of different environments of the same app disagree on which variables exist."
+              },
+              "fullDescription": {
+                "text": "Templates of different environments of the same app disagree on which variables exist. Environments that run the same code should need the same variables. A variable documented for only some of them is often forgotten when the next deploy reaches the others."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG013-environment-drift.md",
+              "help": {
+                "text": "Templates of different environments of the same app disagree on which variables exist. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG013-environment-drift.md",
+                "markdown": "# EG013 environment-drift\n\n**Default severity:** warning\n\nTemplates of different environments of the same app disagree on which variables exist.\n\n## What it detects\n\n- Only environment-specific templates are compared (`.env.staging.example`\n  vs `.env.production.example`), and at least two environments must have\n  one.\n- Variables in the default template (`.env.example`) apply to every\n  environment and are ignored, as are local templates.\n- One finding per variable, at its first declaration, listing the\n  environments that declare it and the ones that don't; other declarations\n  are related locations.\n\n## Why it matters\n\nEnvironments that run the same code should need the same variables. A\nvariable documented for only some of them is often forgotten when the next\ndeploy reaches the others.\n\n## Bad example\n\n```dotenv\n# .env.staging.example\nAPI_URL=\n```\n\n```dotenv\n# .env.production.example\nAPI_URL=\nSTRIPE_SECRET_KEY=\n```\n\n```text\n.env.production.example\n  2:1  ⚠ warning  EG013  STRIPE_SECRET_KEY is declared for production but not for staging\n```\n\n## Good example\n\n```dotenv\n# .env.staging.example\nAPI_URL=\nSTRIPE_SECRET_KEY=\n```\n\n## How to fix\n\n1. Add the variable to the other environments' templates.\n2. Or move it to `.env.example` if every environment needs it.\n\n## How to suppress\n\nIf it really applies to one environment only, put an inline directive on the\nline above its declaration, or a file-level directive in the template:\n\n```dotenv\n# .env.production.example\n# envguard-ignore EG013 -- payments run only in production\nSTRIPE_SECRET_KEY=\n```\n\n```dotenv\n# envguard-ignore-file EG013\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG013: info   # or warning, or off\nignore:\n  - rule: EG013\n    path: \".env.production.example\"\n    variable: STRIPE_SECRET_KEY\n    reason: production-only integration\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG014",
+              "name": "invalid-value",
+              "shortDescription": {
+                "text": "A value in a real env file or the process environment violates its schema in `.envguard.yaml`."
+              },
+              "fullDescription": {
+                "text": "A value in a real env file or the process environment violates its schema in `.envguard.yaml`. The app expects a port, a URL, a number or a boolean. An invalid value usually crashes it at startup or, worse, is silently misread."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md",
+              "help": {
+                "text": "A value in a real env file or the process environment violates its schema in `.envguard.yaml`. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md",
+                "markdown": "# EG014 invalid-value\n\n**Default severity:** error\n\nA value in a real env file or the process environment violates its schema in `.envguard.yaml`.\n\n## What it detects\n\nThe last definition of each key in real env files (or, with\n`--process-env`, in the process environment) is validated against the\nschema's `variables:` entry. Templates are not validated, since they hold\nplaceholders, and empty values are EG005's job.\n\n| type | accepts |\n|---|---|\n| `string` | anything (the default) |\n| `int`, `float` | numbers; `min` and `max` apply |\n| `bool` | `true/false`, `1/0`, `yes/no`, `on/off`, case-insensitive |\n| `url` | a scheme and a host or path; `schemes:` restricts the scheme |\n| `port` | 1–65535; `min` and `max` apply |\n| `email` | `name@domain.tld` |\n| `hostname` | an RFC 1123 hostname, or an IPv4/IPv6 address |\n| `duration` | Go syntax: `300ms`, `30s`, `1h30m` |\n| `enum` | one of `values` (case-sensitive) |\n| `json` | valid JSON |\n| `regex` | a valid Go (RE2) regular expression |\n\nEvery type also accepts `pattern` (searched; anchor with `^…$` for a full\nmatch), `min_length` and `max_length`. The message states what was\nexpected. The value appears only in masked form, and never for variables\nthat are `sensitive: true` or have secret-looking names.\n\n## Why it matters\n\nThe app expects a port, a URL, a number or a boolean. An invalid value\nusually crashes it at startup or, worse, is silently misread.\n\n## Bad example\n\n```yaml\n# .envguard.yaml\nversion: 1\nvariables:\n  WORKERS: { type: int, min: 1 }\n```\n\n```dotenv\n# .env\nWORKERS=0\n```\n\n```text\n.env\n  2:9  ✗ error    EG014  WORKERS in .env has the invalid value 0: is below the minimum 1\n```\n\n## Good example\n\n```dotenv\n# .env\nWORKERS=4\n```\n\n## How to fix\n\n1. Set a value that matches the schema (the fix text describes it, for\n   example \"an integer of at least 1\").\n2. If the schema is wrong, update the variable in `.envguard.yaml`.\n\n## How to suppress\n\nPut an inline directive on the line above the entry in the real env file, or\na file-level directive in it:\n\n```dotenv\n# .env\n# envguard-ignore EG014 -- 0 disables workers in local development\nWORKERS=0\n```\n\n```dotenv\n# envguard-ignore-file EG014\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG014: warning   # or info, or off\nignore:\n  - rule: EG014\n    path: \".env.development\"\n    variable: WORKERS\n    reason: 0 disables background workers locally\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG015",
+              "name": "unsafe-production-value",
+              "shortDescription": {
+                "text": "A production value looks like a development setting; active only via schema `production:` rules or a profile."
+              },
+              "fullDescription": {
+                "text": "A production value looks like a development setting; active only via schema `production:` rules or a profile. Debug modes expose stack traces and settings. Non-production framework modes disable caching and security defaults. Inside a container, `localhost` means the container itself, not your database."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md",
+              "help": {
+                "text": "A production value looks like a development setting; active only via schema `production:` rules or a profile. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md",
+                "markdown": "# EG015 unsafe-production-value\n\n**Default severity:** warning\n\nA production value looks like a development setting; active only via schema `production:` rules or a profile.\n\n## What it detects\n\nThis rule is **never on by default**. It applies only to real env files of\nthe `production` environment (`.env.production`, `.env.prod`, or\n`--process-env --env production`), skips empty values, and checks the last\ndefinition of each key. It is enabled by either of:\n\n- Per-variable schema rules: `production: { must_be, must_not_be, pattern }`.\n  `must_be` and `must_not_be` are compared by type (`off == false`).\n- The `production-safety` profile (`profiles: [production-safety]`):\n\n| Variable | Reported when |\n|---|---|\n| `DEBUG`, `DJANGO_DEBUG`, `APP_DEBUG`, `FLASK_DEBUG` | truthy (`true`, `1`, `yes`, `on`) |\n| `NODE_ENV`, `RAILS_ENV` | anything other than `production` |\n| `APP_ENV` | `local`, `development` or `dev` |\n| `*_URL`, `*_HOST` | points to `localhost`, `127.0.0.1`, `0.0.0.0` or `::1` |\n\nA schema `production:` rule for a variable replaces the profile's check for\nit. With `--process-env`, the localhost check applies only to variables\ndeclared in a template or the schema. Localhost URLs are reported without\ntheir value.\n\n## Why it matters\n\nDebug modes expose stack traces and settings. Non-production framework modes\ndisable caching and security defaults. Inside a container, `localhost` means\nthe container itself, not your database.\n\n## Bad example\n\n```yaml\n# .envguard.yaml\nversion: 1\nprofiles: [production-safety]\n```\n\n```dotenv\n# .env.production\nDEBUG=true\nDATABASE_URL=postgres://localhost:5432/app\n```\n\n```text\n.env.production\n  2:7  ⚠ warning  EG015  DEBUG is enabled in production (.env.production)\n.env.production\n  3:14  ⚠ warning  EG015  DATABASE_URL points to a local address in production (.env.production)\n```\n\n## Good example\n\n```dotenv\n# .env.production\nDEBUG=false\nDATABASE_URL=postgres://db.internal:5432/app\n```\n\n## How to fix\n\n1. Set the production value named in the fix text (`DEBUG=false`,\n   `NODE_ENV=production`, the real database host).\n2. If a schema rule is wrong, update its `production:` block.\n\n## How to suppress\n\nPut an inline directive on the line above the entry, or a file-level\ndirective in the production env file:\n\n```dotenv\n# .env.production\n# envguard-ignore EG015 -- sidecar proxy listens on localhost\nDATABASE_URL=postgres://localhost:5432/app\n```\n\n```dotenv\n# envguard-ignore-file EG015\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG015: info   # or warning, or off\nignore:\n  - rule: EG015\n    path: \".env.production\"\n    variable: REDIS_HOST\n    reason: Redis runs as a sidecar on localhost\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            },
+            {
+              "id": "EG016",
+              "name": "unresolved-reference",
+              "shortDescription": {
+                "text": "A `$VAR` or `${VAR}` reference inside an env file points to a variable that nothing defines."
+              },
+              "fullDescription": {
+                "text": "A `$VAR` or `${VAR}` reference inside an env file points to a variable that nothing defines. Loaders that expand references substitute an empty string, so the referencing value silently ends up incomplete (for example a URL without a host)."
+              },
+              "helpUri": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG016-unresolved-reference.md",
+              "help": {
+                "text": "A `$VAR` or `${VAR}` reference inside an env file points to a variable that nothing defines. See https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG016-unresolved-reference.md",
+                "markdown": "# EG016 unresolved-reference\n\n**Default severity:** warning\n\nA `$VAR` or `${VAR}` reference inside an env file points to a variable that nothing defines.\n\n## What it detects\n\nReferences in unquoted and double-quoted values of real env files and\ntemplates are checked. A reference resolves if any of the following is true:\n\n- The variable is defined in the same file.\n- It is defined in any env file or template of the app's default environment\n  or of the file's own environment. Loaders such as Next.js, Vite and Docker\n  Compose load `.env` together with `.env.\u003cenv\u003e`.\n- It is a well-known process variable (`HOME`, `PATH`, `USER`, ...).\n- It is listed in `scanner.ignore_variables`.\n\nReferences with a default (`${VAR:-x}`, `${VAR-x}`), `$$` and `\\$` escapes,\nand references inside single quotes are never reported. References are never\nexpanded.\n\n## Why it matters\n\nLoaders that expand references substitute an empty string, so the\nreferencing value silently ends up incomplete (for example a URL without a\nhost).\n\n## Bad example\n\n```dotenv\n# .env\nDB_USER=app\nDATABASE_URL=postgres://${DB_USER}@${DB_HOST}/app\n```\n\n```text\n.env\n  3:36  ⚠ warning  EG016  DATABASE_URL references DB_HOST, which is not defined in .env or the env files loaded with it\n```\n\n## Good example\n\n```dotenv\n# .env\nDB_USER=app\nDB_HOST=localhost\nDATABASE_URL=postgres://${DB_USER}@${DB_HOST}/app\n```\n\n## How to fix\n\n1. Define the variable in the same file or an env file loaded with it.\n2. Or give the reference a default: `${DB_HOST:-localhost}`.\n3. If the process environment provides it, add it to\n   `scanner.ignore_variables`.\n\n## How to suppress\n\nPut an inline directive on the line above the entry, or a file-level\ndirective in the file:\n\n```dotenv\n# .env\n# envguard-ignore EG016 -- DB_HOST is injected by the platform\nDATABASE_URL=postgres://app@${DB_HOST}/app\n```\n\n```dotenv\n# envguard-ignore-file EG016\n```\n\nIn `.envguard.yaml`:\n\n```yaml\nversion: 1\nrules:\n  EG016: info   # or warning, or off\nignore:\n  - rule: EG016\n    path: \"deploy/**\"\n    variable: DB_HOST\n    reason: set by the container platform\n```\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "configuration"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "columnKind": "unicodeCodePoints",
+      "results": [
+        {
+          "ruleId": "EG001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "B is declared in negative/.env.example but missing from negative/.env\n\nWhy: Anything that reads B in the default environment gets no value, which usually fails only at runtime or silently falls back to a default.\n\nFix: Add `B=` to negative/.env (it is declared in negative/.env.example:1) and set its value. If it is not needed there, mark it optional in the template (`B= # optional`) or put `# envguard-ignore EG001` on the line above it in negative/.env.example."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "negative/.env",
+                  "uriBaseId": "%SRCROOT%"
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "id": 1,
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "negative/.env.example",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "2697f6f150125f55f2de389e9af3c169"
+          }
+        },
+        {
+          "ruleId": "EG002",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "A is set in negative/.env but not documented in any template\n\nWhy: Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, A will be missing wherever this file is not copied.\n\nFix: Add `A=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env if nothing uses it."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "negative/.env",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "38910edf3dd328e3a4573d1498f5b865"
+          }
+        },
+        {
+          "ruleId": "EG001",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "TEMPLATE_VAR is declared in positive/.env.example but missing from positive/.env\n\nWhy: Anything that reads TEMPLATE_VAR in the default environment gets no value, which usually fails only at runtime or silently falls back to a default.\n\nFix: Add `TEMPLATE_VAR=` to positive/.env (it is declared in positive/.env.example:1) and set its value. If it is not needed there, mark it optional in the template (`TEMPLATE_VAR= # optional`) or put `# envguard-ignore EG001` on the line above it in positive/.env.example."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/.env",
+                  "uriBaseId": "%SRCROOT%"
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "id": 1,
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/.env.example",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "48ea8d3d2b85c7bbbea0edb25af3e9d8"
+          }
+        },
+        {
+          "ruleId": "EG002",
+          "ruleIndex": 1,
+          "level": "warning",
+          "message": {
+            "text": "DEFINED_VAR is set in positive/.env but not documented in any template\n\nWhy: Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, DEFINED_VAR will be missing wherever this file is not copied.\n\nFix: Add `DEFINED_VAR=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env if nothing uses it."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/.env",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "e9e6b469a5edea028796765e98239fd6"
+          }
+        },
+        {
+          "ruleId": "EG011",
+          "ruleIndex": 10,
+          "level": "warning",
+          "message": {
+            "text": "positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is no positive/deploy/.env next to it and it is not declared in positive/.env.example\n\nWhy: Compose substitutes an empty string for an unset PROD_ONLY and only prints a warning, so the container starts with a broken value.\n\nFix: Create positive/deploy/.env with `PROD_ONLY=\u003cvalue\u003e` (Compose reads it automatically), declare `PROD_ONLY=` in a template so others know to set it, or give it a default: `${PROD_ONLY:-value}`."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/deploy/compose.prod.yaml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 3,
+                  "startColumn": 19
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "2bc259e80b571e2677cae5e64de940b4"
+          }
+        },
+        {
+          "ruleId": "EG011",
+          "ruleIndex": 10,
+          "level": "warning",
+          "message": {
+            "text": "positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in positive/.env (the file Compose reads) or any template\n\nWhy: Compose substitutes an empty string for an unset DB_PASSWORD and only prints a warning, so the container starts with a broken value.\n\nFix: Add `DB_PASSWORD=` with a value to positive/.env and document it in a template, or give it a default in the Compose file: `${DB_PASSWORD:-value}`."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 39
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "id": 1,
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 10,
+                  "startColumn": 16
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "a48c5f8528932b2f671f05f1cbe8701d"
+          }
+        },
+        {
+          "ruleId": "EG011",
+          "ruleIndex": 10,
+          "level": "warning",
+          "message": {
+            "text": "positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not defined in positive/.env (the file Compose reads) or any template\n\nWhy: The reference uses ${REQUIRED_TOKEN:?...}, so `docker compose up` aborts when it is unset.\n\nFix: Add `REQUIRED_TOKEN=` with a value to positive/.env and document it in a template, or give it a default in the Compose file: `${REQUIRED_TOKEN:-value}`."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 16
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "7a2c7f34a5e8429e69ac42dcce5d736d"
+          }
+        },
+        {
+          "ruleId": "EG011",
+          "ruleIndex": 10,
+          "level": "warning",
+          "message": {
+            "text": "service api: env_file positive/missing.env does not exist\n\nWhy: `docker compose up` fails for this service when a required env_file is missing.\n\nFix: Create positive/missing.env (for example by copying its template), or make it optional with the long syntax:\n\n    env_file:\n      - path: ./missing.env\n        required: false"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "positive/docker-compose.yml",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 9
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "envguard/v1": "235e5acb6da8e2fa3784328e9df78bb8"
+          }
+        }
+      ]
+    }
+  ]
+}

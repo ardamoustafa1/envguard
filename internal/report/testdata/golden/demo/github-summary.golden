@@ -1,0 +1,30 @@
+## EnvGuard
+
+| ❌ Errors | ⚠️ Warnings | ℹ️ Info | Suppressed | Files |
+|---:|---:|---:|---:|---:|
+| 6 | 10 | 4 | 0 | 10 |
+
+| Severity | Rule | Location | Problem |
+|---|---|---|---|
+| ❌ error | [EG014](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md) invalid-value | `.env:2:11` | LOG_LEVEL in .env has the invalid value verbose: expected one of debug, info, warn or error |
+| ❌ error | [EG010](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md) possible-secret-in-template | `.env.example:4:14` | DATABASE_URL in .env.example looks like a URL with an embedded password |
+| ❌ error | [EG001](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md) missing-variable | `.env.production` | STRIPE_SECRET_KEY is declared in .env.production.example but missing from .env.production |
+| ❌ error | [EG014](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md) invalid-value | `.env.production:6:9` | WORKERS in .env.production has the invalid value 0: is below the minimum 1 |
+| ❌ error | [EG007](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md) syntax-error | `.env.production:10:8` | missing '=' after key |
+| ❌ error | [EG003](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md) used-but-undeclared | `src/server.js:23:33` | ANALYTICS_WRITE_KEY is read by the code but not declared in any env file, template or schema |
+| ⚠️ warning | [EG005](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG005-empty-required-value.md) empty-required-value | `.env:5:1` | SESSION_SECRET is empty in .env but required by .env.example |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `.env:8:1` | FEATURE_NEW_CHECKOUT is set in .env but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `.env:9:1` | CACHE_DIR is set in .env but not documented in any template |
+| ⚠️ warning | [EG016](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG016-unresolved-reference.md) unresolved-reference | `.env:9:11` | CACHE_DIR references APP_HOME, which is not defined in .env or the env files loaded with it |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `.env.production:4:11` | REDIS_URL points to a local address in production (.env.production) |
+| ⚠️ warning | [EG006](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG006-duplicate-key.md) duplicate-key | `.env.production:8:1` | DEBUG is defined 2 times in .env.production (lines 7 and 8) |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `.env.production:8:7` | DEBUG is enabled in production (.env.production) |
+| ⚠️ warning | [EG013](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG013-environment-drift.md) environment-drift | `.env.production.example:2:1` | STRIPE_SECRET_KEY is declared for production but not for staging |
+| ⚠️ warning | [EG013](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG013-environment-drift.md) environment-drift | `.env.staging.example:2:1` | STAGING_BANNER is declared for staging but not for production |
+| ⚠️ warning | [EG011](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md) compose-undefined-variable | `docker-compose.yml:17:28` | docker-compose.yml interpolates ${POSTGRES_PASSWORD}, which is not defined in .env (the file Compose reads) or any template |
+| ℹ️ info | [EG004](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG004-declared-but-unused.md) declared-but-unused | `.env.example:9:1` | LEGACY_API_KEY is declared in .env.example but never read by the code, env files, Compose files or workflows |
+| ℹ️ info | [EG012](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md) ci-secret-undocumented | `.github/workflows/deploy.yml:14:30` | workflows use secret FLY_API_TOKEN, but no template or schema documents it |
+| ℹ️ info | [EG012](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md) ci-secret-undocumented | `.github/workflows/deploy.yml:15:30` | workflows use variable DEPLOY_REGION, but no template or schema documents it |
+| ℹ️ info | [EG003](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md) used-but-undeclared | `worker/main.py:6:30` | WORKER_CONCURRENCY is read by the code but not declared in any env file, template or schema |
+
+Run `envguard doctor` locally to see why each problem matters and how to fix it.

@@ -1,0 +1,16 @@
+name: deploy
+on: push
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: vars.DEPLOY_ENABLED == 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ./deploy.sh
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DOCUMENTED: ${{ secrets.DOCUMENTED_TOKEN }}
+          REGION: ${{ vars.AWS_DEPLOY_REGION }}
+      - run: echo "${{ secrets.DEPLOY_KEY }}" > /dev/null

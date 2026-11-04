@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      go-minor-patch:
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      docker-minor-patch:
+        update-types: [minor, patch]
+  # npm: the repository has no package.json yet. npm/envguard holds only the
+  # launcher template, and scripts/npm/build.mjs generates the real package
+  # manifests into dist/npm at release time. Enable this block if a
+  # package.json is ever committed in npm/envguard.
+  # - package-ecosystem: npm
+  #   directory: /npm/envguard
+  #   schedule:
+  #     interval: weekly
+  #   groups:
+  #     npm-minor-patch:
+  #       update-types: [minor, patch]

@@ -1,0 +1,115 @@
+name: action-test
+
+# Tests the composite action in action.yml against examples/demo-app on
+# Linux, macOS and Windows. It installs a published release, so it skips
+# itself until the first release exists. Releases created by the release
+# workflow (GITHUB_TOKEN) do not trigger `release` events, hence workflow_run.
+on:
+  pull_request:
+    paths:
+      - action.yml
+      - install.sh
+      - .github/workflows/action-test.yml
+  workflow_run:
+    workflows: [release]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release to test (default latest)
+        default: latest
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Is there a release yet?
+        id: release
+        shell: bash
+        run: |
+          if curl -fsSLI -o /dev/null "https://github.com/${GITHUB_REPOSITORY}/releases/latest"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No release yet; skipping the action test."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: doctor never fails with fail-on never
+        id: doctor
+        if: steps.release.outputs.exists == 'true'
+        uses: ./
+        with:
+          version: ${{ inputs.version || 'latest' }}
+          args: doctor
+          working-directory: examples/demo-app
+          fail-on: never
+
+      - name: check fails on the demo app's errors
+        id: check
+        if: steps.release.outputs.exists == 'true'
+        continue-on-error: true
+        uses: ./
+        with:
+          version: ${{ inputs.version || 'latest' }}
+          working-directory: examples/demo-app
+
+      - name: Second run uses the cached binary
+        if: steps.release.outputs.exists == 'true'
+        uses: ./
+        with:
+          version: ${{ inputs.version || 'latest' }}
+          args: version
+
+      - name: Assert outcomes
+        if: steps.release.outputs.exists == 'true'
+        shell: bash
+        env:
+          CHECK_OUTCOME: ${{ steps.check.outcome }}
+          VERSION: ${{ steps.doctor.outputs.version }}
+        run: |
+          set -euo pipefail
+          test "$CHECK_OUTCOME" = failure || { echo "check should fail on the demo app"; exit 1; }
+          test -n "$VERSION" || { echo "no version output"; exit 1; }
+          envguard version | grep -q "envguard $VERSION"
+
+  sarif:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # upload-sarif
+    steps:
+      - uses: actions/checkout@v5
+      - name: Is there a release yet?
+        id: release
+        run: |
+          if curl -fsSLI -o /dev/null "https://github.com/${GITHUB_REPOSITORY}/releases/latest"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: check with SARIF upload
+        id: envguard
+        if: steps.release.outputs.exists == 'true'
+        uses: ./
+        with:
+          version: ${{ inputs.version || 'latest' }}
+          working-directory: examples/demo-app
+          fail-on: never
+          sarif: "true"
+      - name: SARIF file exists
+        if: steps.release.outputs.exists == 'true'
+        env:
+          SARIF: ${{ steps.envguard.outputs.sarif-file }}
+        run: |
+          test -s "$SARIF"
+          grep -q '"version": "2.1.0"' "$SARIF"

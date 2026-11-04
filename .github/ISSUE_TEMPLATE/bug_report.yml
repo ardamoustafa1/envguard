@@ -1,0 +1,57 @@
+name: Bug report
+description: EnvGuard crashed, printed wrong output or behaved unexpectedly.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never paste real secrets or real values. Use fake values.
+        For a rule that reports something wrong in your config, use the "False positive" form instead.
+  - type: input
+    id: version
+    attributes:
+      label: EnvGuard version
+      description: Output of `envguard version`.
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Operating system and install method
+      placeholder: macOS 15 arm64, Homebrew
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command you ran
+      render: shell
+      placeholder: envguard check --format json
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: Output and exit code. Redact values.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: File names and contents with fake values.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed every real secret and value from this report.
+          required: true

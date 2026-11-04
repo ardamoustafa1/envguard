@@ -1,0 +1,41 @@
+{
+  "Filename": "testdata/parser/unterminated-backtick.env",
+  "Entries": [
+    {
+      "Key": "X",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 21
+      },
+      "ValuePos": {
+        "Line": 2,
+        "Column": 3,
+        "Offset": 23
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": [
+    {
+      "Kind": "unterminated-quote",
+      "Severity": "error",
+      "Pos": {
+        "Line": 1,
+        "Column": 17,
+        "Offset": 16
+      },
+      "Key": "UNTERMINATED_BT",
+      "Message": "unterminated backtick quote",
+      "Hint": "Add the matching closing quote. Only double quotes and backticks may span multiple lines; the quote opened here was never closed."
+    }
+  ],
+  "Directives": null,
+  "FileIgnoreRules": null
+}

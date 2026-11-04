@@ -1,0 +1,6 @@
+App . (repository root)
+  VARIABLE  default
+  API_URL      ✓
+  PORT         ✓
+
+✓ set  ○ empty  ✗ missing (required by a template)  – not required

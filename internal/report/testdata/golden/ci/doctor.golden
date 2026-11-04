@@ -1,0 +1,74 @@
+EnvGuard doctor · .
+
+Scanned
+  Env files    0 real · 1 template
+  Compose      0 files
+  Workflows    1 file
+  Source code  0 files
+  Variables    6
+  App roots    2 · ., negative
+  Config       none (zero-config defaults)
+  Git          not available (not a git repository (or not accessible))
+
+Findings  ✗ 0 errors · ⚠ 0 warnings · 3 info
+
+  1  • workflows use variable DEPLOY_ENABLED, but no template or schema
+       documents it
+       info · EG012 ci-secret-undocumented · .github/workflows/deploy.yml:6:9
+
+     Why      Whoever sets up a fork, a new environment or a new repository has
+              to discover DEPLOY_ENABLED by reading workflow files; a missing
+              one usually shows up as a failed deploy.
+     Fix      Document it: add `DEPLOY_ENABLED=` to .env.example with a comment
+              such as
+              `# CI: set in GitHub → Settings → Secrets and variables → Actions (Variables tab)`,
+              or declare it under `variables:` in .envguard.yaml.
+
+  2  • workflows use secret DEPLOY_KEY, but no template or schema documents it
+       info · EG012 ci-secret-undocumented · .github/workflows/deploy.yml:13:27
+
+     Why      Whoever sets up a fork, a new environment or a new repository has
+              to discover DEPLOY_KEY by reading workflow files; a missing one
+              usually shows up as a failed deploy.
+     Fix      Document it: add `DEPLOY_KEY=` to .env.example with a comment such
+              as
+              `# CI: set in GitHub → Settings → Secrets and variables → Actions (Secrets tab)`,
+              or declare it under `variables:` in .envguard.yaml.
+     Related  .github/workflows/deploy.yml:16:24
+
+  3  • workflows use variable AWS_DEPLOY_REGION, but no template or schema
+       documents it
+       info · EG012 ci-secret-undocumented · .github/workflows/deploy.yml:15:23
+
+     Why      Whoever sets up a fork, a new environment or a new repository has
+              to discover AWS_DEPLOY_REGION by reading workflow files; a missing
+              one usually shows up as a failed deploy.
+     Fix      Document it: add `AWS_DEPLOY_REGION=` to .env.example with a
+              comment such as
+              `# CI: set in GitHub → Settings → Secrets and variables → Actions (Variables tab)`,
+              or declare it under `variables:` in .envguard.yaml.
+
+Environment matrix
+  App negative
+    No real env files yet.
+    Templates only, no env file yet: default
+  ✓ set  ○ empty  ✗ missing (required by a template)  – not required
+
+CI inventory  what GitHub Actions workflows expect
+  Secrets  DEPLOY_KEY         .github/workflows/deploy.yml:13:27 (+1 more)
+           DOCUMENTED_TOKEN   .github/workflows/deploy.yml:14:27
+  Vars     AWS_DEPLOY_REGION  .github/workflows/deploy.yml:15:23
+           DEPLOY_ENABLED     .github/workflows/deploy.yml:6:9
+
+Good to know
+  • Git checks (EG008, EG009) were skipped: run EnvGuard inside a git work tree
+    with git installed.
+
+Next steps
+  1. Only informational findings left: clean them up when convenient.
+  2. Learn more about a rule: `envguard explain EG012` (all rules:
+     `envguard explain --list`).
+  3. Run `envguard init` to generate .envguard.yaml with types and required
+     flags for every variable.
+  4. Run `envguard check` in CI: it exits 1 on errors and annotates pull
+     requests in GitHub Actions.

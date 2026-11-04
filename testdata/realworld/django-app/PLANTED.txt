@@ -1,0 +1,2 @@
+EG003 shop/inventory.py INVENTORY_API_URL - code reads os.environ["INVENTORY_API_URL"] with no default; not in any env file, template, compose file or workflow
+EG006 .env DJANGO_DEBUG - key defined twice in the same env file

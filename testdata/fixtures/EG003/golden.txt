@@ -1,0 +1,25 @@
+positive/scripts/deploy.sh:2:34  error  EG003 used-but-undeclared  DEPLOY_TOKEN is read by the code but not declared in any env file, template or schema
+  variable: DEPLOY_TOKEN
+  why: Nothing documents that DEPLOY_TOKEN must be set, so a new environment or teammate will not provide it and the code reads an empty value at runtime.
+  fix: Add `DEPLOY_TOKEN=` to positive/.env.example (read at positive/scripts/deploy.sh:2), then set it in each real env file. If the platform provides it, add DEPLOY_TOKEN to scanner.ignore_variables in .envguard.yaml.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md
+positive/src/app.js:2:24  error  EG003 used-but-undeclared  MISSING_DATABASE_URL is read by the code (5 places) but not declared in any env file, template or schema
+  variable: MISSING_DATABASE_URL
+  why: Nothing documents that MISSING_DATABASE_URL must be set, so a new environment or teammate will not provide it and the code reads an empty value at runtime.
+  fix: Add `MISSING_DATABASE_URL=` to positive/.env.example (read at positive/src/app.js:2), then set it in each real env file. If the platform provides it, add MISSING_DATABASE_URL to scanner.ignore_variables in .envguard.yaml.
+  related: positive/src/db.js:1:23
+  related: positive/src/db.js:2:23
+  related: positive/src/db.js:3:23
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md
+positive/src/app.js:3:26  info  EG003 used-but-undeclared  OPTIONAL_FLAG is read by the code but not declared in any env file, template or schema
+  variable: OPTIONAL_FLAG
+  why: The code falls back to a default, so nothing breaks if OPTIONAL_FLAG is unset, but it is invisible to anyone configuring the app and the default may be wrong for production.
+  fix: Document it by adding `OPTIONAL_FLAG= # optional` to positive/.env.example (read at positive/src/app.js:3). If you do not want it documented, add OPTIONAL_FLAG to scanner.ignore_variables in .envguard.yaml.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md
+positive/src/app.js:5:26  error  EG003 used-but-undeclared  PORT is read by the code (2 places) but not declared in any env file, template or schema
+  variable: PORT
+  why: Nothing documents that PORT must be set, so a new environment or teammate will not provide it and the code reads an empty value at runtime.
+  fix: Add `PORT=` to positive/.env.example (read at positive/src/app.js:5), then set it in each real env file. If the platform provides it, add PORT to scanner.ignore_variables in .envguard.yaml.
+  related: positive/worker/main.go:6:17
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG003-used-but-undeclared.md
+(4 findings, 0 suppressed)

@@ -1,0 +1,78 @@
+EG001 missing-variable
+──────────────────────
+
+  Default severity: error
+
+  A variable declared in a template or required by the schema is missing from an
+  environment's real env file.
+
+What it detects
+
+  Each real env file is compared with the templates that apply to its
+  environment: the app's default templates (`.env.example`, `.env.sample`, ...)
+  plus the environment's own templates (`.env.production.example`).
+
+  • A template variable is *required* if the template gives it a non-empty
+    value, or if its line is not marked `# optional`. Only `KEY= # optional`
+    declares an optional variable, and EG001 skips those.
+  • A schema variable with `required: true` is required in the environments it
+    lists (all if none), in app roots that reference it and in the root app.
+    Template-based findings come first; a schema finding is not duplicated.
+  • Local override files (`.env.local`, `.env.production.local`) are skipped,
+    and so are environments without a real file: a missing `.env` is never
+    reported.
+  • With `--process-env`, the process environment is checked instead of the env
+    files.
+
+Why it matters
+
+  Anything that reads the variable in that environment gets no value. That
+  usually fails only at runtime, or silently falls back to a default.
+
+Bad example
+
+      # .env.example
+      DATABASE_URL=
+      LOG_LEVEL= # optional
+
+      # .env.production
+      LOG_LEVEL=info
+
+      .env.production
+        ✗ error    EG001  DATABASE_URL is declared in .env.example but missing from .env.production
+
+Good example
+
+      # .env.production
+      DATABASE_URL=postgres://db.internal/app
+      LOG_LEVEL=info
+
+How to fix
+
+  1. Add the variable to the env file named in the finding (`DATABASE_URL=`) and
+     set its value.
+  2. If the variable is not needed there, mark it optional in the template
+     (`DATABASE_URL= # optional`), or narrow `environments:` of the schema
+     variable.
+
+How to suppress
+
+  The finding lists the template declaration as a related location, so an inline
+  directive on the line above the declaration in the template silences it for
+  every env file:
+
+      # .env.example
+      # envguard-ignore EG001 -- only set in production
+      SENTRY_DSN=
+
+  A file-level `# envguard-ignore-file EG001` in the real env file (or in the
+  template) silences the rule for that file. In `.envguard.yaml`:
+
+      version: 1
+      rules:
+        EG001: warning   # or info, or off
+      ignore:
+        - rule: EG001
+          path: ".env.development"
+          variable: SENTRY_DSN
+          reason: error reporting is disabled in development

@@ -1,0 +1,11 @@
+positive/.env:2:16  warning  EG016 unresolved-reference  APP_URL references HOST, which is not defined in positive/.env or the env files loaded with it
+  variable: HOST
+  why: Loaders that expand references substitute an empty string for an undefined HOST, so APP_URL silently ends up incomplete (for example a URL without a host).
+  fix: Define `HOST=` in positive/.env (checked: positive/.env), give the reference a default such as `${HOST:-value}`, or add HOST to scanner.ignore_variables in .envguard.yaml if the process environment provides it.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG016-unresolved-reference.md
+positive/.env.production:1:9  warning  EG016 unresolved-reference  API_URL references API_HOST, which is not defined in positive/.env.production or the env files loaded with it
+  variable: API_HOST
+  why: Loaders that expand references substitute an empty string for an undefined API_HOST, so API_URL silently ends up incomplete (for example a URL without a host).
+  fix: Define `API_HOST=` in positive/.env.production (checked: positive/.env and positive/.env.production), give the reference a default such as `${API_HOST:-value}`, or add API_HOST to scanner.ignore_variables in .envguard.yaml if the process environment provides it.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG016-unresolved-reference.md
+(2 findings, 0 suppressed)

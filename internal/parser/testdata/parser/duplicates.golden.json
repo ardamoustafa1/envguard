@@ -1,0 +1,88 @@
+{
+  "Filename": "testdata/parser/duplicates.env",
+  "Entries": [
+    {
+      "Key": "DUP",
+      "Value": "first",
+      "RawValue": "first",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "ValuePos": {
+        "Line": 1,
+        "Column": 5,
+        "Offset": 4
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "OTHER",
+      "Value": "x",
+      "RawValue": "x",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 10
+      },
+      "ValuePos": {
+        "Line": 2,
+        "Column": 7,
+        "Offset": 16
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "DUP",
+      "Value": "second",
+      "RawValue": "second",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 3,
+        "Column": 1,
+        "Offset": 18
+      },
+      "ValuePos": {
+        "Line": 3,
+        "Column": 5,
+        "Offset": 22
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "DUP",
+      "Value": "third",
+      "RawValue": "\"third\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 8,
+        "Offset": 36
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 12,
+        "Offset": 40
+      },
+      "HasExport": true,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

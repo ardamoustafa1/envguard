@@ -1,0 +1,42 @@
+name: New language support
+description: Ask EnvGuard to detect environment variable reads in another language.
+labels: ["new-language", "good first issue"]
+body:
+  - type: input
+    id: language
+    attributes:
+      label: Language and framework
+      placeholder: Dart / Flutter
+    validations:
+      required: true
+  - type: input
+    id: extensions
+    attributes:
+      label: File extensions
+      placeholder: ".dart"
+    validations:
+      required: true
+  - type: textarea
+    id: apis
+    attributes:
+      label: Environment access APIs
+      description: Code examples of every way to read an environment variable.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: defaults
+    attributes:
+      label: Default-value idioms
+      description: How code supplies a fallback, for example `?? "x"` or `getOrDefault`.
+      render: text
+  - type: textarea
+    id: comments
+    attributes:
+      label: Comment and string syntax
+      description: Line and block comments, string quotes, raw or multi-line strings.
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: Official documentation for the APIs above.

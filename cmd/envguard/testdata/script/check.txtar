@@ -1,0 +1,138 @@
+# envguard check: output, formats, flags and exit codes.
+
+# A clean project passes with exit code 0.
+exitcode 0 envguard --root clean check
+stdout '^✓ No problems found · 3 files$'
+! stderr .
+
+# Errors fail with exit code 1, grouped by file, with a summary and a hint.
+exitcode 1 envguard --root demo check
+stdout '^\.env\.production$'
+stdout '^ +6:9  ✗ error    EG014  WORKERS in \.env\.production has the invalid value 0: is below the minimum 1$'
+stdout '^ +✗ error    EG001  STRIPE_SECRET_KEY is declared in \.env\.production\.example but missing from \.env\.production$'
+stdout '^✗ 6 errors · ⚠ 10 warnings · 4 info · 10 files$'
+stdout '^Run `envguard doctor` to see why'
+! stdout 'pa55word'
+! stderr .
+
+# --fail-on: never, warning, info; invalid values are configuration errors.
+exitcode 0 envguard --root demo check --fail-on never
+exitcode 0 envguard --root warn check
+stdout '⚠ warning  EG006'
+exitcode 1 envguard --root warn check --fail-on warning
+exitcode 1 envguard --root warn check --fail-on=info
+exitcode 2 envguard --root demo check --fail-on warn
+stderr '^envguard: --fail-on: invalid value; allowed: error, warning, info, never \(did you mean "warning"\?\)$'
+
+# --quiet prints nothing.
+exitcode 1 envguard --root demo check --quiet
+! stdout .
+
+# --env limits environments (aliases allowed).
+exitcode 1 envguard --root demo check --env prod
+stdout '^\.env\.production$'
+! stdout '^\.env$'
+
+# --app limits findings to one app root; unknown apps are errors that list the known roots.
+exitcode 0 envguard --root demo check --app worker
+stdout '^worker/main\.py$'
+! stdout '^\.env'
+exitcode 2 envguard --root demo check --app nope
+stderr '^envguard: --app: not an app root under --root .*known app roots: \., worker$'
+! stderr nope
+
+# --format: every format, and a clear error for unknown ones.
+exitcode 1 envguard --root demo check --format json
+stdout '"schema_version": 1'
+stdout '"rule_id": "EG014"'
+exitcode 1 envguard --root demo check --format sarif
+stdout '"version": "2.1.0"'
+stdout '"ruleId": "EG010"'
+exitcode 1 envguard --root demo check --format github
+stdout '^::error file=demo/\.env\.production,line=6,col=9,title=EG014 invalid-value::WORKERS'
+stdout '^::notice file=demo/\.env\.example,line=9,col=1,title=EG004 declared-but-unused::'
+stdout '^EnvGuard: 6 errors, 10 warnings, 4 info in 10 files\.$'
+exitcode 1 envguard --root demo check --format doctor
+stdout '^EnvGuard doctor · demo$'
+exitcode 1 envguard --root demo check --format PRETTY
+stdout '^✗ 6 errors'
+exitcode 2 envguard --root demo check --format xml
+stderr '^envguard: --format: unknown format; want one of pretty, doctor, json, sarif, github$'
+
+# --ascii replaces Unicode symbols.
+exitcode 1 envguard --root demo --ascii check
+stdout '^ +6:9  x error    EG014'
+stdout '^x 6 errors \| ! 10 warnings \| 4 info \| 10 files$'
+
+# --no-color and non-TTY output never contain escape sequences.
+exitcode 1 envguard --root demo --no-color check
+! stdout '\x1b\['
+
+# --output writes the report to a file and nothing to stdout.
+exitcode 1 envguard --root demo check --format json --output out/report.json
+! stdout .
+exists out/report.json
+grep '"rule_id": "EG007"' out/report.json
+exitcode 2 envguard --root demo check --output out
+stderr '^envguard: --output: open: is a directory$'
+
+# Inside GitHub Actions, check defaults to annotations and writes a job summary.
+env GITHUB_ACTIONS=true
+env GITHUB_STEP_SUMMARY=$WORK/summary.md
+exitcode 1 envguard --root demo check
+stdout '^::error file=demo/'
+grep '^## EnvGuard$' summary.md
+grep '^\| ❌ error \| \[EG014\]' summary.md
+exitcode 1 envguard --root demo check --format pretty
+stdout '^✗ 6 errors'
+env GITHUB_ACTIONS=
+env GITHUB_STEP_SUMMARY=
+
+# --verbose logs phases with timings and skipped paths to stderr.
+mkdir demo/node_modules
+exitcode 1 envguard --root demo --verbose check
+stderr '^envguard: no config file; using defaults$|^envguard: using config '
+stderr '^envguard: timing: discover +[0-9.]+(µs|ms|s)$'
+stderr '^envguard: timing: rules '
+stderr '^envguard: timing: report '
+stderr '^envguard: skipped node_modules \(builtin-exclude\)$'
+stderr '^envguard: 1 dynamic lookup could not be analyzed \(variable names computed at run time\)$'
+
+# Invalid configuration and arguments exit with 2.
+exitcode 2 envguard --root badconfig check
+stderr '\.envguard\.yaml:2:1: unknown key "exlude"'
+exitcode 2 envguard --root demo check extra
+stderr '^envguard: check takes no arguments; run `envguard check --help` for its flags$'
+exitcode 2 envguard --root does-not-exist check
+stderr '^envguard: --root: cannot read "does-not-exist" \(no such file or directory\); pass the directory of the repository to check, or run envguard from it$'
+exitcode 2 envguard --root demo/package.json check
+stderr '^envguard: --root: "demo/package.json" is a file, not a directory; pass the directory of the repository to check$'
+
+# An environment that does not exist is an error, never a silent all-clear.
+exitcode 2 envguard --root demo check --env prodction
+stderr '^envguard: --env: value 1 names no environment of this repository; known environments: default, production, staging \(aliases such as prod and dev are fine\)$'
+! stderr prodction
+! stdout .
+exitcode 2 envguard --root demo check --env prod,qa
+stderr '--env: value 2 names no environment'
+exitcode 1 envguard --root demo check --env staging,prod
+exitcode 2 envguard --root empty check --env production
+stderr '^envguard: --env: value 1 names no environment of this repository; this repository has no env files or templates$'
+
+-- clean/package.json --
+{"name": "clean"}
+-- clean/.env.example --
+API_URL=
+-- clean/.env --
+API_URL=https://api.example.com
+-- clean/index.js --
+fetch(process.env.API_URL);
+-- warn/.env.example --
+A=
+-- warn/.env --
+A=1
+A=2
+-- badconfig/.envguard.yaml --
+version: 1
+exlude: [x]
+-- empty/.keep --

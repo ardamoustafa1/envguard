@@ -1,0 +1,2 @@
+EG003 internal/alerts/slack.go SLACK_WEBHOOK_URL - code reads os.Getenv("SLACK_WEBHOOK_URL") with no default; it is in no env file, template, compose file or workflow
+EG006 .env.example LOG_LEVEL - key defined twice in the same file with different values

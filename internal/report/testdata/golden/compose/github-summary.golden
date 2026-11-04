@@ -1,0 +1,18 @@
+## EnvGuard
+
+| ❌ Errors | ⚠️ Warnings | ℹ️ Info | Suppressed | Files |
+|---:|---:|---:|---:|---:|
+| 2 | 6 | 0 | 0 | 7 |
+
+| Severity | Rule | Location | Problem |
+|---|---|---|---|
+| ❌ error | [EG001](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md) missing-variable | `negative/.env` | B is declared in negative/.env.example but missing from negative/.env |
+| ❌ error | [EG001](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md) missing-variable | `positive/.env` | TEMPLATE_VAR is declared in positive/.env.example but missing from positive/.env |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env:1:1` | A is set in negative/.env but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env:1:1` | DEFINED_VAR is set in positive/.env but not documented in any template |
+| ⚠️ warning | [EG011](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md) compose-undefined-variable | `positive/deploy/compose.prod.yaml:3:19` | positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is no positive/deploy/.env next to it and it is not declared in positive/.env.example |
+| ⚠️ warning | [EG011](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md) compose-undefined-variable | `positive/docker-compose.yml:5:39` | positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in positive/.env (the file Compose reads) or any template |
+| ⚠️ warning | [EG011](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md) compose-undefined-variable | `positive/docker-compose.yml:9:16` | positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not defined in positive/.env (the file Compose reads) or any template |
+| ⚠️ warning | [EG011](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md) compose-undefined-variable | `positive/docker-compose.yml:12:9` | service api: env_file positive/missing.env does not exist |
+
+Run `envguard doctor` locally to see why each problem matters and how to fix it.

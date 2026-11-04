@@ -1,0 +1,11 @@
+Comparing staging → production
+
+App .
+  staging: .env.example, .env.staging.example (templates)
+  production: .env.production
+  - LEGACY_API_KEY  only in staging
+  - SENTRY_DSN      only in staging
+  - STAGING_BANNER  only in staging
+  8 variables in both
+
+3 variables differ in 1 app root.

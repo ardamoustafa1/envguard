@@ -1,0 +1,11 @@
+App negative
+  VARIABLE  default
+  A            ✓
+  B            ✗
+
+App positive
+  VARIABLE      default
+  DEFINED_VAR      ✓
+  TEMPLATE_VAR     ✗
+
+✓ set  ○ empty  ✗ missing (required by a template)  – not required

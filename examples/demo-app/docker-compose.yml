@@ -1,0 +1,17 @@
+services:
+  api:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+  worker:
+    build: ./worker
+    environment:
+      QUEUE_URL: redis://redis:6379/0
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

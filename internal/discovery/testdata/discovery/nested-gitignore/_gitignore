@@ -1,0 +1,7 @@
+*.log
+!keep.log
+secret/
+/generated.js
+.env
+# comment
+

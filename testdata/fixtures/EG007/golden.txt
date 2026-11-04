@@ -1,0 +1,29 @@
+positive/.env:2:1  error  EG007 syntax-error  key must not start with a digit
+  why: Env loaders skip or misread malformed lines, so the affected variable silently ends up with a wrong value or none at all.
+  fix: Keys may contain only ASCII letters, digits, '_', '.' and '-', and must not start with a digit.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md
+positive/.env:3:1  error  EG007 syntax-error  missing '=' after key
+  why: Env loaders skip or misread malformed lines, so the affected variable silently ends up with a wrong value or none at all.
+  fix: Write assignments as KEY=value. Keys cannot contain spaces, and a bare 'export KEY' without a value is not supported.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md
+positive/.env:4:15  warning  EG007 syntax-error  GREETING: unquoted value contains whitespace
+  variable: GREETING
+  why: Loaders disagree on unquoted values with spaces: some keep the whole line, some stop at the first space, and shells treat the rest as a command.
+  fix: Wrap the value in double quotes. Some loaders cut unquoted values at the first space or treat the rest as a separate token.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md
+positive/.env:5:13  error  EG007 syntax-error  WIN_PATH: invalid escape sequence in double-quoted value
+  variable: WIN_PATH
+  why: Loaders handle unknown escape sequences differently, so the value your app receives depends on which loader reads the file.
+  fix: Supported escapes in double quotes are \n \t \r \" \\ and \$. Use \\ for a literal backslash, or single quotes for fully literal text.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md
+positive/.env:5:19  error  EG007 syntax-error  WIN_PATH: invalid escape sequence in double-quoted value
+  variable: WIN_PATH
+  why: Loaders handle unknown escape sequences differently, so the value your app receives depends on which loader reads the file.
+  fix: Supported escapes in double quotes are \n \t \r \" \\ and \$. Use \\ for a literal backslash, or single quotes for fully literal text.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md
+positive/.env:8:14  error  EG007 syntax-error  UNTERMINATED: unterminated double quote
+  variable: UNTERMINATED
+  why: Env loaders skip or misread malformed lines, so the affected variable silently ends up with a wrong value or none at all.
+  fix: Add the matching closing quote. Only double quotes and backticks may span multiple lines; the quote opened here was never closed.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG007-syntax-error.md
+(6 findings, 1 suppressed)

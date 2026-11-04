@@ -1,0 +1,86 @@
+{
+  "Files": [
+    {
+      "Path": ".env",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": true,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.example",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 3
+    },
+    {
+      "Path": "app.js",
+      "Kind": "source",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "javascript",
+      "Size": 2
+    },
+    {
+      "Path": "other/c.ts",
+      "Kind": "source",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "typescript",
+      "Size": 2
+    },
+    {
+      "Path": "sub/generated.js",
+      "Kind": "source",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "javascript",
+      "Size": 2
+    },
+    {
+      "Path": "sub/keep.ts",
+      "Kind": "source",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "typescript",
+      "Size": 2
+    }
+  ],
+  "Skipped": [
+    {
+      "Path": "generated.js",
+      "Reason": "gitignored"
+    },
+    {
+      "Path": "secret",
+      "Reason": "gitignored"
+    },
+    {
+      "Path": "sub/a.ts",
+      "Reason": "gitignored"
+    },
+    {
+      "Path": "sub/deeper/b.ts",
+      "Reason": "gitignored"
+    }
+  ],
+  "AppRoots": [
+    "."
+  ],
+  "Truncated": false
+}

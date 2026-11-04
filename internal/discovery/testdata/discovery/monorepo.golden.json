@@ -1,0 +1,238 @@
+{
+  "Files": [
+    {
+      "Path": ".env.example",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 9
+    },
+    {
+      "Path": ".github/workflows/ci.yml",
+      "Kind": "workflow",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 9
+    },
+    {
+      "Path": ".github/workflows/release.yaml",
+      "Kind": "workflow",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 9
+    },
+    {
+      "Path": "apps/api/.env",
+      "Kind": "env",
+      "AppRoot": "apps/api",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 14
+    },
+    {
+      "Path": "apps/api/.env.example",
+      "Kind": "env-template",
+      "AppRoot": "apps/api",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 10
+    },
+    {
+      "Path": "apps/api/config/.env.test",
+      "Kind": "env",
+      "AppRoot": "apps/api",
+      "Environment": "test",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 11
+    },
+    {
+      "Path": "apps/api/src/server.ts",
+      "Kind": "source",
+      "AppRoot": "apps/api",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "typescript",
+      "Size": 21
+    },
+    {
+      "Path": "apps/web/.env.local",
+      "Kind": "env",
+      "AppRoot": "apps/web",
+      "Environment": "development",
+      "Local": true,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 16
+    },
+    {
+      "Path": "apps/web/.env.production.example",
+      "Kind": "env-template",
+      "AppRoot": "apps/web",
+      "Environment": "production",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 15
+    },
+    {
+      "Path": "apps/web/components/Button.vue",
+      "Kind": "source",
+      "AppRoot": "apps/web",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "vue",
+      "Size": 12
+    },
+    {
+      "Path": "apps/web/pages/index.tsx",
+      "Kind": "source",
+      "AppRoot": "apps/web",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "typescript",
+      "Size": 17
+    },
+    {
+      "Path": "deploy/compose.prod.yaml",
+      "Kind": "compose",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 13
+    },
+    {
+      "Path": "deploy/docker-compose-dev.yml",
+      "Kind": "compose",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 13
+    },
+    {
+      "Path": "docker-compose.yml",
+      "Kind": "compose",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 13
+    },
+    {
+      "Path": "services/billing/Program.cs",
+      "Kind": "source",
+      "AppRoot": "services/billing",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "csharp",
+      "Size": 11
+    },
+    {
+      "Path": "services/worker/.env",
+      "Kind": "env",
+      "AppRoot": "services/worker",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 11
+    },
+    {
+      "Path": "services/worker/main.go",
+      "Kind": "source",
+      "AppRoot": "services/worker",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "go",
+      "Size": 13
+    },
+    {
+      "Path": "tools/deploy.sh",
+      "Kind": "source",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "shell",
+      "Size": 17
+    }
+  ],
+  "Skipped": [
+    {
+      "Path": ".nuxt",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": ".venv",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "__pycache__",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "apps/web/.next",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "apps/web/node_modules",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "build",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "coverage",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "dist",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "target",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "vendor",
+      "Reason": "builtin-exclude"
+    },
+    {
+      "Path": "venv",
+      "Reason": "builtin-exclude"
+    }
+  ],
+  "AppRoots": [
+    ".",
+    "apps/api",
+    "apps/web",
+    "services/billing",
+    "services/worker"
+  ],
+  "Truncated": false
+}

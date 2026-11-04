@@ -1,0 +1,2 @@
+EG003 config/services.php MODERATION_ALERT_CHANNEL - read via env() with no default but declared in no env file, template, compose file or workflow
+EG006 .env LOG_LEVEL - key defined twice in the local .env (debug then info)

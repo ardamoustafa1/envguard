@@ -1,0 +1,20 @@
+version: 1
+variables:
+  DATABASE_URL:
+    type: url
+    schemes: [postgres, postgresql]
+    sensitive: true
+  LOG_LEVEL:
+    type: enum
+    values: [debug, info, warn, error]
+    default: info
+  PORT: { type: port, default: "3000" }
+  WORKERS: { type: int, min: 1, max: 64 }
+  DEBUG: { type: bool }
+  API_URL: { type: url, pattern: "^https://" }
+  ADMIN_EMAIL: { type: email }
+  CACHE_TTL: { type: duration }
+  FEATURES: { type: json }
+  HOST: { type: hostname }
+  RATIO: { type: float, max: 1 }
+  PUBLIC_NAME: { sensitive: true, min_length: 3 }

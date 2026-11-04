@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:${PG_VERSION:-16}
+    environment:
+      A: ${A}
+      B: ${B}
+      HOME_DIR: ${HOME}
+      LITERAL: "$$NOT_INTERPOLATED"
+    env_file:
+      - .env
+      - path: local.env
+        required: false

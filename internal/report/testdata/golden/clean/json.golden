@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "envguard",
+    "version": "test"
+  },
+  "command": "check",
+  "root": ".",
+  "process_env": false,
+  "stats": {
+    "env_files": 1,
+    "templates": 1,
+    "compose_files": 0,
+    "workflows": 0,
+    "source_files": 1,
+    "languages": [
+      {
+        "language": "javascript",
+        "files": 1
+      }
+    ],
+    "variables": 2,
+    "app_roots": [
+      "."
+    ],
+    "dynamic_lookups": 0
+  },
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 0,
+    "suppressed": 0
+  },
+  "findings": [],
+  "matrix": [
+    {
+      "app_root": ".",
+      "environments": [
+        "default"
+      ],
+      "template_only_environments": [],
+      "files": {
+        "default": [
+          ".env"
+        ]
+      },
+      "variables": [
+        {
+          "name": "API_URL",
+          "cells": {
+            "default": "set"
+          }
+        },
+        {
+          "name": "PORT",
+          "cells": {
+            "default": "set"
+          }
+        }
+      ]
+    }
+  ],
+  "ci": {
+    "secrets": [],
+    "vars": []
+  },
+  "notes": []
+}

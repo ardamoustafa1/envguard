@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.go text eol=lf
+# Fixtures keep their exact bytes so CRLF / BOM tests are meaningful.
+**/testdata/** -text

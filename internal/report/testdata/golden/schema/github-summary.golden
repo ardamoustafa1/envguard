@@ -1,0 +1,40 @@
+## EnvGuard
+
+| ❌ Errors | ⚠️ Warnings | ℹ️ Info | Suppressed | Files |
+|---:|---:|---:|---:|---:|
+| 0 | 30 | 0 | 0 | 5 |
+
+| Severity | Rule | Location | Problem |
+|---|---|---|---|
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.development:2:1` | NODE_ENV is set in negative/.env.development but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.development:3:1` | DATABASE_URL is set in negative/.env.development but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:2:1` | APP_DEBUG is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:3:1` | FLASK_DEBUG is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:4:1` | NODE_ENV is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:5:1` | RAILS_ENV is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:6:1` | APP_ENV is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:7:1` | DATABASE_URL is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:8:1` | REDIS_HOST is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `negative/.env.production:12:1` | EMPTY_VALUE_IS_IGNORED is set in negative/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:1:7` | DEBUG must be false in production but is on (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:2:1` | APP_DEBUG is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:2:11` | APP_DEBUG is enabled in production (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:3:1` | FLASK_DEBUG is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:3:13` | FLASK_DEBUG is enabled in production (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:4:1` | DJANGO_DEBUG is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:4:14` | DJANGO_DEBUG is enabled in production (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:5:1` | NODE_ENV is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:5:10` | NODE_ENV is development, but production must use "production" (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:6:1` | RAILS_ENV is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:6:11` | RAILS_ENV is staging, but production must use "production" (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:7:1` | APP_ENV is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:7:9` | APP_ENV is local in production (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:8:1` | DATABASE_URL is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:8:14` | DATABASE_URL points to a local address in production (positive/.env.production) |
+| ⚠️ warning | [EG002](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md) undocumented-variable | `positive/.env.production:9:1` | REDIS_HOST is set in positive/.env.production but not documented in any template |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:9:12` | REDIS_HOST points to a local address in production (positive/.env.production) |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:10:11` | LOG_LEVEL must not be debug in production (positive/.env.production) |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:11:15` | CACHE_ENABLED must be true in production but is no (positive/.env.production) |
+| ⚠️ warning | [EG015](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md) unsafe-production-value | `positive/.env.production:12:9` | CDN_URL does not match the production pattern "^https://" (positive/.env.production) |
+
+Run `envguard doctor` locally to see why each problem matters and how to fix it.

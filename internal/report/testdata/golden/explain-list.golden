@@ -1,0 +1,37 @@
+RULE   NAME                         SEVERITY  DESCRIPTION
+EG001  missing-variable             error     A variable declared in a template or required by the
+                                              schema is missing from an environment's real env file.
+EG002  undocumented-variable        warning   A real env file sets a variable that no template or
+                                              schema documents.
+EG003  used-but-undeclared          error     The code reads an environment variable that no env
+                                              file, template, schema, Compose file or workflow
+                                              declares.
+EG004  declared-but-unused          info      A template declares a variable that no code, env file
+                                              reference, Compose file or workflow reads.
+EG005  empty-required-value         warning   A required variable is present but empty in a real env
+                                              file or the process environment.
+EG006  duplicate-key                warning   The same key is defined more than once in one env file
+                                              or template.
+EG007  syntax-error                 error     An env file, Compose file or workflow cannot be
+                                              parsed, or an env file line cannot be parsed reliably.
+EG008  env-file-committed           error     A real env file (not a template) is tracked by git.
+EG009  env-file-not-ignored         warning   A real env file is not tracked by git, but no
+                                              `.gitignore` rule covers it.
+EG010  possible-secret-in-template  error     A template, or a real env file that git tracks,
+                                              contains a value that looks like a real credential.
+EG011  compose-undefined-variable   warning   A Compose file interpolates an undefined variable
+                                              without a default, or a required `env_file` does not
+                                              exist.
+EG012  ci-secret-undocumented       info      A GitHub Actions workflow references `secrets.X` or
+                                              `vars.X` that no template or schema documents.
+EG013  environment-drift            warning   Templates of different environments of the same app
+                                              disagree on which variables exist.
+EG014  invalid-value                error     A value in a real env file or the process environment
+                                              violates its schema in `.envguard.yaml`.
+EG015  unsafe-production-value      warning   A production value looks like a development setting;
+                                              active only via schema `production:` rules or a
+                                              profile.
+EG016  unresolved-reference         warning   A `$VAR` or `${VAR}` reference inside an env file
+                                              points to a variable that nothing defines.
+
+Run `envguard explain <RULE>` for details, e.g. `envguard explain EG001`.

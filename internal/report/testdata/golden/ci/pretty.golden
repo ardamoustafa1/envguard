@@ -1,0 +1,7 @@
+.github/workflows/deploy.yml
+    6:9  • info     EG012  workflows use variable DEPLOY_ENABLED, but no template or schema documents it
+  13:27  • info     EG012  workflows use secret DEPLOY_KEY, but no template or schema documents it
+  15:23  • info     EG012  workflows use variable AWS_DEPLOY_REGION, but no template or schema documents it
+
+✗ 0 errors · ⚠ 0 warnings · 3 info · 2 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG012`.

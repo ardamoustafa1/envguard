@@ -1,0 +1,40 @@
+[1m.env[0m
+  [2m2:11[0m  [1;31m✗ error[0m    [2mEG014[0m  [1mLOG_LEVEL[0m in .env has the invalid value verbose: expected one of debug, info, warn or error
+   [2m5:1[0m  [1;33m⚠ warning[0m  [2mEG005[0m  [1mSESSION_SECRET[0m is empty in .env but required by .env.example
+   [2m8:1[0m  [1;33m⚠ warning[0m  [2mEG002[0m  [1mFEATURE_NEW_CHECKOUT[0m is set in .env but not documented in any template
+   [2m9:1[0m  [1;33m⚠ warning[0m  [2mEG002[0m  [1mCACHE_DIR[0m is set in .env but not documented in any template
+  [2m9:11[0m  [1;33m⚠ warning[0m  [2mEG016[0m  CACHE_DIR references [1mAPP_HOME[0m, which is not defined in .env or the env files loaded with it
+
+[1m.env.example[0m
+  [2m4:14[0m  [1;31m✗ error[0m    [2mEG010[0m  [1mDATABASE_URL[0m in .env.example looks like a URL with an embedded password
+   [2m9:1[0m  [1;34m• info[0m     [2mEG004[0m  [1mLEGACY_API_KEY[0m is declared in .env.example but never read by the code, env files, Compose files or workflows
+
+[1m.env.production[0m
+        [1;31m✗ error[0m    [2mEG001[0m  [1mSTRIPE_SECRET_KEY[0m is declared in .env.production.example but missing from .env.production
+  [2m4:11[0m  [1;33m⚠ warning[0m  [2mEG015[0m  [1mREDIS_URL[0m points to a local address in production (.env.production)
+   [2m6:9[0m  [1;31m✗ error[0m    [2mEG014[0m  [1mWORKERS[0m in .env.production has the invalid value 0: is below the minimum 1
+   [2m8:1[0m  [1;33m⚠ warning[0m  [2mEG006[0m  [1mDEBUG[0m is defined 2 times in .env.production (lines 7 and 8)
+   [2m8:7[0m  [1;33m⚠ warning[0m  [2mEG015[0m  [1mDEBUG[0m is enabled in production (.env.production)
+  [2m10:8[0m  [1;31m✗ error[0m    [2mEG007[0m  missing '=' after key
+
+[1m.env.production.example[0m
+  [2m2:1[0m  [1;33m⚠ warning[0m  [2mEG013[0m  [1mSTRIPE_SECRET_KEY[0m is declared for production but not for staging
+
+[1m.env.staging.example[0m
+  [2m2:1[0m  [1;33m⚠ warning[0m  [2mEG013[0m  [1mSTAGING_BANNER[0m is declared for staging but not for production
+
+[1m.github/workflows/deploy.yml[0m
+  [2m14:30[0m  [1;34m• info[0m     [2mEG012[0m  workflows use secret [1mFLY_API_TOKEN[0m, but no template or schema documents it
+  [2m15:30[0m  [1;34m• info[0m     [2mEG012[0m  workflows use variable [1mDEPLOY_REGION[0m, but no template or schema documents it
+
+[1mdocker-compose.yml[0m
+  [2m17:28[0m  [1;33m⚠ warning[0m  [2mEG011[0m  docker-compose.yml interpolates ${[1mPOSTGRES_PASSWORD[0m}, which is not defined in .env (the file Compose reads) or any template
+
+[1msrc/server.js[0m
+  [2m23:33[0m  [1;31m✗ error[0m    [2mEG003[0m  [1mANALYTICS_WRITE_KEY[0m is read by the code but not declared in any env file, template or schema
+
+[1mworker/main.py[0m
+  [2m6:30[0m  [1;34m• info[0m     [2mEG003[0m  [1mWORKER_CONCURRENCY[0m is read by the code but not declared in any env file, template or schema
+
+[1;31m✗ 6 errors[0m [2m·[0m [1;33m⚠ 10 warnings[0m [2m·[0m [1;34m4 info[0m [2m·[0m 10 files
+[2mRun `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG014`.[0m

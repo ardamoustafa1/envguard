@@ -1,0 +1,6 @@
+positive/.env.example:2:1  info  EG004 declared-but-unused  UNUSED_FEATURE_FLAG is declared in positive/.env.example but never read by the code, env files, Compose files or workflows
+  variable: UNUSED_FEATURE_FLAG
+  why: Unused variables make templates longer and send people looking for values nothing needs; they are often left over after a refactor. Note: 1 dynamic lookup in this app (a variable name computed at run time) could not be analyzed and may read it.
+  fix: If nothing needs UNUSED_FEATURE_FLAG, remove it from positive/.env.example:2 and from the real env files. If a tool outside the scanned code reads it (Prisma, Docker, a framework), add UNUSED_FEATURE_FLAG to scanner.ignore_variables in .envguard.yaml.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG004-declared-but-unused.md
+(1 findings, 0 suppressed)

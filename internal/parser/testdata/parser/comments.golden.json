@@ -1,0 +1,168 @@
+{
+  "Filename": "testdata/parser/comments.env",
+  "Entries": [
+    {
+      "Key": "URL",
+      "Value": "https://example.com/path?a=1\u0026b=2#fragment",
+      "RawValue": "https://example.com/path?a=1\u0026b=2#fragment",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 3,
+        "Column": 1,
+        "Offset": 42
+      },
+      "ValuePos": {
+        "Line": 3,
+        "Column": 5,
+        "Offset": 46
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "PASSWORD_LIKE",
+      "Value": "abc#123",
+      "RawValue": "abc#123",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 1,
+        "Offset": 88
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 15,
+        "Offset": 102
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "WITH_COMMENT",
+      "Value": "value",
+      "RawValue": "value",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 5,
+        "Column": 1,
+        "Offset": 110
+      },
+      "ValuePos": {
+        "Line": 5,
+        "Column": 14,
+        "Offset": 123
+      },
+      "HasExport": false,
+      "InlineComment": "this is a comment",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "TAB_COMMENT",
+      "Value": "value",
+      "RawValue": "value",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 6,
+        "Column": 1,
+        "Offset": 149
+      },
+      "ValuePos": {
+        "Line": 6,
+        "Column": 13,
+        "Offset": 161
+      },
+      "HasExport": false,
+      "InlineComment": "tab before hash",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "QUOTED_HASH",
+      "Value": "a # b",
+      "RawValue": "\"a # b\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 7,
+        "Column": 1,
+        "Offset": 185
+      },
+      "ValuePos": {
+        "Line": 7,
+        "Column": 13,
+        "Offset": 197
+      },
+      "HasExport": false,
+      "InlineComment": "real comment",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "SINGLE_HASH",
+      "Value": "x#y",
+      "RawValue": "'x#y'",
+      "Quote": "single",
+      "KeyPos": {
+        "Line": 8,
+        "Column": 1,
+        "Offset": 220
+      },
+      "ValuePos": {
+        "Line": 8,
+        "Column": 13,
+        "Offset": 232
+      },
+      "HasExport": false,
+      "InlineComment": "tight comment",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "EMPTY_COMMENT",
+      "Value": "",
+      "RawValue": "",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 9,
+        "Column": 1,
+        "Offset": 252
+      },
+      "ValuePos": {
+        "Line": 9,
+        "Column": 15,
+        "Offset": 266
+      },
+      "HasExport": false,
+      "InlineComment": "only a comment",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "HASH_FIRST",
+      "Value": "#notacomment",
+      "RawValue": "#notacomment",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 10,
+        "Column": 1,
+        "Offset": 284
+      },
+      "ValuePos": {
+        "Line": 10,
+        "Column": 12,
+        "Offset": 295
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

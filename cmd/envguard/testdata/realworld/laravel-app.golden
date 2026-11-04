@@ -1,0 +1,112 @@
+.env
+        ✗ error    EG001  APP_FAKER_LOCALE is declared in .env.example but missing from .env
+        ✗ error    EG001  APP_FALLBACK_LOCALE is declared in .env.example but missing from .env
+        ✗ error    EG001  APP_LOCALE is declared in .env.example but missing from .env
+        ✗ error    EG001  APP_MAINTENANCE_DRIVER is declared in .env.example but missing from .env
+        ✗ error    EG001  AWS_ACCESS_KEY_ID is declared in .env.example but missing from .env
+        ✗ error    EG001  AWS_BUCKET is declared in .env.example but missing from .env
+        ✗ error    EG001  AWS_DEFAULT_REGION is declared in .env.example but missing from .env
+        ✗ error    EG001  AWS_SECRET_ACCESS_KEY is declared in .env.example but missing from .env
+        ✗ error    EG001  AWS_USE_PATH_STYLE_ENDPOINT is declared in .env.example but missing from .env
+        ✗ error    EG001  BCRYPT_ROUNDS is declared in .env.example but missing from .env
+        ✗ error    EG001  BROADCAST_CONNECTION is declared in .env.example but missing from .env
+        ✗ error    EG001  CACHE_PREFIX is declared in .env.example but missing from .env
+        ✗ error    EG001  FILESYSTEM_DISK is declared in .env.example but missing from .env
+        ✗ error    EG001  LOG_DEPRECATIONS_CHANNEL is declared in .env.example but missing from .env
+        ✗ error    EG001  LOG_STACK is declared in .env.example but missing from .env
+        ✗ error    EG001  MAIL_ENCRYPTION is declared in .env.example but missing from .env
+        ✗ error    EG001  MAIL_HOST is declared in .env.example but missing from .env
+        ✗ error    EG001  MAIL_PASSWORD is declared in .env.example but missing from .env
+        ✗ error    EG001  MAIL_PORT is declared in .env.example but missing from .env
+        ✗ error    EG001  MAIL_USERNAME is declared in .env.example but missing from .env
+        ✗ error    EG001  MEMCACHED_HOST is declared in .env.example but missing from .env
+        ✗ error    EG001  POSTMARK_TOKEN is declared in .env.example but missing from .env
+        ✗ error    EG001  REDIS_CLIENT is declared in .env.example but missing from .env
+        ✗ error    EG001  REDIS_HOST is declared in .env.example but missing from .env
+        ✗ error    EG001  REDIS_PASSWORD is declared in .env.example but missing from .env
+        ✗ error    EG001  REDIS_PORT is declared in .env.example but missing from .env
+        ✗ error    EG001  SESSION_DOMAIN is declared in .env.example but missing from .env
+        ✗ error    EG001  SESSION_ENCRYPT is declared in .env.example but missing from .env
+        ✗ error    EG001  SESSION_LIFETIME is declared in .env.example but missing from .env
+        ✗ error    EG001  SESSION_PATH is declared in .env.example but missing from .env
+  26:1  ⚠ warning  EG006  LOG_LEVEL is defined 2 times in .env (lines 8 and 26)
+
+.env.example
+  14:1  • info     EG004  BCRYPT_ROUNDS is declared in .env.example but never read by the code, env files, Compose files or workflows
+  34:1  • info     EG004  BROADCAST_CONNECTION is declared in .env.example but never read by the code, env files, Compose files or workflows
+  41:1  • info     EG004  MEMCACHED_HOST is declared in .env.example but never read by the code, env files, Compose files or workflows
+
+.github/workflows/tests.yml
+  53:22  • info     EG012  workflows use secret CODECOV_TOKEN, but no template or schema documents it
+
+config/app.php
+  27:31  • info     EG003  APP_PREVIOUS_KEYS is read by the code but not declared in any env file, template or schema
+  33:25  • info     EG003  APP_MAINTENANCE_STORE is read by the code but not declared in any env file, template or schema
+
+config/cache.php
+  18:34  • info     EG003  DB_CACHE_CONNECTION is read by the code but not declared in any env file, template or schema
+  19:29  • info     EG003  DB_CACHE_TABLE is read by the code but not declared in any env file, template or schema
+  20:39  • info     EG003  DB_CACHE_LOCK_CONNECTION is read by the code but not declared in any env file, template or schema
+  21:34  • info     EG003  DB_CACHE_LOCK_TABLE is read by the code but not declared in any env file, template or schema
+  32:34  • info     EG003  REDIS_CACHE_CONNECTION is read by the code but not declared in any env file, template or schema
+  33:39  • info     EG003  REDIS_CACHE_LOCK_CONNECTION is read by the code but not declared in any env file, template or schema
+
+config/database.php
+  13:27  • info     EG003  DB_URL is read by the code (3 places) but not declared in any env file, template or schema
+  16:47  • info     EG003  DB_FOREIGN_KEYS is read by the code but not declared in any env file, template or schema
+  27:35  • info     EG003  DB_SOCKET is read by the code but not declared in any env file, template or schema
+  28:31  • info     EG003  DB_CHARSET is read by the code (2 places) but not declared in any env file, template or schema
+  29:33  • info     EG003  DB_COLLATION is read by the code but not declared in any env file, template or schema
+  61:31  • info     EG003  REDIS_CLUSTER is read by the code but not declared in any env file, template or schema
+  62:30  • info     EG003  REDIS_PREFIX is read by the code but not declared in any env file, template or schema
+  66:27  • info     EG003  REDIS_URL is read by the code (2 places) but not declared in any env file, template or schema
+  68:32  • info     EG003  REDIS_USERNAME is read by the code (2 places) but not declared in any env file, template or schema
+  71:32  • info     EG003  REDIS_DB is read by the code but not declared in any env file, template or schema
+  80:32  • info     EG003  REDIS_CACHE_DB is read by the code but not declared in any env file, template or schema
+
+config/filesystems.php
+  30:27  • info     EG003  AWS_URL is read by the code but not declared in any env file, template or schema
+  31:32  • info     EG003  AWS_ENDPOINT is read by the code but not declared in any env file, template or schema
+
+config/logging.php
+  13:25  • info     EG003  LOG_DEPRECATIONS_TRACE is read by the code but not declared in any env file, template or schema
+  35:28  • info     EG003  LOG_DAILY_DAYS is read by the code but not declared in any env file, template or schema
+  43:33  • info     EG003  LOG_STDERR_FORMATTER is read by the code but not declared in any env file, template or schema
+
+config/mail.php
+  11:27  • info     EG003  MAIL_URL is read by the code but not declared in any env file, template or schema
+  18:36  • info     EG003  MAIL_EHLO_DOMAIN is read by the code but not declared in any env file, template or schema
+  27:31  • info     EG003  MAIL_LOG_CHANNEL is read by the code but not declared in any env file, template or schema
+
+config/queue.php
+  15:34  • info     EG003  DB_QUEUE_CONNECTION is read by the code but not declared in any env file, template or schema
+  16:29  • info     EG003  DB_QUEUE_TABLE is read by the code but not declared in any env file, template or schema
+  17:29  • info     EG003  DB_QUEUE is read by the code but not declared in any env file, template or schema
+  18:41  • info     EG003  DB_QUEUE_RETRY_AFTER is read by the code but not declared in any env file, template or schema
+  24:34  • info     EG003  REDIS_QUEUE_CONNECTION is read by the code but not declared in any env file, template or schema
+  25:29  • info     EG003  REDIS_QUEUE is read by the code but not declared in any env file, template or schema
+  26:41  • info     EG003  REDIS_QUEUE_RETRY_AFTER is read by the code but not declared in any env file, template or schema
+  34:26  • info     EG003  QUEUE_FAILED_DRIVER is read by the code but not declared in any env file, template or schema
+
+config/services.php
+  17:44  • info     EG003  SLACK_BOT_USER_OAUTH_TOKEN is read by the code but not declared in any env file, template or schema
+  18:31  • info     EG003  SLACK_BOT_USER_DEFAULT_CHANNEL is read by the code but not declared in any env file, template or schema
+  23:33  • info     EG003  MODERATION_ALERT_CHANNEL is read by the code but not declared in any env file, template or schema
+
+config/session.php
+  11:31  • info     EG003  SESSION_EXPIRE_ON_CLOSE is read by the code but not declared in any env file, template or schema
+  17:26  • info     EG003  SESSION_CONNECTION is read by the code but not declared in any env file, template or schema
+  19:21  • info     EG003  SESSION_TABLE is read by the code but not declared in any env file, template or schema
+  21:21  • info     EG003  SESSION_STORE is read by the code but not declared in any env file, template or schema
+  26:10  • info     EG003  SESSION_COOKIE is read by the code but not declared in any env file, template or schema
+  34:22  • info     EG003  SESSION_SECURE_COOKIE is read by the code but not declared in any env file, template or schema
+  36:25  • info     EG003  SESSION_HTTP_ONLY is read by the code but not declared in any env file, template or schema
+  38:25  • info     EG003  SESSION_SAME_SITE is read by the code but not declared in any env file, template or schema
+  40:27  • info     EG003  SESSION_PARTITIONED_COOKIE is read by the code but not declared in any env file, template or schema
+
+docker-compose.yml
+   7:30  ⚠ warning  EG011  docker-compose.yml interpolates ${WWWGROUP}, which is not defined in .env (the file Compose reads) or any template
+  15:25  ⚠ warning  EG011  docker-compose.yml interpolates ${WWWUSER}, which is not defined in .env (the file Compose reads) or any template
+
+✗ 30 errors · ⚠ 3 warnings · 51 info · 32 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG001`.

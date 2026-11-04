@@ -1,0 +1,41 @@
+services:
+  django:
+    build:
+      context: .
+      args:
+        BUILD_ENVIRONMENT: local
+    image: shop_local_django
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+
+  postgres:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.local/.postgres
+
+  redis:
+    image: redis:7
+
+  celeryworker:
+    image: shop_local_django
+    depends_on:
+      - redis
+      - postgres
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    command: celery -A config.celery_app worker -l INFO
+
+volumes:
+  postgres_data: {}

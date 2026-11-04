@@ -1,0 +1,6 @@
+# General
+USE_DOCKER=yes
+DJANGO_DEBUG=True
+REDIS_URL=redis://redis:6379/0
+CELERY_BROKER_URL=redis://redis:6379/0
+PAYMENT_WEBHOOK_SECRET=change-me

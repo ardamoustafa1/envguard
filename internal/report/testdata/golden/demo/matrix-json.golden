@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "envguard",
+    "version": "test"
+  },
+  "command": "diff",
+  "root": ".",
+  "matrix": [
+    {
+      "app_root": ".",
+      "environments": [
+        "default",
+        "production"
+      ],
+      "template_only_environments": [
+        "staging"
+      ],
+      "files": {
+        "default": [
+          ".env"
+        ],
+        "production": [
+          ".env.production"
+        ]
+      },
+      "variables": [
+        {
+          "name": "CACHE_DIR",
+          "cells": {
+            "default": "set",
+            "production": "absent"
+          }
+        },
+        {
+          "name": "CDN_URL",
+          "cells": {
+            "default": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "DATABASE_URL",
+          "cells": {
+            "default": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "DEBUG",
+          "cells": {
+            "default": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "FEATURE_NEW_CHECKOUT",
+          "cells": {
+            "default": "set",
+            "production": "absent"
+          }
+        },
+        {
+          "name": "LEGACY_API_KEY",
+          "cells": {
+            "default": "absent",
+            "production": "absent"
+          }
+        },
+        {
+          "name": "LOG_LEVEL",
+          "cells": {
+            "default": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "PORT",
+          "cells": {
+            "default": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "REDIS_URL",
+          "cells": {
+            "default": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "SENTRY_DSN",
+          "cells": {
+            "default": "absent",
+            "production": "absent"
+          }
+        },
+        {
+          "name": "SESSION_SECRET",
+          "cells": {
+            "default": "empty",
+            "production": "set"
+          }
+        },
+        {
+          "name": "STRIPE_SECRET_KEY",
+          "cells": {
+            "default": "absent",
+            "production": "missing"
+          }
+        },
+        {
+          "name": "WORKERS",
+          "cells": {
+            "default": "set",
+            "production": "set"
+          }
+        }
+      ]
+    }
+  ]
+}

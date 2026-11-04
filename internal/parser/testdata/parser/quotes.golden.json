@@ -1,0 +1,228 @@
+{
+  "Filename": "testdata/parser/quotes.env",
+  "Entries": [
+    {
+      "Key": "SINGLE",
+      "Value": "literal $HOME \\n stays",
+      "RawValue": "'literal $HOME \\n stays'",
+      "Quote": "single",
+      "KeyPos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "ValuePos": {
+        "Line": 1,
+        "Column": 8,
+        "Offset": 7
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "DOUBLE",
+      "Value": "tab\there\nnewline \"quoted\" back\\slash $NOT_A_REF",
+      "RawValue": "\"tab\\there\\nnewline \\\"quoted\\\" back\\\\slash \\$NOT_A_REF\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 32
+      },
+      "ValuePos": {
+        "Line": 2,
+        "Column": 8,
+        "Offset": 39
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "BACKTICK",
+      "Value": "literal ${X} \\n",
+      "RawValue": "`literal ${X} \\n`",
+      "Quote": "backtick",
+      "KeyPos": {
+        "Line": 3,
+        "Column": 1,
+        "Offset": 95
+      },
+      "ValuePos": {
+        "Line": 3,
+        "Column": 10,
+        "Offset": 104
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "JSON",
+      "Value": "{\"name\": \"demo\", \"tags\": [\"a\", \"b#c\"]}",
+      "RawValue": "'{\"name\": \"demo\", \"tags\": [\"a\", \"b#c\"]}'",
+      "Quote": "single",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 1,
+        "Offset": 122
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 6,
+        "Offset": 127
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "WIN_UNQUOTED",
+      "Value": "C:\\Users\\demo\\app",
+      "RawValue": "C:\\Users\\demo\\app",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 5,
+        "Column": 1,
+        "Offset": 168
+      },
+      "ValuePos": {
+        "Line": 5,
+        "Column": 14,
+        "Offset": 181
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "WIN_SINGLE",
+      "Value": "C:\\Program Files\\demo",
+      "RawValue": "'C:\\Program Files\\demo'",
+      "Quote": "single",
+      "KeyPos": {
+        "Line": 6,
+        "Column": 1,
+        "Offset": 199
+      },
+      "ValuePos": {
+        "Line": 6,
+        "Column": 12,
+        "Offset": 210
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "WIN_DOUBLE",
+      "Value": "C:\\Users\\demo",
+      "RawValue": "\"C:\\\\Users\\\\demo\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 7,
+        "Column": 1,
+        "Offset": 234
+      },
+      "ValuePos": {
+        "Line": 7,
+        "Column": 12,
+        "Offset": 245
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "BASE64",
+      "Value": "ZGVtby12YWx1ZQ==",
+      "RawValue": "ZGVtby12YWx1ZQ==",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 8,
+        "Column": 1,
+        "Offset": 263
+      },
+      "ValuePos": {
+        "Line": 8,
+        "Column": 8,
+        "Offset": 270
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "UNICODE",
+      "Value": "héllo wörld ✓ 日本語",
+      "RawValue": "\"héllo wörld ✓ 日本語\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 9,
+        "Column": 1,
+        "Offset": 287
+      },
+      "ValuePos": {
+        "Line": 9,
+        "Column": 9,
+        "Offset": 295
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "UNICODE_BARE",
+      "Value": "日本語",
+      "RawValue": "日本語",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 10,
+        "Column": 1,
+        "Offset": 325
+      },
+      "ValuePos": {
+        "Line": 10,
+        "Column": 14,
+        "Offset": 338
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "MID_QUOTE",
+      "Value": "it\"s",
+      "RawValue": "it\"s",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 11,
+        "Column": 1,
+        "Offset": 348
+      },
+      "ValuePos": {
+        "Line": 11,
+        "Column": 11,
+        "Offset": 358
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

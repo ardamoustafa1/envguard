@@ -1,0 +1,266 @@
+{
+  "$id": "https://raw.githubusercontent.com/ardamoustafa1/envguard/main/docs/envguard.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Optional configuration for envguard. Every key is optional except version.",
+  "properties": {
+    "environments": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "files": {
+            "description": "Glob patterns of real env files for this environment.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "templates": {
+            "description": "Glob patterns of env templates for this environment.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "description": "Map environment names to env files and templates whose names envguard cannot infer (e.g. deploy/prod.env). Overrides the built-in .env.<name> inference for matching files.",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9_-]*$"
+      },
+      "type": "object"
+    },
+    "exclude": {
+      "description": "Glob patterns of files or directories to skip, in addition to .gitignore and the built-in excludes (node_modules, vendor, dist, ...). Patterns without a slash match names anywhere.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "fail_on": {
+      "description": "Lowest severity that makes envguard exit with code 1 (never: always exit 0 unless envguard itself fails). Overridden by --fail-on. Default: error.",
+      "enum": [
+        "error",
+        "warning",
+        "info",
+        "never"
+      ],
+      "type": "string"
+    },
+    "ignore": {
+      "description": "Suppress findings matching a rule, a path glob and/or a variable name.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "description": "Glob of files the suppression applies to (relative to the root, ** supported).",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Why this is suppressed (for reviewers; not used by envguard).",
+            "type": "string"
+          },
+          "rule": {
+            "description": "Rule ID to suppress, e.g. EG004. Omit to suppress every rule.",
+            "pattern": "^EG[0-9]{3}$",
+            "type": "string"
+          },
+          "variable": {
+            "description": "Variable name the suppression applies to. * matches any sequence of characters.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "include": {
+      "description": "Glob patterns (relative to the root, ** supported). When set, only matching files are analyzed. Patterns without a slash match file names anywhere.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "profiles": {
+      "description": "Opt-in rule packs.",
+      "items": {
+        "enum": [
+          "production-safety"
+        ],
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "rules": {
+      "additionalProperties": {
+        "enum": [
+          "error",
+          "warning",
+          "info",
+          "off"
+        ],
+        "type": "string"
+      },
+      "description": "Per-rule severity overrides, keyed by rule ID. Use off to disable a rule.",
+      "propertyNames": {
+        "pattern": "^EG[0-9]{3}$"
+      },
+      "type": "object"
+    },
+    "scanner": {
+      "additionalProperties": false,
+      "description": "Source code scanner settings.",
+      "properties": {
+        "ignore_variables": {
+          "description": "Variable names the scanner should ignore, e.g. variables provided by the platform. * matches any sequence of characters.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "languages": {
+          "description": "Languages to scan. Default: all supported languages.",
+          "items": {
+            "enum": [
+              "csharp",
+              "elixir",
+              "go",
+              "java",
+              "javascript",
+              "kotlin",
+              "php",
+              "python",
+              "ruby",
+              "rust",
+              "shell",
+              "svelte",
+              "typescript",
+              "vue"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "variables": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "default": {
+            "description": "Documented default value. Must be valid for the type.",
+            "type": "string"
+          },
+          "description": {
+            "description": "What the variable is for.",
+            "type": "string"
+          },
+          "environments": {
+            "description": "Environments in which required applies. Default: all environments.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "max": {
+            "description": "Maximum numeric value (int, float, port).",
+            "type": "number"
+          },
+          "max_length": {
+            "description": "Maximum value length in characters.",
+            "type": "integer"
+          },
+          "min": {
+            "description": "Minimum numeric value (int, float, port).",
+            "type": "number"
+          },
+          "min_length": {
+            "description": "Minimum value length in characters.",
+            "type": "integer"
+          },
+          "pattern": {
+            "description": "Regular expression (Go RE2 syntax) the value must match; it is searched, so anchor with ^ and $ for a full match.",
+            "type": "string"
+          },
+          "production": {
+            "additionalProperties": false,
+            "description": "Extra constraints in the production environment (rule EG015).",
+            "properties": {
+              "must_be": {
+                "description": "The value must equal this in production (compared by type: for bool, off equals false).",
+                "type": "string"
+              },
+              "must_not_be": {
+                "description": "The value must not equal this in production (compared by type).",
+                "type": "string"
+              },
+              "pattern": {
+                "description": "Regular expression the value must match in production.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "required": {
+            "description": "The variable must be set (in the listed environments, or everywhere). Default: false.",
+            "type": "boolean"
+          },
+          "schemes": {
+            "description": "Allowed URL schemes (type url only), e.g. [postgres, postgresql].",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sensitive": {
+            "description": "Always mask the value, even if the name looks harmless.",
+            "type": "boolean"
+          },
+          "type": {
+            "description": "Value type. Default: string. bool accepts true/false, 1/0, yes/no, on/off (case-insensitive); duration uses Go syntax (300ms, 1h30m).",
+            "enum": [
+              "string",
+              "int",
+              "float",
+              "bool",
+              "url",
+              "port",
+              "email",
+              "hostname",
+              "duration",
+              "enum",
+              "json",
+              "regex"
+            ],
+            "type": "string"
+          },
+          "values": {
+            "description": "Allowed values (required for type enum, only allowed there).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "description": "Schema of environment variables, keyed by variable name.",
+      "propertyNames": {
+        "pattern": "^[A-Za-z_][A-Za-z0-9_.-]*$"
+      },
+      "type": "object"
+    },
+    "version": {
+      "const": 1,
+      "description": "Configuration format version. Must be 1.",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "title": "EnvGuard configuration (.envguard.yaml)",
+  "type": "object"
+}

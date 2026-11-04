@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="96" viewBox="0 0 360 96" role="img" aria-label="EnvGuard">
+  <title>EnvGuard (logo placeholder)</title>
+  <path d="M48 8 12 22v24c0 20 14 36 36 44 22-8 36-24 36-44V22L48 8Z" fill="#14532d"/>
+  <path d="m31 48 12 12 22-24" fill="none" stroke="#bbf7d0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="104" y="62" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="40" font-weight="700" fill="#14532d">envguard</text>
+</svg>

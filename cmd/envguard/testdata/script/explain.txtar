@@ -1,0 +1,36 @@
+# envguard explain: rule documentation from the embedded docs.
+
+exitcode 0 envguard explain EG001
+stdout '^EG001 missing-variable$'
+stdout '^  Default severity: error$'
+stdout '^What it detects$'
+stdout '^Bad example$'
+stdout '^Good example$'
+stdout '^How to suppress$'
+stdout '^https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable\.md$'
+! stdout '\x1b\['
+
+# IDs are case-insensitive and may drop leading zeros; names work too.
+exitcode 0 envguard explain eg1
+stdout '^EG001 missing-variable$'
+exitcode 0 envguard explain duplicate-key
+stdout '^EG006 duplicate-key$'
+exitcode 0 envguard --ascii explain EG010
+stdout '^EG010 possible-secret-in-template$'
+stdout '^-+$'
+
+# --list (or no argument) lists every rule with severity and description.
+exitcode 0 envguard explain --list
+stdout '^RULE   NAME +SEVERITY  DESCRIPTION$'
+stdout '^EG001  missing-variable +error +A variable declared'
+stdout '^EG016  unresolved-reference +warning '
+exitcode 0 envguard explain
+stdout '^EG008  env-file-committed'
+
+# Unknown rules and extra arguments are errors (exit 2); the argument is not echoed.
+exitcode 2 envguard explain EG999
+stderr '^envguard: unknown rule; run `envguard explain --list` to see all rules$'
+exitcode 2 envguard explain not-a-rule
+! stderr not-a-rule
+exitcode 2 envguard explain EG001 EG002
+stderr '^envguard: explain takes one rule, e.g. `envguard explain EG001`; list all rules with `envguard explain --list`$'

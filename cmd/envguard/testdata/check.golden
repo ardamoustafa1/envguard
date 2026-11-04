@@ -1,0 +1,191 @@
+EG001/positive/.env
+  ✗ error    EG001  CACHE_TTL is declared in EG001/positive/.env.example but missing from EG001/positive/.env
+  ✗ error    EG001  DATABASE_URL is declared in EG001/positive/.env.example but missing from EG001/positive/.env
+
+EG001/positive/.env.production
+  ✗ error    EG001  STRIPE_SECRET_KEY is declared in EG001/positive/.env.production.example but missing from EG001/positive/.env.production
+
+EG002/negative/.env
+  ✗ error    EG001  SHARED_TOKEN is declared in EG002/negative/.env.example but missing from EG002/negative/.env
+
+EG002/positive/app/.env
+  2:1  ⚠ warning  EG002  FEATURE_FLAG is set in EG002/positive/app/.env but not documented in any template
+  3:1  ⚠ warning  EG006  FEATURE_FLAG is defined 2 times in EG002/positive/app/.env (lines 2 and 3)
+
+EG002/positive/app/.env.production
+  2:1  ⚠ warning  EG002  PROD_ONLY is set in EG002/positive/app/.env.production but not documented in any template
+
+EG002/positive/no-template/.env
+  ⚠ warning  EG002  EG002/positive/no-template/.env defines 2 variables but no template documents them
+
+EG003/negative/.env
+  2:1  ⚠ warning  EG002  LOCAL_ONLY is set in EG003/negative/.env but not documented in any template
+
+EG003/positive/scripts/deploy.sh
+  2:34  ✗ error    EG003  DEPLOY_TOKEN is read by the code but not declared in any env file, template or schema
+
+EG003/positive/src/app.js
+  2:24  ✗ error    EG003  MISSING_DATABASE_URL is read by the code (5 places) but not declared in any env file, template or schema
+  3:26  • info     EG003  OPTIONAL_FLAG is read by the code but not declared in any env file, template or schema
+
+EG004/positive/.env.example
+  2:1  • info     EG004  UNUSED_FEATURE_FLAG is declared in EG004/positive/.env.example but never read by the code, env files, Compose files or workflows
+
+EG005/negative/.env
+  3:1  ⚠ warning  EG006  NAME is defined 2 times in EG005/negative/.env (lines 2 and 3)
+  4:1  ⚠ warning  EG002  UNDOCUMENTED is set in EG005/negative/.env but not documented in any template
+
+EG005/positive/.env
+  1:1  ⚠ warning  EG005  DATABASE_URL is empty in EG005/positive/.env but required by EG005/positive/.env.example
+  2:1  ⚠ warning  EG005  PORT is empty in EG005/positive/.env but required by EG005/positive/.env.example
+  3:1  ⚠ warning  EG005  DEBUG is empty in EG005/positive/.env but required by EG005/positive/.env.example
+
+EG006/positive/.env
+  1:1  ⚠ warning  EG002  API_URL is set in EG006/positive/.env but not documented in any template
+  3:1  ⚠ warning  EG006  API_URL is defined 3 times in EG006/positive/.env (lines 1, 3 and 4)
+  4:1  ⚠ warning  EG006  API_URL is defined 3 times in EG006/positive/.env (lines 1, 3 and 4)
+
+EG006/positive/.env.example
+  2:1  ⚠ warning  EG006  PORT is defined 2 times in EG006/positive/.env.example (lines 1 and 2)
+
+EG007/negative/.env
+  ⚠ warning  EG002  EG007/negative/.env defines 6 variables but no template documents them
+
+EG007/positive/.env
+        ⚠ warning  EG002  EG007/positive/.env defines 4 variables but no template documents them
+   2:1  ✗ error    EG007  key must not start with a digit
+   3:1  ✗ error    EG007  missing '=' after key
+  4:15  ⚠ warning  EG007  GREETING: unquoted value contains whitespace
+  5:13  ✗ error    EG007  WIN_PATH: invalid escape sequence in double-quoted value
+  5:19  ✗ error    EG007  WIN_PATH: invalid escape sequence in double-quoted value
+  8:14  ✗ error    EG007  UNTERMINATED: unterminated double quote
+
+EG009/negative/.env
+  ⚠ warning  EG002  EG009/negative/.env defines 1 variable but no template documents them
+
+EG009/negative/.env.production
+  ⚠ warning  EG002  EG009/negative/.env.production defines 1 variable but no template documents them
+
+EG010/negative/.env
+  ✗ error    EG001  API_TOKEN is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  AWS_ACCESS_KEY_ID is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  DATABASE_URL is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  JWT_SECRET is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  OPENAI_API_KEY is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  REDIS_URL is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  SESSION_SECRET is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+  ✗ error    EG001  STRIPE_SECRET_KEY is declared in EG010/negative/.env.example but missing from EG010/negative/.env
+
+EG010/positive/.env.example
+  1:14  ✗ error    EG010  GITHUB_TOKEN in EG010/positive/.env.example looks like a GitHub personal access token
+  2:19  ✗ error    EG010  AWS_ACCESS_KEY_ID in EG010/positive/.env.example looks like an AWS access key ID
+  3:14  ✗ error    EG010  DATABASE_URL in EG010/positive/.env.example looks like a URL with an embedded password
+  4:13  ✗ error    EG010  SIGNING_KEY in EG010/positive/.env.example looks like a private key (PEM block)
+  5:13  ✗ error    EG010  SESSION_JWT in EG010/positive/.env.example looks like a JSON Web Token
+  6:12  ✗ error    EG010  API_SECRET in EG010/positive/.env.example looks like a high-entropy secret
+
+EG010/positive/.env.staging
+       ✗ error    EG001  API_SECRET is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+       ✗ error    EG001  AWS_ACCESS_KEY_ID is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+       ✗ error    EG001  DATABASE_URL is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+       ✗ error    EG001  DOCS_EXAMPLE_TOKEN is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+       ✗ error    EG001  GITHUB_TOKEN is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+       ✗ error    EG001  SESSION_JWT is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+       ✗ error    EG001  SIGNING_KEY is declared in EG010/positive/.env.example but missing from EG010/positive/.env.staging
+  1:1  ⚠ warning  EG002  STRIPE_SECRET_KEY is set in EG010/positive/.env.staging but not documented in any template
+
+EG011/negative/.env
+       ✗ error    EG001  B is declared in EG011/negative/.env.example but missing from EG011/negative/.env
+  1:1  ⚠ warning  EG002  A is set in EG011/negative/.env but not documented in any template
+
+EG011/positive/.env
+       ✗ error    EG001  TEMPLATE_VAR is declared in EG011/positive/.env.example but missing from EG011/positive/.env
+  1:1  ⚠ warning  EG002  DEFINED_VAR is set in EG011/positive/.env but not documented in any template
+
+EG011/positive/deploy/compose.prod.yaml
+  3:19  ⚠ warning  EG011  EG011/positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is no EG011/positive/deploy/.env next to it and it is not declared in EG011/positive/.env.example
+
+EG011/positive/docker-compose.yml
+  5:39  ⚠ warning  EG011  EG011/positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in EG011/positive/.env (the file Compose reads) or any template
+  9:16  ⚠ warning  EG011  EG011/positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not defined in EG011/positive/.env (the file Compose reads) or any template
+  12:9  ⚠ warning  EG011  service api: env_file EG011/positive/missing.env does not exist
+
+EG013/positive/.env.production.example
+  2:1  ⚠ warning  EG013  STRIPE_SECRET_KEY is declared for production but not for development and staging
+
+EG013/positive/.env.staging.example
+  2:1  ⚠ warning  EG013  SENTRY_DSN is declared for staging but not for development and production
+
+EG014/negative/.env
+   1:1  ⚠ warning  EG002  DATABASE_URL is set in EG014/negative/.env but not documented in any template
+   3:1  ⚠ warning  EG002  PORT is set in EG014/negative/.env but not documented in any template
+   4:1  ⚠ warning  EG002  WORKERS is set in EG014/negative/.env but not documented in any template
+   5:1  ⚠ warning  EG002  DEBUG is set in EG014/negative/.env but not documented in any template
+   6:1  ⚠ warning  EG002  API_URL is set in EG014/negative/.env but not documented in any template
+   7:1  ⚠ warning  EG002  ADMIN_EMAIL is set in EG014/negative/.env but not documented in any template
+   8:1  ⚠ warning  EG002  CACHE_TTL is set in EG014/negative/.env but not documented in any template
+   9:1  ⚠ warning  EG002  FEATURES is set in EG014/negative/.env but not documented in any template
+  9:18  ⚠ warning  EG007  FEATURES: unquoted value contains whitespace
+  10:1  ⚠ warning  EG002  HOST is set in EG014/negative/.env but not documented in any template
+  11:1  ⚠ warning  EG002  RATIO is set in EG014/negative/.env but not documented in any template
+  12:1  ⚠ warning  EG002  PUBLIC_NAME is set in EG014/negative/.env but not documented in any template
+  13:1  ⚠ warning  EG002  EMPTY_IS_EG005 is set in EG014/negative/.env but not documented in any template
+  14:1  ⚠ warning  EG002  WORKERS_UNSET_IN_SCHEMA is set in EG014/negative/.env but not documented in any template
+
+EG015/negative/.env.development
+  2:1  ⚠ warning  EG002  NODE_ENV is set in EG015/negative/.env.development but not documented in any template
+  3:1  ⚠ warning  EG002  DATABASE_URL is set in EG015/negative/.env.development but not documented in any template
+  4:1  ⚠ warning  EG002  LOG_LEVEL is set in EG015/negative/.env.development but not documented in any template
+
+EG015/negative/.env.production
+   2:1  ⚠ warning  EG002  APP_DEBUG is set in EG015/negative/.env.production but not documented in any template
+   3:1  ⚠ warning  EG002  FLASK_DEBUG is set in EG015/negative/.env.production but not documented in any template
+   4:1  ⚠ warning  EG002  NODE_ENV is set in EG015/negative/.env.production but not documented in any template
+   5:1  ⚠ warning  EG002  RAILS_ENV is set in EG015/negative/.env.production but not documented in any template
+   6:1  ⚠ warning  EG002  APP_ENV is set in EG015/negative/.env.production but not documented in any template
+   7:1  ⚠ warning  EG002  DATABASE_URL is set in EG015/negative/.env.production but not documented in any template
+   8:1  ⚠ warning  EG002  REDIS_HOST is set in EG015/negative/.env.production but not documented in any template
+   9:1  ⚠ warning  EG002  LOG_LEVEL is set in EG015/negative/.env.production but not documented in any template
+  10:1  ⚠ warning  EG002  CACHE_ENABLED is set in EG015/negative/.env.production but not documented in any template
+  11:1  ⚠ warning  EG002  CDN_URL is set in EG015/negative/.env.production but not documented in any template
+  12:1  ⚠ warning  EG002  EMPTY_VALUE_IS_IGNORED is set in EG015/negative/.env.production but not documented in any template
+
+EG015/positive/.env.production
+   2:1  ⚠ warning  EG002  APP_DEBUG is set in EG015/positive/.env.production but not documented in any template
+   3:1  ⚠ warning  EG002  FLASK_DEBUG is set in EG015/positive/.env.production but not documented in any template
+   4:1  ⚠ warning  EG002  DJANGO_DEBUG is set in EG015/positive/.env.production but not documented in any template
+   5:1  ⚠ warning  EG002  NODE_ENV is set in EG015/positive/.env.production but not documented in any template
+   6:1  ⚠ warning  EG002  RAILS_ENV is set in EG015/positive/.env.production but not documented in any template
+   7:1  ⚠ warning  EG002  APP_ENV is set in EG015/positive/.env.production but not documented in any template
+   8:1  ⚠ warning  EG002  DATABASE_URL is set in EG015/positive/.env.production but not documented in any template
+   9:1  ⚠ warning  EG002  REDIS_HOST is set in EG015/positive/.env.production but not documented in any template
+  10:1  ⚠ warning  EG002  LOG_LEVEL is set in EG015/positive/.env.production but not documented in any template
+  11:1  ⚠ warning  EG002  CACHE_ENABLED is set in EG015/positive/.env.production but not documented in any template
+  12:1  ⚠ warning  EG002  CDN_URL is set in EG015/positive/.env.production but not documented in any template
+
+EG016/negative/.env
+       ✗ error    EG001  FROM_TEMPLATE is declared in EG016/negative/.env.example but missing from EG016/negative/.env
+       ✗ error    EG001  USES_TEMPLATE is declared in EG016/negative/.env.example but missing from EG016/negative/.env
+  1:1  ⚠ warning  EG002  HOST is set in EG016/negative/.env but not documented in any template
+  2:1  ⚠ warning  EG002  APP_URL is set in EG016/negative/.env but not documented in any template
+  3:1  ⚠ warning  EG002  DATA_DIR is set in EG016/negative/.env but not documented in any template
+  4:1  ⚠ warning  EG002  WITH_DEFAULT is set in EG016/negative/.env but not documented in any template
+  5:1  ⚠ warning  EG002  LITERAL is set in EG016/negative/.env but not documented in any template
+  6:1  ⚠ warning  EG002  ESCAPED is set in EG016/negative/.env but not documented in any template
+  7:1  ⚠ warning  EG002  SELF is set in EG016/negative/.env but not documented in any template
+
+EG016/negative/.env.production
+       ✗ error    EG001  FROM_TEMPLATE is declared in EG016/negative/.env.example but missing from EG016/negative/.env.production
+       ✗ error    EG001  USES_TEMPLATE is declared in EG016/negative/.env.example but missing from EG016/negative/.env.production
+  1:1  ⚠ warning  EG002  API_URL is set in EG016/negative/.env.production but not documented in any template
+
+EG016/positive/.env
+        ⚠ warning  EG002  EG016/positive/.env defines 2 variables but no template documents them
+  2:16  ⚠ warning  EG016  APP_URL references HOST, which is not defined in EG016/positive/.env or the env files loaded with it
+
+EG016/positive/.env.production
+       ⚠ warning  EG002  EG016/positive/.env.production defines 1 variable but no template documents them
+  1:9  ⚠ warning  EG016  API_URL references API_HOST, which is not defined in EG016/positive/.env.production or the env files loaded with it
+
+✗ 38 errors · ⚠ 79 warnings · 2 info · 80 files · 4 suppressed
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG001`.

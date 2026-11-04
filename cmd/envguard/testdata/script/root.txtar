@@ -1,0 +1,28 @@
+# Top-level behavior: help, version, unknown commands and flags.
+
+exitcode 0 envguard --help
+stdout '^Usage:$'
+stdout 'doctor +Print a health report'
+stdout '--ascii'
+
+exitcode 0 envguard version
+stdout '^envguard dev$'
+stdout '^commit: none$'
+
+exitcode 2 envguard nope
+stderr '^envguard: unknown command; run `envguard --help` to see the commands$'
+
+# A typo gets the closest command.
+exitcode 2 envguard chek
+stderr '^envguard: unknown command \(did you mean `envguard check`\?\); run `envguard --help` to see the commands$'
+! stderr chek
+
+exitcode 2 envguard --nope
+stderr '^envguard: unknown flag: --nope; run `envguard --help` to see the available flags$'
+
+exitcode 2 envguard check --nope
+stderr '^envguard: unknown flag: --nope; run `envguard check --help` to see the available flags$'
+exitcode 2 envguard check --env
+stderr '^envguard: flag needs an argument: --env; run `envguard check --help` to see the available flags$'
+exitcode 2 envguard version extra
+stderr '^envguard: version takes no arguments; run `envguard version --help` for its flags$'

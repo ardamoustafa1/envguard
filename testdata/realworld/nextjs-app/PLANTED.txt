@@ -1,0 +1,2 @@
+EG003 lib/email.ts RESEND_API_KEY - code reads process.env.RESEND_API_KEY but it is in no env file, template, compose or workflow
+EG006 .env.development NEXTAUTH_URL - key defined twice in the same file

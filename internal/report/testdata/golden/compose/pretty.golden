@@ -1,0 +1,18 @@
+negative/.env
+       ✗ error    EG001  B is declared in negative/.env.example but missing from negative/.env
+  1:1  ⚠ warning  EG002  A is set in negative/.env but not documented in any template
+
+positive/.env
+       ✗ error    EG001  TEMPLATE_VAR is declared in positive/.env.example but missing from positive/.env
+  1:1  ⚠ warning  EG002  DEFINED_VAR is set in positive/.env but not documented in any template
+
+positive/deploy/compose.prod.yaml
+  3:19  ⚠ warning  EG011  positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is no positive/deploy/.env next to it and it is not declared in positive/.env.example
+
+positive/docker-compose.yml
+  5:39  ⚠ warning  EG011  positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in positive/.env (the file Compose reads) or any template
+  9:16  ⚠ warning  EG011  positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not defined in positive/.env (the file Compose reads) or any template
+  12:9  ⚠ warning  EG011  service api: env_file positive/missing.env does not exist
+
+✗ 2 errors · ⚠ 6 warnings · 0 info · 7 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG001`.

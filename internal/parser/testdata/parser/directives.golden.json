@@ -1,0 +1,305 @@
+{
+  "Filename": "testdata/parser/directives.env",
+  "Entries": [
+    {
+      "Key": "IGNORED_TWO",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 1,
+        "Offset": 60
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 13,
+        "Offset": 72
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": [
+        "EG002",
+        "EG010"
+      ]
+    },
+    {
+      "Key": "LOWERCASE",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 6,
+        "Column": 1,
+        "Offset": 130
+      },
+      "ValuePos": {
+        "Line": 6,
+        "Column": 11,
+        "Offset": 140
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": [
+        "EG013",
+        "EG014"
+      ]
+    },
+    {
+      "Key": "INLINE",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 7,
+        "Column": 1,
+        "Offset": 142
+      },
+      "ValuePos": {
+        "Line": 7,
+        "Column": 8,
+        "Offset": 149
+      },
+      "HasExport": false,
+      "InlineComment": "envguard-ignore EG005",
+      "References": null,
+      "IgnoreRules": [
+        "EG005"
+      ]
+    },
+    {
+      "Key": "NOT_IGNORED",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 8,
+        "Column": 1,
+        "Offset": 175
+      },
+      "ValuePos": {
+        "Line": 8,
+        "Column": 13,
+        "Offset": 187
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "STACKED",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 11,
+        "Column": 1,
+        "Offset": 237
+      },
+      "ValuePos": {
+        "Line": 11,
+        "Column": 9,
+        "Offset": 245
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": [
+        "EG001",
+        "EG006"
+      ]
+    },
+    {
+      "Key": "BAD_ID",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 13,
+        "Column": 1,
+        "Offset": 269
+      },
+      "ValuePos": {
+        "Line": 13,
+        "Column": 8,
+        "Offset": 276
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "NO_IDS",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 15,
+        "Column": 1,
+        "Offset": 296
+      },
+      "ValuePos": {
+        "Line": 15,
+        "Column": 8,
+        "Offset": 303
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "MULTI",
+      "Value": "# envguard-ignore EG009\nnot a directive",
+      "RawValue": "\"# envguard-ignore EG009\nnot a directive\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 16,
+        "Column": 1,
+        "Offset": 305
+      },
+      "ValuePos": {
+        "Line": 16,
+        "Column": 7,
+        "Offset": 311
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": [
+    {
+      "Kind": "invalid-directive",
+      "Severity": "warning",
+      "Pos": {
+        "Line": 12,
+        "Column": 19,
+        "Offset": 265
+      },
+      "Key": "",
+      "Message": "invalid rule ID in envguard-ignore directive",
+      "Hint": "Use '# envguard-ignore EG002,EG004' (next entry) or '# envguard-ignore-file EG002' (whole file) with rule IDs of the form EG000."
+    },
+    {
+      "Kind": "invalid-directive",
+      "Severity": "warning",
+      "Pos": {
+        "Line": 14,
+        "Column": 1,
+        "Offset": 278
+      },
+      "Key": "",
+      "Message": "envguard-ignore directive lists no rule IDs",
+      "Hint": "Use '# envguard-ignore EG002,EG004' (next entry) or '# envguard-ignore-file EG002' (whole file) with rule IDs of the form EG000."
+    },
+    {
+      "Kind": "invalid-key",
+      "Severity": "error",
+      "Pos": {
+        "Line": 19,
+        "Column": 1,
+        "Offset": 377
+      },
+      "Key": "",
+      "Message": "key must not start with a digit",
+      "Hint": "Keys may contain only ASCII letters, digits, '_', '.' and '-', and must not start with a digit."
+    }
+  ],
+  "Directives": [
+    {
+      "Pos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "Scope": "file",
+      "Rules": [
+        "EG004"
+      ],
+      "TargetLine": 0
+    },
+    {
+      "Pos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 29
+      },
+      "Scope": "entry",
+      "Rules": [
+        "EG002",
+        "EG010"
+      ],
+      "TargetLine": 4
+    },
+    {
+      "Pos": {
+        "Line": 5,
+        "Column": 1,
+        "Offset": 74
+      },
+      "Scope": "entry",
+      "Rules": [
+        "EG013",
+        "EG014"
+      ],
+      "TargetLine": 6
+    },
+    {
+      "Pos": {
+        "Line": 7,
+        "Column": 10,
+        "Offset": 151
+      },
+      "Scope": "entry",
+      "Rules": [
+        "EG005"
+      ],
+      "TargetLine": 7
+    },
+    {
+      "Pos": {
+        "Line": 9,
+        "Column": 1,
+        "Offset": 189
+      },
+      "Scope": "entry",
+      "Rules": [
+        "EG001"
+      ],
+      "TargetLine": 11
+    },
+    {
+      "Pos": {
+        "Line": 10,
+        "Column": 1,
+        "Offset": 213
+      },
+      "Scope": "entry",
+      "Rules": [
+        "EG006"
+      ],
+      "TargetLine": 11
+    },
+    {
+      "Pos": {
+        "Line": 18,
+        "Column": 1,
+        "Offset": 353
+      },
+      "Scope": "entry",
+      "Rules": [
+        "EG007"
+      ],
+      "TargetLine": 19
+    }
+  ],
+  "FileIgnoreRules": [
+    "EG004"
+  ]
+}

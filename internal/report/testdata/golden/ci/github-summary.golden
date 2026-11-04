@@ -1,0 +1,13 @@
+## EnvGuard
+
+| ❌ Errors | ⚠️ Warnings | ℹ️ Info | Suppressed | Files |
+|---:|---:|---:|---:|---:|
+| 0 | 0 | 3 | 0 | 2 |
+
+| Severity | Rule | Location | Problem |
+|---|---|---|---|
+| ℹ️ info | [EG012](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md) ci-secret-undocumented | `.github/workflows/deploy.yml:6:9` | workflows use variable DEPLOY_ENABLED, but no template or schema documents it |
+| ℹ️ info | [EG012](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md) ci-secret-undocumented | `.github/workflows/deploy.yml:13:27` | workflows use secret DEPLOY_KEY, but no template or schema documents it |
+| ℹ️ info | [EG012](https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md) ci-secret-undocumented | `.github/workflows/deploy.yml:15:23` | workflows use variable AWS_DEPLOY_REGION, but no template or schema documents it |
+
+Run `envguard doctor` locally to see why each problem matters and how to fix it.

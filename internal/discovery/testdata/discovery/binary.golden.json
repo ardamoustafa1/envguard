@@ -1,0 +1,28 @@
+{
+  "Files": [
+    {
+      "Path": "text.js",
+      "Kind": "source",
+      "AppRoot": ".",
+      "Environment": "",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "javascript",
+      "Size": 15
+    }
+  ],
+  "Skipped": [
+    {
+      "Path": ".env.binary",
+      "Reason": "binary"
+    },
+    {
+      "Path": "blob.js",
+      "Reason": "binary"
+    }
+  ],
+  "AppRoots": [
+    "."
+  ],
+  "Truncated": false
+}

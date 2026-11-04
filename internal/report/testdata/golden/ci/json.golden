@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "envguard",
+    "version": "test"
+  },
+  "command": "check",
+  "root": ".",
+  "process_env": false,
+  "stats": {
+    "env_files": 0,
+    "templates": 1,
+    "compose_files": 0,
+    "workflows": 1,
+    "source_files": 0,
+    "languages": [],
+    "variables": 6,
+    "app_roots": [
+      ".",
+      "negative"
+    ],
+    "dynamic_lookups": 0
+  },
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 3,
+    "suppressed": 0
+  },
+  "findings": [
+    {
+      "rule_id": "EG012",
+      "rule_name": "ci-secret-undocumented",
+      "severity": "info",
+      "message": "workflows use variable DEPLOY_ENABLED, but no template or schema documents it",
+      "variable": "DEPLOY_ENABLED",
+      "location": {
+        "file": ".github/workflows/deploy.yml",
+        "line": 6,
+        "column": 9
+      },
+      "evidence": "",
+      "why": "Whoever sets up a fork, a new environment or a new repository has to discover DEPLOY_ENABLED by reading workflow files; a missing one usually shows up as a failed deploy.",
+      "fix": "Document it: add `DEPLOY_ENABLED=` to .env.example with a comment such as `# CI: set in GitHub → Settings → Secrets and variables → Actions (Variables tab)`, or declare it under `variables:` in .envguard.yaml.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md"
+    },
+    {
+      "rule_id": "EG012",
+      "rule_name": "ci-secret-undocumented",
+      "severity": "info",
+      "message": "workflows use secret DEPLOY_KEY, but no template or schema documents it",
+      "variable": "DEPLOY_KEY",
+      "location": {
+        "file": ".github/workflows/deploy.yml",
+        "line": 13,
+        "column": 27
+      },
+      "evidence": "",
+      "why": "Whoever sets up a fork, a new environment or a new repository has to discover DEPLOY_KEY by reading workflow files; a missing one usually shows up as a failed deploy.",
+      "fix": "Document it: add `DEPLOY_KEY=` to .env.example with a comment such as `# CI: set in GitHub → Settings → Secrets and variables → Actions (Secrets tab)`, or declare it under `variables:` in .envguard.yaml.",
+      "related": [
+        {
+          "file": ".github/workflows/deploy.yml",
+          "line": 16,
+          "column": 24
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md"
+    },
+    {
+      "rule_id": "EG012",
+      "rule_name": "ci-secret-undocumented",
+      "severity": "info",
+      "message": "workflows use variable AWS_DEPLOY_REGION, but no template or schema documents it",
+      "variable": "AWS_DEPLOY_REGION",
+      "location": {
+        "file": ".github/workflows/deploy.yml",
+        "line": 15,
+        "column": 23
+      },
+      "evidence": "",
+      "why": "Whoever sets up a fork, a new environment or a new repository has to discover AWS_DEPLOY_REGION by reading workflow files; a missing one usually shows up as a failed deploy.",
+      "fix": "Document it: add `AWS_DEPLOY_REGION=` to .env.example with a comment such as `# CI: set in GitHub → Settings → Secrets and variables → Actions (Variables tab)`, or declare it under `variables:` in .envguard.yaml.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md"
+    }
+  ],
+  "matrix": [
+    {
+      "app_root": "negative",
+      "environments": [],
+      "template_only_environments": [
+        "default"
+      ],
+      "files": {},
+      "variables": []
+    }
+  ],
+  "ci": {
+    "secrets": [
+      {
+        "name": "DEPLOY_KEY",
+        "refs": [
+          {
+            "file": ".github/workflows/deploy.yml",
+            "line": 13,
+            "column": 27
+          },
+          {
+            "file": ".github/workflows/deploy.yml",
+            "line": 16,
+            "column": 24
+          }
+        ]
+      },
+      {
+        "name": "DOCUMENTED_TOKEN",
+        "refs": [
+          {
+            "file": ".github/workflows/deploy.yml",
+            "line": 14,
+            "column": 27
+          }
+        ]
+      }
+    ],
+    "vars": [
+      {
+        "name": "AWS_DEPLOY_REGION",
+        "refs": [
+          {
+            "file": ".github/workflows/deploy.yml",
+            "line": 15,
+            "column": 23
+          }
+        ]
+      },
+      {
+        "name": "DEPLOY_ENABLED",
+        "refs": [
+          {
+            "file": ".github/workflows/deploy.yml",
+            "line": 6,
+            "column": 9
+          }
+        ]
+      }
+    ]
+  },
+  "notes": []
+}

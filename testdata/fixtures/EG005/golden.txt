@@ -1,0 +1,19 @@
+positive/.env:1:1  warning  EG005 empty-required-value  DATABASE_URL is empty in positive/.env but required by positive/.env.example
+  variable: DATABASE_URL
+  why: An empty DATABASE_URL is usually read as "set" and passes presence checks, then fails later (empty URLs, empty credentials, zero ports).
+  fix: Set a value for DATABASE_URL in positive/.env:1. If an empty value is intentional, mark the template line optional: `DATABASE_URL= # optional` in positive/.env.example:1.
+  related: positive/.env.example:1:1
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG005-empty-required-value.md
+positive/.env:2:1  warning  EG005 empty-required-value  PORT is empty in positive/.env but required by positive/.env.example
+  variable: PORT
+  why: An empty PORT is usually read as "set" and passes presence checks, then fails later (empty URLs, empty credentials, zero ports).
+  fix: Set a value for PORT in positive/.env:2. The template suggests a non-empty value (positive/.env.example:2), so an empty one is almost certainly a mistake; if it is intentional, add `# envguard-ignore EG005` on the line above it.
+  related: positive/.env.example:2:1
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG005-empty-required-value.md
+positive/.env:3:1  warning  EG005 empty-required-value  DEBUG is empty in positive/.env but required by positive/.env.example
+  variable: DEBUG
+  why: An empty DEBUG is usually read as "set" and passes presence checks, then fails later (empty URLs, empty credentials, zero ports).
+  fix: Set a value for DEBUG in positive/.env:3. The template suggests a non-empty value (positive/.env.example:3), so an empty one is almost certainly a mistake; if it is intentional, add `# envguard-ignore EG005` on the line above it.
+  related: positive/.env.example:3:1
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG005-empty-required-value.md
+(3 findings, 0 suppressed)

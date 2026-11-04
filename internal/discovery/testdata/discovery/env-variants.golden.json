@@ -1,0 +1,249 @@
+{
+  "Files": [
+    {
+      "Path": ".env",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.defaults",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.dev",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "development",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.development",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "development",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.development.local",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "development",
+      "Local": true,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.dist",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.example",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.local",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "development",
+      "Local": true,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.local.example",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "development",
+      "Local": true,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.preview",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "preview",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.prod",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "production",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.prod.local.example",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "production",
+      "Local": true,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.production",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "production",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.production.example",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "production",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.production.local",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "production",
+      "Local": true,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.sample",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.stage",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "staging",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.staging",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "staging",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.staging.sample",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "staging",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.template",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "default",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.test",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "test",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.test.template",
+      "Kind": "env-template",
+      "AppRoot": ".",
+      "Environment": "test",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.testing",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "test",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    },
+    {
+      "Path": ".env.vault",
+      "Kind": "env",
+      "AppRoot": ".",
+      "Environment": "vault",
+      "Local": false,
+      "GitIgnored": false,
+      "Language": "",
+      "Size": 4
+    }
+  ],
+  "Skipped": null,
+  "AppRoots": [
+    "."
+  ],
+  "Truncated": false
+}

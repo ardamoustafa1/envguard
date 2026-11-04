@@ -1,0 +1,18 @@
+.env.development
+  9:1  ⚠ warning  EG006  NEXTAUTH_URL is defined 2 times in .env.development (lines 3 and 9)
+
+.github/workflows/ci.yml
+  48:28  • info     EG012  workflows use secret E2E_NEXTAUTH_SECRET, but no template or schema documents it
+  49:27  • info     EG012  workflows use secret E2E_GITHUB_ID, but no template or schema documents it
+  50:31  • info     EG012  workflows use secret E2E_GITHUB_SECRET, but no template or schema documents it
+  51:30  • info     EG012  workflows use secret STRIPE_TEST_SECRET_KEY, but no template or schema documents it
+  52:34  • info     EG012  workflows use secret STRIPE_TEST_WEBHOOK_SECRET, but no template or schema documents it
+
+lib/email.ts
+  3:30  ✗ error    EG003  RESEND_API_KEY is read by the code but not declared in any env file, template or schema
+
+next.config.ts
+  29:28  • info     EG003  ANALYZE is read by the code but not declared in any env file, template or schema
+
+✗ 1 error · ⚠ 1 warning · 6 info · 24 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG003`.

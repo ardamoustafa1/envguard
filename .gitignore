@@ -1,0 +1,25 @@
+# Build output
+/bin/
+/dist/
+coverage.out
+*.out
+*.prof
+*.test
+/envguard
+coverage.html
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Real env files must never be committed...
+.env
+.env.*
+# ...but templates are documentation and should be.
+!*.example
+!*.sample
+!*.template
+# Test fixtures and examples are intentionally committed.
+!**/testdata/**
+!examples/**

@@ -1,0 +1,17 @@
+[project]
+name = "shop"
+version = "0.1.0"
+description = "A small Django shop backend"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+addopts = "--ds=config.settings.test --reuse-db"
+python_files = ["tests.py", "test_*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "DJ"]
+ignore = ["F403", "F405"]

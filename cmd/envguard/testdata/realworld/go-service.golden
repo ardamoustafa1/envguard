@@ -1,0 +1,11 @@
+.env.example
+  25:1  ⚠ warning  EG006  LOG_LEVEL is defined 2 times in .env.example (lines 5 and 25)
+
+.github/workflows/release.yml
+  39:32  • info     EG012  workflows use secret RELEASE_WEBHOOK_URL, but no template or schema documents it
+
+internal/alerts/slack.go
+  15:20  ✗ error    EG003  SLACK_WEBHOOK_URL is read by the code but not declared in any env file, template or schema
+
+✗ 1 error · ⚠ 1 warning · 1 info · 17 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG003`.

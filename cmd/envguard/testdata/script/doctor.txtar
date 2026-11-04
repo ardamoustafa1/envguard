@@ -1,0 +1,101 @@
+# envguard doctor: friendly report, exit 0 unless --fail-on.
+
+exitcode 0 envguard --root demo doctor
+stdout '^EnvGuard doctor · demo$'
+stdout '^Scanned$'
+stdout '^  Env files    2 real · 3 templates$'
+stdout '^  Source code  3 files · javascript 2 · python 1$'
+stdout '^  App roots    2 · \., worker$'
+stdout '^  Config       \.envguard\.yaml with a variable schema$'
+stdout '^Findings  ✗ 6 errors · ⚠ 10 warnings · 4 info$'
+stdout '^   1  ✗ LOG_LEVEL in \.env has the invalid value verbose'
+stdout '^        error · EG014 invalid-value · \.env:2:11$'
+stdout '^      Why      '
+stdout '^      Fix      1\. '
+stdout '^      Related  '
+stdout '^      Evidence detected: URL with an embedded password$'
+stdout '^Environment matrix$'
+stdout '^    VARIABLE +default  production$'
+stdout '^    STRIPE_SECRET_KEY +–  +✗$'
+stdout '^    Templates only, no env file yet: staging$'
+stdout '^CI inventory'
+stdout '^  Secrets  DATABASE_URL  +\.github/workflows/deploy\.yml:13:29$'
+stdout '^  Vars     DEPLOY_REGION'
+stdout '^Good to know$'
+stdout '1 dynamic env lookup \(like `process\.env\[name\]`\) could not be analyzed'
+stdout '^Next steps$'
+stdout '^  1\. Fix the 6 errors first'
+! stdout 'pa55word'
+! stderr .
+
+# Running envguard without a command runs doctor (with doctor's flags).
+exitcode 0 envguard --root demo
+stdout '^EnvGuard doctor · demo$'
+exitcode 1 envguard --root demo --fail-on error
+exitcode 0 envguard --root demo --format json
+stdout '"command": "doctor"'
+
+# --fail-on makes doctor fail; the config's fail_on does not.
+exitcode 1 envguard --root demo doctor --fail-on error
+exitcode 0 envguard --root failcfg doctor
+exitcode 1 envguard --root failcfg check
+exitcode 2 envguard --root demo doctor --fail-on sometimes
+
+# --env and --app narrow the report.
+exitcode 0 envguard --root demo doctor --env production --app .
+stdout '^EnvGuard doctor · demo · app \. · env production$|^EnvGuard doctor · demo · env production$'
+! stdout '^    VARIABLE +default'
+
+# A clean project gets the short "all good" message.
+exitcode 0 envguard --root clean doctor
+cmp stdout clean.golden
+
+# Every format works for doctor too.
+exitcode 0 envguard --root demo doctor --format sarif
+stdout '"name": "EnvGuard"'
+exitcode 0 envguard --root demo doctor --format pretty
+stdout '^✗ 6 errors'
+exitcode 0 envguard --root demo doctor --output reports/doctor.txt
+! stdout .
+grep '^EnvGuard doctor · demo$' reports/doctor.txt
+exitcode 0 envguard --root demo --ascii doctor
+stdout '^EnvGuard doctor \| demo$'
+stdout '^   1  x LOG_LEVEL'
+exitcode 2 envguard --root demo doctor --format html
+stderr 'unknown format'
+exitcode 2 envguard --root demo doctor --env nowhere
+stderr '--env: value 1 names no environment'
+
+# Invalid configuration exits with 2.
+exitcode 2 envguard --root badconfig doctor
+stderr 'invalid configuration'
+exitcode 2 envguard --root demo doctor extra
+stderr '^envguard: doctor takes no arguments; run `envguard doctor --help` for its flags$'
+
+-- clean/package.json --
+{"name": "clean"}
+-- clean/.env.example --
+API_URL=
+-- clean/.env --
+API_URL=https://api.example.com
+-- clean/index.js --
+fetch(process.env.API_URL);
+-- clean.golden --
+EnvGuard doctor · clean
+
+✓ All good – no problems found.
+
+  1 env file · 1 template · 0 Compose files · 0 workflows · 1 source file
+  1 variable · 1 app root
+
+Next: `envguard init` adds a schema with types, and `envguard check` in CI keeps it this way.
+-- failcfg/.envguard.yaml --
+version: 1
+fail_on: warning
+-- failcfg/.env.example --
+A=
+-- failcfg/.env --
+A=
+-- badconfig/.envguard.yaml --
+version: 1
+exlude: [x]

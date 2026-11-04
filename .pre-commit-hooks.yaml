@@ -1,0 +1,21 @@
+# pre-commit hooks (https://pre-commit.com). Usage in .pre-commit-config.yaml:
+#
+#   repos:
+#     - repo: https://github.com/ardamoustafa1/envguard
+#       rev: v1.2.3
+#       hooks:
+#         - id: envguard
+#
+# pre-commit builds EnvGuard from source with the Go toolchain (language:
+# golang); no binary is downloaded. Add `args: [--env, production]` etc. to
+# pass extra check flags.
+- id: envguard
+  name: envguard
+  description: Check env files, templates, Compose files, workflows and code for env var mistakes.
+  entry: envguard check
+  language: golang
+  pass_filenames: false
+  # Any change can matter (code that reads a new variable, a template, a
+  # workflow), and the check is fast, so it runs on every commit.
+  always_run: true
+  minimum_pre_commit_version: "3.0.0"

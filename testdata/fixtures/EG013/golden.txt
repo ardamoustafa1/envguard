@@ -1,0 +1,11 @@
+positive/.env.production.example:2:1  warning  EG013 environment-drift  STRIPE_SECRET_KEY is declared for production but not for development and staging
+  variable: STRIPE_SECRET_KEY
+  why: Environments that are supposed to run the same code should need the same variables; a variable documented for only some of them is often forgotten when the next deploy reaches the others.
+  fix: Add `STRIPE_SECRET_KEY=` to positive/.env.development.example and positive/.env.staging.example, or move it to positive/.env.example if every environment needs it. If it really applies only to production, add `# envguard-ignore EG013` above positive/.env.production.example:2.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG013-environment-drift.md
+positive/.env.staging.example:2:1  warning  EG013 environment-drift  SENTRY_DSN is declared for staging but not for development and production
+  variable: SENTRY_DSN
+  why: Environments that are supposed to run the same code should need the same variables; a variable documented for only some of them is often forgotten when the next deploy reaches the others.
+  fix: Add `SENTRY_DSN=` to positive/.env.development.example and positive/.env.production.example, or move it to positive/.env.example if every environment needs it. If it really applies only to staging, add `# envguard-ignore EG013` above positive/.env.staging.example:2.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG013-environment-drift.md
+(2 findings, 0 suppressed)

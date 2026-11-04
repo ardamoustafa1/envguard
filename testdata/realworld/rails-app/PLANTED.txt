@@ -1,0 +1,2 @@
+EG003 app/mailers/invoice_mailer.rb SUPPORT_EMAIL - read with ENV["SUPPORT_EMAIL"] but declared in no env file, template, compose file or workflow
+EG006 .env PORT - key defined twice in the local .env (3000 then 3001)

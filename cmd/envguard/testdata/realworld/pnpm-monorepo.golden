@@ -1,0 +1,12 @@
+.github/workflows/ci.yml
+  13:20  • info     EG012  workflows use secret TURBO_TOKEN, but no template or schema documents it
+  14:19  • info     EG012  workflows use variable TURBO_TEAM, but no template or schema documents it
+
+apps/api/.env.production
+  ✗ error    EG001  CORS_ORIGIN is declared in apps/api/.env.example but missing from apps/api/.env.production
+
+apps/worker/src/index.ts
+  7:58  ✗ error    EG003  SMTP_URL is read by the code but not declared in any env file, template or schema
+
+✗ 2 errors · ⚠ 0 warnings · 2 info · 24 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG001`.

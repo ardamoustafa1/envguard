@@ -1,0 +1,5 @@
+App negative
+  No real env files yet.
+  Templates only, no env file yet: default
+
+✓ set  ○ empty  ✗ missing (required by a template)  – not required

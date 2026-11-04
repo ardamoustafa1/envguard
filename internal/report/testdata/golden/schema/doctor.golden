@@ -1,0 +1,362 @@
+EnvGuard doctor · .
+
+Scanned
+  Env files    3 real · 2 templates
+  Compose      0 files
+  Workflows    0 files
+  Source code  0 files
+  Variables    13
+  App roots    3 · ., negative, positive
+  Config       .envguard.yaml with a variable schema
+  Git          not available (not a git repository (or not accessible))
+
+Findings  ✗ 0 errors · ⚠ 30 warnings · 0 info
+
+   1  ⚠ NODE_ENV is set in negative/.env.development but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.development:2:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, NODE_ENV will be missing
+               wherever this file is not copied.
+      Fix      Add `NODE_ENV=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.development if nothing uses it.
+
+   2  ⚠ DATABASE_URL is set in negative/.env.development but not documented in
+        any template
+        warning · EG002 undocumented-variable · negative/.env.development:3:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, DATABASE_URL will be missing
+               wherever this file is not copied.
+      Fix      Add `DATABASE_URL=` (with an empty or placeholder value, never
+               the real one) to negative/.env.example, or remove it from
+               negative/.env.development if nothing uses it.
+
+   3  ⚠ APP_DEBUG is set in negative/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.production:2:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, APP_DEBUG will be missing
+               wherever this file is not copied.
+      Fix      Add `APP_DEBUG=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+   4  ⚠ FLASK_DEBUG is set in negative/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.production:3:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, FLASK_DEBUG will be missing
+               wherever this file is not copied.
+      Fix      Add `FLASK_DEBUG=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+   5  ⚠ NODE_ENV is set in negative/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.production:4:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, NODE_ENV will be missing
+               wherever this file is not copied.
+      Fix      Add `NODE_ENV=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+   6  ⚠ RAILS_ENV is set in negative/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.production:5:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, RAILS_ENV will be missing
+               wherever this file is not copied.
+      Fix      Add `RAILS_ENV=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+   7  ⚠ APP_ENV is set in negative/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.production:6:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, APP_ENV will be missing wherever
+               this file is not copied.
+      Fix      Add `APP_ENV=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+   8  ⚠ DATABASE_URL is set in negative/.env.production but not documented in
+        any template
+        warning · EG002 undocumented-variable · negative/.env.production:7:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, DATABASE_URL will be missing
+               wherever this file is not copied.
+      Fix      Add `DATABASE_URL=` (with an empty or placeholder value, never
+               the real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+   9  ⚠ REDIS_HOST is set in negative/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · negative/.env.production:8:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, REDIS_HOST will be missing
+               wherever this file is not copied.
+      Fix      Add `REDIS_HOST=` (with an empty or placeholder value, never the
+               real one) to negative/.env.example, or remove it from
+               negative/.env.production if nothing uses it.
+
+  10  ⚠ EMPTY_VALUE_IS_IGNORED is set in negative/.env.production but not
+        documented in any template
+        warning · EG002 undocumented-variable · negative/.env.production:12:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, EMPTY_VALUE_IS_IGNORED will be
+               missing wherever this file is not copied.
+      Fix      Add `EMPTY_VALUE_IS_IGNORED=` (with an empty or placeholder
+               value, never the real one) to negative/.env.example, or remove it
+               from negative/.env.production if nothing uses it.
+
+  11  ⚠ DEBUG must be false in production but is on (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:1:7
+
+      Why      The schema (.envguard.yaml:14) constrains DEBUG in production;
+               violating it usually means a development or test setting is about
+               to be deployed.
+      Fix      Set `DEBUG=false` in positive/.env.production.
+      Related  .envguard.yaml:14:3
+
+  12  ⚠ APP_DEBUG is set in positive/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · positive/.env.production:2:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, APP_DEBUG will be missing
+               wherever this file is not copied.
+      Fix      Add `APP_DEBUG=` (with an empty or placeholder value, never the
+               real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  13  ⚠ APP_DEBUG is enabled in production (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:2:11
+
+      Why      Laravel debug mode in production exposes stack traces, settings
+               and sometimes an interactive console to anyone who triggers an
+               error.
+      Fix      Set `APP_DEBUG=false` in positive/.env.production.
+
+  14  ⚠ FLASK_DEBUG is set in positive/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · positive/.env.production:3:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, FLASK_DEBUG will be missing
+               wherever this file is not copied.
+      Fix      Add `FLASK_DEBUG=` (with an empty or placeholder value, never the
+               real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  15  ⚠ FLASK_DEBUG is enabled in production (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:3:13
+
+      Why      Flask debug mode in production exposes stack traces, settings and
+               sometimes an interactive console to anyone who triggers an error.
+      Fix      Set `FLASK_DEBUG=false` in positive/.env.production.
+
+  16  ⚠ DJANGO_DEBUG is set in positive/.env.production but not documented in
+        any template
+        warning · EG002 undocumented-variable · positive/.env.production:4:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, DJANGO_DEBUG will be missing
+               wherever this file is not copied.
+      Fix      Add `DJANGO_DEBUG=` (with an empty or placeholder value, never
+               the real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  17  ⚠ DJANGO_DEBUG is enabled in production (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:4:14
+
+      Why      Django debug mode in production exposes stack traces, settings
+               and sometimes an interactive console to anyone who triggers an
+               error.
+      Fix      Set `DJANGO_DEBUG=false` in positive/.env.production.
+
+  18  ⚠ NODE_ENV is set in positive/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · positive/.env.production:5:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, NODE_ENV will be missing
+               wherever this file is not copied.
+      Fix      Add `NODE_ENV=` (with an empty or placeholder value, never the
+               real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  19  ⚠ NODE_ENV is development, but production must use "production"
+        (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:5:10
+
+      Why      Frameworks switch off caching, minification and security defaults
+               outside "production", and some enable verbose errors.
+      Fix      Set `NODE_ENV=production` in positive/.env.production.
+
+  20  ⚠ RAILS_ENV is set in positive/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · positive/.env.production:6:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, RAILS_ENV will be missing
+               wherever this file is not copied.
+      Fix      Add `RAILS_ENV=` (with an empty or placeholder value, never the
+               real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  21  ⚠ RAILS_ENV is staging, but production must use "production"
+        (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:6:11
+
+      Why      Frameworks switch off caching, minification and security defaults
+               outside "production", and some enable verbose errors.
+      Fix      Set `RAILS_ENV=production` in positive/.env.production.
+
+  22  ⚠ APP_ENV is set in positive/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · positive/.env.production:7:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, APP_ENV will be missing wherever
+               this file is not copied.
+      Fix      Add `APP_ENV=` (with an empty or placeholder value, never the
+               real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  23  ⚠ APP_ENV is local in production (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:7:9
+
+      Why      Laravel and similar frameworks enable development behavior (debug
+               pages, relaxed security) for local and development environments.
+      Fix      Set `APP_ENV=production` in positive/.env.production.
+
+  24  ⚠ DATABASE_URL is set in positive/.env.production but not documented in
+        any template
+        warning · EG002 undocumented-variable · positive/.env.production:8:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, DATABASE_URL will be missing
+               wherever this file is not copied.
+      Fix      Add `DATABASE_URL=` (with an empty or placeholder value, never
+               the real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  25  ⚠ DATABASE_URL points to a local address in production
+        (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:8:14
+
+      Why      Inside a production container or server, localhost is the machine
+               itself, not your database or API; this is almost always a
+               development value that slipped through.
+      Fix      Set DATABASE_URL in positive/.env.production to the production
+               host.
+
+  26  ⚠ REDIS_HOST is set in positive/.env.production but not documented in any
+        template
+        warning · EG002 undocumented-variable · positive/.env.production:9:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, REDIS_HOST will be missing
+               wherever this file is not copied.
+      Fix      Add `REDIS_HOST=` (with an empty or placeholder value, never the
+               real one) to positive/.env.example, or remove it from
+               positive/.env.production if nothing uses it.
+
+  27  ⚠ REDIS_HOST points to a local address in production
+        (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:9:12
+
+      Why      Inside a production container or server, localhost is the machine
+               itself, not your database or API; this is almost always a
+               development value that slipped through.
+      Fix      Set REDIS_HOST in positive/.env.production to the production
+               host.
+
+  28  ⚠ LOG_LEVEL must not be debug in production (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:10:11
+
+      Why      The schema (.envguard.yaml:4) constrains LOG_LEVEL in production;
+               violating it usually means a development or test setting is about
+               to be deployed.
+      Fix      Change LOG_LEVEL in positive/.env.production to a
+               production-appropriate value.
+      Related  .envguard.yaml:4:3
+
+  29  ⚠ CACHE_ENABLED must be true in production but is no
+        (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:11:15
+
+      Why      The schema (.envguard.yaml:8) constrains CACHE_ENABLED in
+               production; violating it usually means a development or test
+               setting is about to be deployed.
+      Fix      Set `CACHE_ENABLED=true` in positive/.env.production.
+      Related  .envguard.yaml:8:3
+
+  30  ⚠ CDN_URL does not match the production pattern "^https://"
+        (positive/.env.production)
+        warning · EG015 unsafe-production-value · positive/.env.production:12:9
+
+      Why      The schema (.envguard.yaml:11) constrains CDN_URL in production;
+               violating it usually means a development or test setting is about
+               to be deployed.
+      Fix      Set CDN_URL in positive/.env.production to a value matching
+               "^https://".
+      Related  .envguard.yaml:11:3
+
+Environment matrix
+  App negative
+    VARIABLE                development  production
+    APP_DEBUG                    –           ✓
+    APP_ENV                      –           ✓
+    CACHE_ENABLED                –           ✓
+    CDN_URL                      –           ✓
+    DATABASE_URL                 ✓           ✓
+    DEBUG                        ✓           ✓
+    EMPTY_VALUE_IS_IGNORED       –           ○
+    FLASK_DEBUG                  –           ✓
+    LOG_LEVEL                    ✓           ✓
+    NODE_ENV                     ✓           ✓
+    RAILS_ENV                    –           ✓
+    REDIS_HOST                   –           ✓
+    Templates only, no env file yet: default
+
+  App positive
+    VARIABLE       production
+    APP_DEBUG          ✓
+    APP_ENV            ✓
+    CACHE_ENABLED      ✓
+    CDN_URL            ✓
+    DATABASE_URL       ✓
+    DEBUG              ✓
+    DJANGO_DEBUG       ✓
+    FLASK_DEBUG        ✓
+    LOG_LEVEL          ✓
+    NODE_ENV           ✓
+    RAILS_ENV          ✓
+    REDIS_HOST         ✓
+    Templates only, no env file yet: default
+  ✓ set  ○ empty  ✗ missing (required by a template)  – not required
+
+Good to know
+  • Git checks (EG008, EG009) were skipped: run EnvGuard inside a git work tree
+    with git installed.
+
+Next steps
+  1. Review the 30 warnings; each one explains why it matters.
+  2. Learn more about a rule: `envguard explain EG002` (all rules:
+     `envguard explain --list`).
+  3. Run `envguard check` in CI: it exits 1 on errors and annotates pull
+     requests in GitHub Actions.

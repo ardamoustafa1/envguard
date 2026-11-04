@@ -1,0 +1,7 @@
+positive/.env.production  error  EG008 env-file-committed  positive/.env.production is a real env file and is committed to git
+  why: Everyone with access to the repository, its forks and every clone can read the values, and they stay in git history even after the file is deleted.
+  fix: 1. Stop tracking it (the local file is kept): `git rm --cached positive/.env.production`
+       2. Ignore it: add `.env.production` to .gitignore (or `.env*` plus `!*.example` to cover all env files), then commit.
+       3. WARNING: the values are still in git history. Rotate every secret in this file (new keys, new passwords); deleting the file or rewriting history afterwards is not enough, because clones and forks keep the old commits.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG008-env-file-committed.md
+(1 findings, 0 suppressed)

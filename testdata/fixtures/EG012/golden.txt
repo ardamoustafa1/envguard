@@ -1,0 +1,17 @@
+.github/workflows/deploy.yml:6:9  info  EG012 ci-secret-undocumented  workflows use variable DEPLOY_ENABLED, but no template or schema documents it
+  variable: DEPLOY_ENABLED
+  why: Whoever sets up a fork, a new environment or a new repository has to discover DEPLOY_ENABLED by reading workflow files; a missing one usually shows up as a failed deploy.
+  fix: Document it: add `DEPLOY_ENABLED=` to .env.example with a comment such as `# CI: set in GitHub → Settings → Secrets and variables → Actions (Variables tab)`, or declare it under `variables:` in .envguard.yaml.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md
+.github/workflows/deploy.yml:13:27  info  EG012 ci-secret-undocumented  workflows use secret DEPLOY_KEY, but no template or schema documents it
+  variable: DEPLOY_KEY
+  why: Whoever sets up a fork, a new environment or a new repository has to discover DEPLOY_KEY by reading workflow files; a missing one usually shows up as a failed deploy.
+  fix: Document it: add `DEPLOY_KEY=` to .env.example with a comment such as `# CI: set in GitHub → Settings → Secrets and variables → Actions (Secrets tab)`, or declare it under `variables:` in .envguard.yaml.
+  related: .github/workflows/deploy.yml:16:24
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md
+.github/workflows/deploy.yml:15:23  info  EG012 ci-secret-undocumented  workflows use variable AWS_DEPLOY_REGION, but no template or schema documents it
+  variable: AWS_DEPLOY_REGION
+  why: Whoever sets up a fork, a new environment or a new repository has to discover AWS_DEPLOY_REGION by reading workflow files; a missing one usually shows up as a failed deploy.
+  fix: Document it: add `AWS_DEPLOY_REGION=` to .env.example with a comment such as `# CI: set in GitHub → Settings → Secrets and variables → Actions (Variables tab)`, or declare it under `variables:` in .envguard.yaml.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG012-ci-secret-undocumented.md
+(3 findings, 0 suppressed)

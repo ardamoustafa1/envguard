@@ -1,0 +1,5 @@
+.env.example
+apps/web/.env.example
+apps/api/.env.example
+apps/api/.env.production.example
+apps/worker/.env.example

@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "envguard",
+    "version": "test"
+  },
+  "command": "check",
+  "root": ".",
+  "process_env": false,
+  "stats": {
+    "env_files": 2,
+    "templates": 2,
+    "compose_files": 3,
+    "workflows": 0,
+    "source_files": 0,
+    "languages": [],
+    "variables": 18,
+    "app_roots": [
+      ".",
+      "negative",
+      "positive"
+    ],
+    "dynamic_lookups": 0
+  },
+  "summary": {
+    "errors": 2,
+    "warnings": 6,
+    "info": 0,
+    "suppressed": 0
+  },
+  "findings": [
+    {
+      "rule_id": "EG001",
+      "rule_name": "missing-variable",
+      "severity": "error",
+      "message": "B is declared in negative/.env.example but missing from negative/.env",
+      "variable": "B",
+      "location": {
+        "file": "negative/.env",
+        "line": 0,
+        "column": 0
+      },
+      "evidence": "",
+      "why": "Anything that reads B in the default environment gets no value, which usually fails only at runtime or silently falls back to a default.",
+      "fix": "Add `B=` to negative/.env (it is declared in negative/.env.example:1) and set its value. If it is not needed there, mark it optional in the template (`B= # optional`) or put `# envguard-ignore EG001` on the line above it in negative/.env.example.",
+      "related": [
+        {
+          "file": "negative/.env.example",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "A is set in negative/.env but not documented in any template",
+      "variable": "A",
+      "location": {
+        "file": "negative/.env",
+        "line": 1,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, A will be missing wherever this file is not copied.",
+      "fix": "Add `A=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG001",
+      "rule_name": "missing-variable",
+      "severity": "error",
+      "message": "TEMPLATE_VAR is declared in positive/.env.example but missing from positive/.env",
+      "variable": "TEMPLATE_VAR",
+      "location": {
+        "file": "positive/.env",
+        "line": 0,
+        "column": 0
+      },
+      "evidence": "",
+      "why": "Anything that reads TEMPLATE_VAR in the default environment gets no value, which usually fails only at runtime or silently falls back to a default.",
+      "fix": "Add `TEMPLATE_VAR=` to positive/.env (it is declared in positive/.env.example:1) and set its value. If it is not needed there, mark it optional in the template (`TEMPLATE_VAR= # optional`) or put `# envguard-ignore EG001` on the line above it in positive/.env.example.",
+      "related": [
+        {
+          "file": "positive/.env.example",
+          "line": 1,
+          "column": 1
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "DEFINED_VAR is set in positive/.env but not documented in any template",
+      "variable": "DEFINED_VAR",
+      "location": {
+        "file": "positive/.env",
+        "line": 1,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, DEFINED_VAR will be missing wherever this file is not copied.",
+      "fix": "Add `DEFINED_VAR=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG011",
+      "rule_name": "compose-undefined-variable",
+      "severity": "warning",
+      "message": "positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is no positive/deploy/.env next to it and it is not declared in positive/.env.example",
+      "variable": "PROD_ONLY",
+      "location": {
+        "file": "positive/deploy/compose.prod.yaml",
+        "line": 3,
+        "column": 19
+      },
+      "evidence": "",
+      "why": "Compose substitutes an empty string for an unset PROD_ONLY and only prints a warning, so the container starts with a broken value.",
+      "fix": "Create positive/deploy/.env with `PROD_ONLY=\u003cvalue\u003e` (Compose reads it automatically), declare `PROD_ONLY=` in a template so others know to set it, or give it a default: `${PROD_ONLY:-value}`.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md"
+    },
+    {
+      "rule_id": "EG011",
+      "rule_name": "compose-undefined-variable",
+      "severity": "warning",
+      "message": "positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in positive/.env (the file Compose reads) or any template",
+      "variable": "DB_PASSWORD",
+      "location": {
+        "file": "positive/docker-compose.yml",
+        "line": 5,
+        "column": 39
+      },
+      "evidence": "",
+      "why": "Compose substitutes an empty string for an unset DB_PASSWORD and only prints a warning, so the container starts with a broken value.",
+      "fix": "Add `DB_PASSWORD=` with a value to positive/.env and document it in a template, or give it a default in the Compose file: `${DB_PASSWORD:-value}`.",
+      "related": [
+        {
+          "file": "positive/docker-compose.yml",
+          "line": 10,
+          "column": 16
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md"
+    },
+    {
+      "rule_id": "EG011",
+      "rule_name": "compose-undefined-variable",
+      "severity": "warning",
+      "message": "positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not defined in positive/.env (the file Compose reads) or any template",
+      "variable": "REQUIRED_TOKEN",
+      "location": {
+        "file": "positive/docker-compose.yml",
+        "line": 9,
+        "column": 16
+      },
+      "evidence": "",
+      "why": "The reference uses ${REQUIRED_TOKEN:?...}, so `docker compose up` aborts when it is unset.",
+      "fix": "Add `REQUIRED_TOKEN=` with a value to positive/.env and document it in a template, or give it a default in the Compose file: `${REQUIRED_TOKEN:-value}`.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md"
+    },
+    {
+      "rule_id": "EG011",
+      "rule_name": "compose-undefined-variable",
+      "severity": "warning",
+      "message": "service api: env_file positive/missing.env does not exist",
+      "variable": "",
+      "location": {
+        "file": "positive/docker-compose.yml",
+        "line": 12,
+        "column": 9
+      },
+      "evidence": "",
+      "why": "`docker compose up` fails for this service when a required env_file is missing.",
+      "fix": "Create positive/missing.env (for example by copying its template), or make it optional with the long syntax:\n\n    env_file:\n      - path: ./missing.env\n        required: false",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md"
+    }
+  ],
+  "matrix": [
+    {
+      "app_root": "negative",
+      "environments": [
+        "default"
+      ],
+      "template_only_environments": [],
+      "files": {
+        "default": [
+          "negative/.env"
+        ]
+      },
+      "variables": [
+        {
+          "name": "A",
+          "cells": {
+            "default": "set"
+          }
+        },
+        {
+          "name": "B",
+          "cells": {
+            "default": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "app_root": "positive",
+      "environments": [
+        "default"
+      ],
+      "template_only_environments": [],
+      "files": {
+        "default": [
+          "positive/.env"
+        ]
+      },
+      "variables": [
+        {
+          "name": "DEFINED_VAR",
+          "cells": {
+            "default": "set"
+          }
+        },
+        {
+          "name": "TEMPLATE_VAR",
+          "cells": {
+            "default": "missing"
+          }
+        }
+      ]
+    }
+  ],
+  "ci": {
+    "secrets": [],
+    "vars": []
+  },
+  "notes": []
+}

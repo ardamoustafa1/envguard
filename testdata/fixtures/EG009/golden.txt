@@ -1,0 +1,5 @@
+positive/.env.local  warning  EG009 env-file-not-ignored  positive/.env.local is not ignored by git; `git add .` would commit it
+  why: Real env files hold credentials. One `git add .` or `git commit -a` away from being committed, they end up in history, forks and CI logs.
+  fix: Add `.env.local` to positive/.gitignore (or add `.env*` and `!*.example` to the root .gitignore to cover every env file except templates), then check with `git check-ignore -v positive/.env.local`.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG009-env-file-not-ignored.md
+(1 findings, 0 suppressed)

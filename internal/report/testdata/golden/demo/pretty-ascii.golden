@@ -1,0 +1,40 @@
+.env
+  2:11  x error    EG014  LOG_LEVEL in .env has the invalid value verbose: expected one of debug, info, warn or error
+   5:1  ! warning  EG005  SESSION_SECRET is empty in .env but required by .env.example
+   8:1  ! warning  EG002  FEATURE_NEW_CHECKOUT is set in .env but not documented in any template
+   9:1  ! warning  EG002  CACHE_DIR is set in .env but not documented in any template
+  9:11  ! warning  EG016  CACHE_DIR references APP_HOME, which is not defined in .env or the env files loaded with it
+
+.env.example
+  4:14  x error    EG010  DATABASE_URL in .env.example looks like a URL with an embedded password
+   9:1  i info     EG004  LEGACY_API_KEY is declared in .env.example but never read by the code, env files, Compose files or workflows
+
+.env.production
+        x error    EG001  STRIPE_SECRET_KEY is declared in .env.production.example but missing from .env.production
+  4:11  ! warning  EG015  REDIS_URL points to a local address in production (.env.production)
+   6:9  x error    EG014  WORKERS in .env.production has the invalid value 0: is below the minimum 1
+   8:1  ! warning  EG006  DEBUG is defined 2 times in .env.production (lines 7 and 8)
+   8:7  ! warning  EG015  DEBUG is enabled in production (.env.production)
+  10:8  x error    EG007  missing '=' after key
+
+.env.production.example
+  2:1  ! warning  EG013  STRIPE_SECRET_KEY is declared for production but not for staging
+
+.env.staging.example
+  2:1  ! warning  EG013  STAGING_BANNER is declared for staging but not for production
+
+.github/workflows/deploy.yml
+  14:30  i info     EG012  workflows use secret FLY_API_TOKEN, but no template or schema documents it
+  15:30  i info     EG012  workflows use variable DEPLOY_REGION, but no template or schema documents it
+
+docker-compose.yml
+  17:28  ! warning  EG011  docker-compose.yml interpolates ${POSTGRES_PASSWORD}, which is not defined in .env (the file Compose reads) or any template
+
+src/server.js
+  23:33  x error    EG003  ANALYTICS_WRITE_KEY is read by the code but not declared in any env file, template or schema
+
+worker/main.py
+  6:30  i info     EG003  WORKER_CONCURRENCY is read by the code but not declared in any env file, template or schema
+
+x 6 errors | ! 10 warnings | 4 info | 10 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG014`.

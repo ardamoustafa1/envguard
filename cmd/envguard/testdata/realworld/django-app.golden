@@ -1,0 +1,15 @@
+.env
+  16:31  ⚠ warning  EG007  DJANGO_DEFAULT_FROM_EMAIL: unquoted value contains whitespace
+   21:1  ⚠ warning  EG006  DJANGO_DEBUG is defined 2 times in .env (lines 3 and 21)
+
+.env.example
+  30:31  ⚠ warning  EG007  DJANGO_DEFAULT_FROM_EMAIL: unquoted value contains whitespace
+
+.github/workflows/ci.yml
+  41:35  • info     EG012  workflows use secret TEST_PAYMENT_WEBHOOK_SECRET, but no template or schema documents it
+
+shop/inventory.py
+  8:28  ✗ error    EG003  INVENTORY_API_URL is read by the code but not declared in any env file, template or schema
+
+✗ 1 error · ⚠ 3 warnings · 1 info · 32 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG003`.

@@ -1,0 +1,43 @@
+positive/.env.example:1:14  error  EG010 possible-secret-in-template  GITHUB_TOKEN in positive/.env.example looks like a GitHub personal access token
+  variable: GITHUB_TOKEN
+  evidence: detected: GitHub personal access token
+  why: A template is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`GITHUB_TOKEN=` or `GITHUB_TOKEN=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+positive/.env.example:2:19  error  EG010 possible-secret-in-template  AWS_ACCESS_KEY_ID in positive/.env.example looks like an AWS access key ID
+  variable: AWS_ACCESS_KEY_ID
+  evidence: detected: AWS access key ID
+  why: A template is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`AWS_ACCESS_KEY_ID=` or `AWS_ACCESS_KEY_ID=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+positive/.env.example:3:14  error  EG010 possible-secret-in-template  DATABASE_URL in positive/.env.example looks like a URL with an embedded password
+  variable: DATABASE_URL
+  evidence: detected: URL with an embedded password
+  why: A template is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`DATABASE_URL=` or `DATABASE_URL=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+positive/.env.example:4:13  error  EG010 possible-secret-in-template  SIGNING_KEY in positive/.env.example looks like a private key (PEM block)
+  variable: SIGNING_KEY
+  evidence: detected: private key (PEM block)
+  why: A template is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`SIGNING_KEY=` or `SIGNING_KEY=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+positive/.env.example:5:13  error  EG010 possible-secret-in-template  SESSION_JWT in positive/.env.example looks like a JSON Web Token
+  variable: SESSION_JWT
+  evidence: detected: JSON Web Token
+  why: A template is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`SESSION_JWT=` or `SESSION_JWT=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+positive/.env.example:6:12  error  EG010 possible-secret-in-template  API_SECRET in positive/.env.example looks like a high-entropy secret
+  variable: API_SECRET
+  evidence: detected: high-entropy secret
+  why: A template is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`API_SECRET=` or `API_SECRET=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+positive/.env.staging:1:19  error  EG010 possible-secret-in-template  STRIPE_SECRET_KEY in positive/.env.staging looks like a Stripe live secret key
+  variable: STRIPE_SECRET_KEY
+  evidence: detected: Stripe live secret key
+  why: A committed env file is shared with everyone who can read the repository; a real credential there is leaked, and it stays in git history even after it is removed.
+  fix: Replace the value with an empty one or a placeholder (`STRIPE_SECRET_KEY=` or `STRIPE_SECRET_KEY=<your-value>`). If it is a real credential, rotate it now: it has been exposed. If it is a deliberate fake, use an obvious placeholder or add `# envguard-ignore EG010` on the line above.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG010-possible-secret-in-template.md
+(7 findings, 1 suppressed)

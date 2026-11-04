@@ -1,0 +1,18 @@
+positive/app/.env:2:1  warning  EG002 undocumented-variable  FEATURE_FLAG is set in positive/app/.env but not documented in any template
+  variable: FEATURE_FLAG
+  why: Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, FEATURE_FLAG will be missing wherever this file is not copied.
+  fix: Add `FEATURE_FLAG=` (with an empty or placeholder value, never the real one) to positive/app/.env.example, or remove it from positive/app/.env if nothing uses it.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md
+positive/app/.env.production:2:1  warning  EG002 undocumented-variable  PROD_ONLY is set in positive/app/.env.production but not documented in any template
+  variable: PROD_ONLY
+  why: Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, PROD_ONLY will be missing wherever this file is not copied.
+  fix: Add `PROD_ONLY=` (with an empty or placeholder value, never the real one) to positive/app/.env.example, or remove it from positive/app/.env.production if nothing uses it.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md
+positive/no-template/.env  warning  EG002 undocumented-variable  positive/no-template/.env defines 2 variables but no template documents them
+  why: Without a template such as .env.example nobody can tell which variables the app needs, so new environments are set up by guesswork.
+  fix: Create positive/no-template/.env.example listing every variable without its real value:
+       
+           A=
+           B=
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md
+(3 findings, 0 suppressed)

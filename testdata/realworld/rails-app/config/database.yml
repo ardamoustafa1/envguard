@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: ledgerly_development
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+test:
+  <<: *default
+  database: ledgerly_test
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+  username: <%= ENV.fetch("DB_USERNAME", "postgres") %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+production:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL") %>

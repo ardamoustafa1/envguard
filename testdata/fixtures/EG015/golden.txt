@@ -1,0 +1,65 @@
+positive/.env.production:1:7  warning  EG015 unsafe-production-value  DEBUG must be false in production but is on (positive/.env.production)
+  variable: DEBUG
+  why: The schema (.envguard.yaml:14) constrains DEBUG in production; violating it usually means a development or test setting is about to be deployed.
+  fix: Set `DEBUG=false` in positive/.env.production.
+  related: .envguard.yaml:14:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:2:11  warning  EG015 unsafe-production-value  APP_DEBUG is enabled in production (positive/.env.production)
+  variable: APP_DEBUG
+  why: Laravel debug mode in production exposes stack traces, settings and sometimes an interactive console to anyone who triggers an error.
+  fix: Set `APP_DEBUG=false` in positive/.env.production.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:3:13  warning  EG015 unsafe-production-value  FLASK_DEBUG is enabled in production (positive/.env.production)
+  variable: FLASK_DEBUG
+  why: Flask debug mode in production exposes stack traces, settings and sometimes an interactive console to anyone who triggers an error.
+  fix: Set `FLASK_DEBUG=false` in positive/.env.production.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:4:14  warning  EG015 unsafe-production-value  DJANGO_DEBUG is enabled in production (positive/.env.production)
+  variable: DJANGO_DEBUG
+  why: Django debug mode in production exposes stack traces, settings and sometimes an interactive console to anyone who triggers an error.
+  fix: Set `DJANGO_DEBUG=false` in positive/.env.production.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:5:10  warning  EG015 unsafe-production-value  NODE_ENV is development, but production must use "production" (positive/.env.production)
+  variable: NODE_ENV
+  why: Frameworks switch off caching, minification and security defaults outside "production", and some enable verbose errors.
+  fix: Set `NODE_ENV=production` in positive/.env.production.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:6:11  warning  EG015 unsafe-production-value  RAILS_ENV is staging, but production must use "production" (positive/.env.production)
+  variable: RAILS_ENV
+  why: Frameworks switch off caching, minification and security defaults outside "production", and some enable verbose errors.
+  fix: Set `RAILS_ENV=production` in positive/.env.production.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:7:9  warning  EG015 unsafe-production-value  APP_ENV is local in production (positive/.env.production)
+  variable: APP_ENV
+  why: Laravel and similar frameworks enable development behavior (debug pages, relaxed security) for local and development environments.
+  fix: Set `APP_ENV=production` in positive/.env.production.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:8:14  warning  EG015 unsafe-production-value  DATABASE_URL points to a local address in production (positive/.env.production)
+  variable: DATABASE_URL
+  why: Inside a production container or server, localhost is the machine itself, not your database or API; this is almost always a development value that slipped through.
+  fix: Set DATABASE_URL in positive/.env.production to the production host.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:9:12  warning  EG015 unsafe-production-value  REDIS_HOST points to a local address in production (positive/.env.production)
+  variable: REDIS_HOST
+  why: Inside a production container or server, localhost is the machine itself, not your database or API; this is almost always a development value that slipped through.
+  fix: Set REDIS_HOST in positive/.env.production to the production host.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:10:11  warning  EG015 unsafe-production-value  LOG_LEVEL must not be debug in production (positive/.env.production)
+  variable: LOG_LEVEL
+  why: The schema (.envguard.yaml:4) constrains LOG_LEVEL in production; violating it usually means a development or test setting is about to be deployed.
+  fix: Change LOG_LEVEL in positive/.env.production to a production-appropriate value.
+  related: .envguard.yaml:4:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:11:15  warning  EG015 unsafe-production-value  CACHE_ENABLED must be true in production but is no (positive/.env.production)
+  variable: CACHE_ENABLED
+  why: The schema (.envguard.yaml:8) constrains CACHE_ENABLED in production; violating it usually means a development or test setting is about to be deployed.
+  fix: Set `CACHE_ENABLED=true` in positive/.env.production.
+  related: .envguard.yaml:8:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+positive/.env.production:12:9  warning  EG015 unsafe-production-value  CDN_URL does not match the production pattern "^https://" (positive/.env.production)
+  variable: CDN_URL
+  why: The schema (.envguard.yaml:11) constrains CDN_URL in production; violating it usually means a development or test setting is about to be deployed.
+  fix: Set CDN_URL in positive/.env.production to a value matching "^https://".
+  related: .envguard.yaml:11:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md
+(12 findings, 0 suppressed)

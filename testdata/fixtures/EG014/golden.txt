@@ -1,0 +1,73 @@
+positive/.env:1:14  error  EG014 invalid-value  DATABASE_URL in positive/.env has an invalid value: expected a URL with scheme postgres or postgresql
+  variable: DATABASE_URL
+  why: The app expects DATABASE_URL to be a URL with scheme postgres or postgresql; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set DATABASE_URL to a URL with scheme postgres or postgresql in positive/.env:1. If the schema is wrong, update DATABASE_URL at .envguard.yaml:3.
+  related: .envguard.yaml:3:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:2:11  error  EG014 invalid-value  LOG_LEVEL in positive/.env has the invalid value verbose: expected one of debug, info, warn or error
+  variable: LOG_LEVEL
+  why: The app expects LOG_LEVEL to be one of debug, info, warn or error; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set LOG_LEVEL to one of debug, info, warn or error in positive/.env:2. The schema's default is info. If the schema is wrong, update LOG_LEVEL at .envguard.yaml:7.
+  related: .envguard.yaml:7:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:3:6  error  EG014 invalid-value  PORT in positive/.env has the invalid value 99999: expected a port number between 1 and 65535
+  variable: PORT
+  why: The app expects PORT to be a port (1-65535); an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set PORT to a port (1-65535) in positive/.env:3. The schema's default is 3000. If the schema is wrong, update PORT at .envguard.yaml:11.
+  related: .envguard.yaml:11:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:4:9  error  EG014 invalid-value  WORKERS in positive/.env has the invalid value 0: is below the minimum 1
+  variable: WORKERS
+  why: The app expects WORKERS to be an integer between 1 and 64; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set WORKERS to an integer between 1 and 64 in positive/.env:4. If the schema is wrong, update WORKERS at .envguard.yaml:12.
+  related: .envguard.yaml:12:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:5:7  error  EG014 invalid-value  DEBUG in positive/.env has the invalid value maybe: expected a boolean (true/false, 1/0, yes/no, on/off)
+  variable: DEBUG
+  why: The app expects DEBUG to be a boolean (true/false, 1/0, yes/no, on/off); an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set DEBUG to a boolean (true/false, 1/0, yes/no, on/off) in positive/.env:5. If the schema is wrong, update DEBUG at .envguard.yaml:13.
+  related: .envguard.yaml:13:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:6:9  error  EG014 invalid-value  API_URL in positive/.env has the invalid value http://api.example.com: does not match the pattern "^https://"
+  variable: API_URL
+  why: The app expects API_URL to be a URL matching "^https://"; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set API_URL to a URL matching "^https://" in positive/.env:6. If the schema is wrong, update API_URL at .envguard.yaml:14.
+  related: .envguard.yaml:14:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:7:13  error  EG014 invalid-value  ADMIN_EMAIL in positive/.env has the invalid value ops-at-example: expected an email address
+  variable: ADMIN_EMAIL
+  why: The app expects ADMIN_EMAIL to be an email address; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set ADMIN_EMAIL to an email address in positive/.env:7. If the schema is wrong, update ADMIN_EMAIL at .envguard.yaml:15.
+  related: .envguard.yaml:15:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:8:11  error  EG014 invalid-value  CACHE_TTL in positive/.env has the invalid value 30: expected a duration such as 300ms, 30s or 1h30m
+  variable: CACHE_TTL
+  why: The app expects CACHE_TTL to be a duration such as 300ms, 30s or 1h30m; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set CACHE_TTL to a duration such as 300ms, 30s or 1h30m in positive/.env:8. If the schema is wrong, update CACHE_TTL at .envguard.yaml:16.
+  related: .envguard.yaml:16:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:9:10  error  EG014 invalid-value  FEATURES in positive/.env has the invalid value {broken: expected valid JSON
+  variable: FEATURES
+  why: The app expects FEATURES to be valid JSON; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set FEATURES to valid JSON in positive/.env:9. If the schema is wrong, update FEATURES at .envguard.yaml:17.
+  related: .envguard.yaml:17:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:10:6  error  EG014 invalid-value  HOST in positive/.env has the invalid value -bad-: expected a hostname or IP address
+  variable: HOST
+  why: The app expects HOST to be a hostname or IP address; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set HOST to a hostname or IP address in positive/.env:10. If the schema is wrong, update HOST at .envguard.yaml:18.
+  related: .envguard.yaml:18:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:11:7  error  EG014 invalid-value  RATIO in positive/.env has the invalid value 1.5: is above the maximum 1
+  variable: RATIO
+  why: The app expects RATIO to be a number of at most 1; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set RATIO to a number of at most 1 in positive/.env:11. If the schema is wrong, update RATIO at .envguard.yaml:19.
+  related: .envguard.yaml:19:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+positive/.env:12:13  error  EG014 invalid-value  PUBLIC_NAME in positive/.env has an invalid value: is shorter than 3 characters
+  variable: PUBLIC_NAME
+  why: The app expects PUBLIC_NAME to be a string; an invalid value usually crashes it at startup or, worse, is silently misread.
+  fix: Set PUBLIC_NAME to a string in positive/.env:12. If the schema is wrong, update PUBLIC_NAME at .envguard.yaml:20.
+  related: .envguard.yaml:20:3
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG014-invalid-value.md
+(12 findings, 0 suppressed)

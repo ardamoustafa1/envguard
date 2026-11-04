@@ -1,0 +1,108 @@
+{
+  "Filename": "testdata/parser/crlf.env",
+  "Entries": [
+    {
+      "Key": "CRLF",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "ValuePos": {
+        "Line": 1,
+        "Column": 6,
+        "Offset": 5
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "QUOTED",
+      "Value": "a\nb",
+      "RawValue": "\"a\r\nb\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 8
+      },
+      "ValuePos": {
+        "Line": 2,
+        "Column": 8,
+        "Offset": 15
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "LF",
+      "Value": "2",
+      "RawValue": "2",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 1,
+        "Offset": 23
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 4,
+        "Offset": 26
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "CR_ONLY",
+      "Value": "3",
+      "RawValue": "3",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 5,
+        "Column": 1,
+        "Offset": 28
+      },
+      "ValuePos": {
+        "Line": 5,
+        "Column": 9,
+        "Offset": 36
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "LAST",
+      "Value": "4",
+      "RawValue": "4",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 6,
+        "Column": 1,
+        "Offset": 38
+      },
+      "ValuePos": {
+        "Line": 6,
+        "Column": 6,
+        "Offset": 43
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

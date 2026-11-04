@@ -1,0 +1,261 @@
+{
+  "Filename": "testdata/parser/problems.env",
+  "Entries": [
+    {
+      "Key": "GOOD",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "ValuePos": {
+        "Line": 1,
+        "Column": 6,
+        "Offset": 5
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "SPACES",
+      "Value": "hello world",
+      "RawValue": "hello world",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 8,
+        "Column": 1,
+        "Offset": 86
+      },
+      "ValuePos": {
+        "Line": 8,
+        "Column": 8,
+        "Offset": 93
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "BAD_ESCAPE",
+      "Value": "a\\qb",
+      "RawValue": "\"a\\qb\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 9,
+        "Column": 1,
+        "Offset": 105
+      },
+      "ValuePos": {
+        "Line": 9,
+        "Column": 12,
+        "Offset": 116
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "TRAILING",
+      "Value": "x",
+      "RawValue": "\"x\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 10,
+        "Column": 1,
+        "Offset": 123
+      },
+      "ValuePos": {
+        "Line": 10,
+        "Column": 10,
+        "Offset": 132
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "STILL_PARSED",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 12,
+        "Column": 1,
+        "Offset": 163
+      },
+      "ValuePos": {
+        "Line": 12,
+        "Column": 14,
+        "Offset": 176
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "LAST",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 14,
+        "Column": 1,
+        "Offset": 203
+      },
+      "ValuePos": {
+        "Line": 14,
+        "Column": 6,
+        "Offset": 208
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": [
+    {
+      "Kind": "invalid-key",
+      "Severity": "error",
+      "Pos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 7
+      },
+      "Key": "",
+      "Message": "key must not start with a digit",
+      "Hint": "Keys may contain only ASCII letters, digits, '_', '.' and '-', and must not start with a digit."
+    },
+    {
+      "Kind": "invalid-key",
+      "Severity": "error",
+      "Pos": {
+        "Line": 3,
+        "Column": 4,
+        "Offset": 31
+      },
+      "Key": "",
+      "Message": "key contains an invalid character",
+      "Hint": "Keys may contain only ASCII letters, digits, '_', '.' and '-', and must not start with a digit."
+    },
+    {
+      "Kind": "missing-equals",
+      "Severity": "error",
+      "Pos": {
+        "Line": 4,
+        "Column": 1,
+        "Offset": 39
+      },
+      "Key": "",
+      "Message": "missing '=' after key",
+      "Hint": "Write assignments as KEY=value. Keys cannot contain spaces, and a bare 'export KEY' without a value is not supported."
+    },
+    {
+      "Kind": "missing-equals",
+      "Severity": "error",
+      "Pos": {
+        "Line": 5,
+        "Column": 1,
+        "Offset": 49
+      },
+      "Key": "",
+      "Message": "missing '=' after key",
+      "Hint": "Write assignments as KEY=value. Keys cannot contain spaces, and a bare 'export KEY' without a value is not supported."
+    },
+    {
+      "Kind": "empty-key",
+      "Severity": "error",
+      "Pos": {
+        "Line": 6,
+        "Column": 1,
+        "Offset": 64
+      },
+      "Key": "",
+      "Message": "missing key before '='",
+      "Hint": "Add a variable name before '=', e.g. KEY=value."
+    },
+    {
+      "Kind": "missing-equals",
+      "Severity": "error",
+      "Pos": {
+        "Line": 7,
+        "Column": 8,
+        "Offset": 79
+      },
+      "Key": "",
+      "Message": "missing '=' after key",
+      "Hint": "Write assignments as KEY=value. Keys cannot contain spaces, and a bare 'export KEY' without a value is not supported."
+    },
+    {
+      "Kind": "unquoted-whitespace",
+      "Severity": "warning",
+      "Pos": {
+        "Line": 8,
+        "Column": 13,
+        "Offset": 98
+      },
+      "Key": "SPACES",
+      "Message": "unquoted value contains whitespace",
+      "Hint": "Wrap the value in double quotes. Some loaders cut unquoted values at the first space or treat the rest as a separate token."
+    },
+    {
+      "Kind": "invalid-escape",
+      "Severity": "error",
+      "Pos": {
+        "Line": 9,
+        "Column": 14,
+        "Offset": 118
+      },
+      "Key": "BAD_ESCAPE",
+      "Message": "invalid escape sequence in double-quoted value",
+      "Hint": "Supported escapes in double quotes are \\n \\t \\r \\\" \\\\ and \\$. Use \\\\ for a literal backslash, or single quotes for fully literal text."
+    },
+    {
+      "Kind": "trailing-characters",
+      "Severity": "error",
+      "Pos": {
+        "Line": 10,
+        "Column": 14,
+        "Offset": 136
+      },
+      "Key": "TRAILING",
+      "Message": "unexpected characters after closing quote",
+      "Hint": "Remove the text after the closing quote, or start an inline comment with '#'."
+    },
+    {
+      "Kind": "unterminated-quote",
+      "Severity": "error",
+      "Pos": {
+        "Line": 11,
+        "Column": 21,
+        "Offset": 158
+      },
+      "Key": "UNTERMINATED_SINGLE",
+      "Message": "unterminated single quote",
+      "Hint": "Add the matching closing quote. Only double quotes and backticks may span multiple lines; the quote opened here was never closed."
+    },
+    {
+      "Kind": "unterminated-quote",
+      "Severity": "error",
+      "Pos": {
+        "Line": 13,
+        "Column": 21,
+        "Offset": 198
+      },
+      "Key": "UNTERMINATED_DOUBLE",
+      "Message": "unterminated double quote",
+      "Hint": "Add the matching closing quote. Only double quotes and backticks may span multiple lines; the quote opened here was never closed."
+    }
+  ],
+  "Directives": null,
+  "FileIgnoreRules": null
+}

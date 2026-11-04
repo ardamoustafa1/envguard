@@ -1,0 +1,8 @@
+EnvGuard doctor · .
+
+✓ All good – no problems found.
+
+  1 env file · 1 template · 0 Compose files · 0 workflows · 1 source file
+  2 variables · 1 app root
+
+Next: `envguard init` adds a schema with types, and `envguard check` in CI keeps it this way.

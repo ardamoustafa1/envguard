@@ -1,0 +1,33 @@
+App negative
+  VARIABLE                development  production
+  APP_DEBUG                    –           ✓
+  APP_ENV                      –           ✓
+  CACHE_ENABLED                –           ✓
+  CDN_URL                      –           ✓
+  DATABASE_URL                 ✓           ✓
+  DEBUG                        ✓           ✓
+  EMPTY_VALUE_IS_IGNORED       –           ○
+  FLASK_DEBUG                  –           ✓
+  LOG_LEVEL                    ✓           ✓
+  NODE_ENV                     ✓           ✓
+  RAILS_ENV                    –           ✓
+  REDIS_HOST                   –           ✓
+  Templates only, no env file yet: default
+
+App positive
+  VARIABLE       production
+  APP_DEBUG          ✓
+  APP_ENV            ✓
+  CACHE_ENABLED      ✓
+  CDN_URL            ✓
+  DATABASE_URL       ✓
+  DEBUG              ✓
+  DJANGO_DEBUG       ✓
+  FLASK_DEBUG        ✓
+  LOG_LEVEL          ✓
+  NODE_ENV           ✓
+  RAILS_ENV          ✓
+  REDIS_HOST         ✓
+  Templates only, no env file yet: default
+
+✓ set  ○ empty  ✗ missing (required by a template)  – not required

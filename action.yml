@@ -1,0 +1,147 @@
+name: EnvGuard
+description: Catch environment-variable and configuration mistakes before you deploy. Annotates pull requests; optional SARIF upload.
+author: EnvGuard
+branding:
+  icon: shield
+  color: green
+
+inputs:
+  version:
+    description: EnvGuard version to install (1.2.3, v1.2.3 or latest).
+    required: false
+    default: latest
+  args:
+    description: Arguments for envguard, e.g. "check", "check --env production" or "doctor".
+    required: false
+    default: check
+  working-directory:
+    description: Directory to analyze (passed as --root), relative to the workspace.
+    required: false
+    default: .
+  fail-on:
+    description: Lowest severity that fails the step (error, warning, info, never). Applied to check and doctor; empty leaves the command's default.
+    required: false
+    default: error
+  sarif:
+    description: >
+      Also write a SARIF report and upload it to GitHub code scanning with
+      github/codeql-action/upload-sarif. The job needs `permissions: security-events: write`
+      (and code scanning enabled for the repository).
+    required: false
+    default: "false"
+  sarif-file:
+    description: Where to write the SARIF report when sarif is true.
+    required: false
+    default: envguard.sarif
+
+outputs:
+  version:
+    description: The EnvGuard version that was installed.
+    value: ${{ steps.resolve.outputs.version }}
+  sarif-file:
+    description: Path of the SARIF report (when sarif is true).
+    value: ${{ steps.sarif.outputs.file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve version and platform
+      id: resolve
+      shell: bash
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+        TOOL_CACHE: ${{ runner.tool_cache }}
+      run: |
+        set -euo pipefail
+        repo="ardamoustafa1/envguard"
+        version="${INPUT_VERSION#v}"
+        if [ -z "$version" ] || [ "$version" = latest ]; then
+          url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${repo}/releases/latest")
+          version="${url##*/v}"
+        fi
+        case "$version" in
+          [0-9]*) ;;
+          *) echo "::error title=EnvGuard::invalid version input; use 1.2.3, v1.2.3 or latest"; exit 1 ;;
+        esac
+        case "$RUNNER_OS" in
+          Linux) os=linux ;; macOS) os=darwin ;; Windows) os=windows ;;
+          *) echo "::error title=EnvGuard::unsupported runner OS $RUNNER_OS"; exit 1 ;;
+        esac
+        case "$RUNNER_ARCH" in
+          X64) arch=amd64 ;; ARM64) arch=arm64 ;;
+          *) echo "::error title=EnvGuard::unsupported runner architecture $RUNNER_ARCH"; exit 1 ;;
+        esac
+        dir="${TOOL_CACHE}/envguard/${version}/${arch}"
+        {
+          echo "version=$version"
+          echo "os=$os"
+          echo "arch=$arch"
+          echo "dir=$dir"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Restore cached binary
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.resolve.outputs.dir }}
+        key: envguard-${{ steps.resolve.outputs.version }}-${{ steps.resolve.outputs.os }}-${{ steps.resolve.outputs.arch }}
+
+    - name: Download and verify
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        VERSION: ${{ steps.resolve.outputs.version }}
+        DIR: ${{ steps.resolve.outputs.dir }}
+      run: |
+        set -euo pipefail
+        if command -v cygpath >/dev/null 2>&1; then DIR=$(cygpath -u "$DIR"); fi
+        # install.sh downloads the archive and checksums.txt from the release
+        # and refuses to install on a SHA-256 mismatch.
+        ENVGUARD_INSTALL_DIR="$DIR" sh "$GITHUB_ACTION_PATH/install.sh" "$VERSION"
+
+    - name: Add to PATH
+      shell: bash
+      env:
+        DIR: ${{ steps.resolve.outputs.dir }}
+      run: echo "$DIR" >> "$GITHUB_PATH"
+
+    - name: Write SARIF
+      id: sarif
+      if: inputs.sarif == 'true'
+      shell: bash
+      env:
+        WD: ${{ inputs.working-directory }}
+        SARIF_FILE: ${{ inputs.sarif-file }}
+      run: |
+        set -euo pipefail
+        envguard --root "$WD" check --format sarif --output "$SARIF_FILE" --fail-on never
+        echo "file=$SARIF_FILE" >> "$GITHUB_OUTPUT"
+
+    - name: Upload SARIF
+      if: inputs.sarif == 'true'
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ steps.sarif.outputs.file }}
+        category: envguard
+
+    - name: Run EnvGuard
+      shell: bash
+      env:
+        WD: ${{ inputs.working-directory }}
+        ARGS: ${{ inputs.args }}
+        FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        set -euo pipefail
+        set -f # args are split on whitespace, never glob-expanded or evaluated
+        # shellcheck disable=SC2086
+        set -- $ARGS
+        if [ "$#" -eq 0 ]; then set -- check; fi
+        case "$1" in
+          check | doctor)
+            case " $ARGS " in
+              *" --fail-on"*) ;; # explicit --fail-on in args wins
+              *) if [ -n "$FAIL_ON" ]; then set -- "$@" --fail-on "$FAIL_ON"; fi ;;
+            esac ;;
+        esac
+        # GITHUB_ACTIONS=true makes `check` print annotations and write a job summary.
+        envguard --root "$WD" "$@"

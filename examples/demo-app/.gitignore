@@ -1,0 +1,3 @@
+node_modules/
+# A real project would also ignore .env and .env.production here.
+# They are committed on purpose so EnvGuard has something to report (EG008).

@@ -1,0 +1,275 @@
+EnvGuard doctor | .
+
+Scanned
+  Env files    2 real | 3 templates
+  Compose      1 file
+  Workflows    1 file
+  Source code  3 files | javascript 2 | python 1
+  Variables    20
+  App roots    2 | ., worker
+  Config       .envguard.yaml with a variable schema
+  Git          not available (not a git repository (or not accessible))
+
+Findings  x 6 errors | ! 10 warnings | 4 info
+
+   1  x LOG_LEVEL in .env has the invalid value verbose: expected one of debug,
+        info, warn or error
+        error | EG014 invalid-value | .env:2:11
+
+      Why      The app expects LOG_LEVEL to be one of debug, info, warn or
+               error; an invalid value usually crashes it at startup or, worse,
+               is silently misread.
+      Fix      1. Set LOG_LEVEL to one of debug, info, warn or error in .env:2.
+               2. If the schema is wrong, update LOG_LEVEL at .envguard.yaml:7.
+      Related  .envguard.yaml:7:3
+
+   2  x DATABASE_URL in .env.example looks like a URL with an embedded password
+        error | EG010 possible-secret-in-template | .env.example:4:14
+
+      Why      A template is shared with everyone who can read the repository; a
+               real credential there is leaked, and it stays in git history even
+               after it is removed.
+      Fix      1. Replace the value with an empty one or a placeholder
+                  (`DATABASE_URL=` or `DATABASE_URL=<your-value>`).
+               2. If it is a real credential, rotate it now: it has been
+                  exposed.
+               3. If it is a deliberate fake, use an obvious placeholder or add
+                  `# envguard-ignore EG010` on the line above.
+      Evidence detected: URL with an embedded password
+
+   3  x STRIPE_SECRET_KEY is declared in .env.production.example but missing
+        from .env.production
+        error | EG001 missing-variable | .env.production
+
+      Why      Anything that reads STRIPE_SECRET_KEY in the production
+               environment gets no value, which usually fails only at runtime or
+               silently falls back to a default.
+      Fix      1. Add `STRIPE_SECRET_KEY=` to .env.production (it is declared in
+                  .env.production.example:2) and set its value.
+               2. If it is not needed there, mark it optional in the template
+                  (`STRIPE_SECRET_KEY= # optional`) or put
+                  `# envguard-ignore EG001` on the line above it in
+                  .env.production.example.
+      Related  .env.production.example:2:1
+
+   4  x WORKERS in .env.production has the invalid value 0: is below the minimum
+        1
+        error | EG014 invalid-value | .env.production:6:9
+
+      Why      The app expects WORKERS to be an integer between 1 and 64; an
+               invalid value usually crashes it at startup or, worse, is
+               silently misread.
+      Fix      1. Set WORKERS to an integer between 1 and 64 in
+                  .env.production:6.
+               2. If the schema is wrong, update WORKERS at .envguard.yaml:15.
+      Related  .envguard.yaml:15:3
+
+   5  x missing '=' after key
+        error | EG007 syntax-error | .env.production:10:8
+
+      Why      Env loaders skip or misread malformed lines, so the affected
+               variable silently ends up with a wrong value or none at all.
+      Fix      1. Write assignments as KEY=value.
+               2. Keys cannot contain spaces, and a bare 'export KEY' without a
+                  value is not supported.
+
+   6  x ANALYTICS_WRITE_KEY is read by the code but not declared in any env
+        file, template or schema
+        error | EG003 used-but-undeclared | src/server.js:23:33
+
+      Why      Nothing documents that ANALYTICS_WRITE_KEY must be set, so a new
+               environment or teammate will not provide it and the code reads an
+               empty value at runtime.
+      Fix      1. Add `ANALYTICS_WRITE_KEY=` to .env.example (read at
+                  src/server.js:23), then set it in each real env file.
+               2. If the platform provides it, add ANALYTICS_WRITE_KEY to
+                  scanner.ignore_variables in .envguard.yaml.
+
+   7  ! SESSION_SECRET is empty in .env but required by .env.example
+        warning | EG005 empty-required-value | .env:5:1
+
+      Why      An empty SESSION_SECRET is usually read as "set" and passes
+               presence checks, then fails later (empty URLs, empty credentials,
+               zero ports).
+      Fix      1. Set a value for SESSION_SECRET in .env:5.
+               2. If an empty value is intentional, mark the template line
+                  optional: `SESSION_SECRET= # optional` in .env.example:6.
+      Related  .env.example:6:1
+
+   8  ! FEATURE_NEW_CHECKOUT is set in .env but not documented in any template
+        warning | EG002 undocumented-variable | .env:8:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, FEATURE_NEW_CHECKOUT will be
+               missing wherever this file is not copied.
+      Fix      Add `FEATURE_NEW_CHECKOUT=` (with an empty or placeholder value,
+               never the real one) to .env.example, or remove it from .env if
+               nothing uses it.
+
+   9  ! CACHE_DIR is set in .env but not documented in any template
+        warning | EG002 undocumented-variable | .env:9:1
+
+      Why      Teammates, CI and deploy targets learn which variables exist from
+               the templates; without an entry, CACHE_DIR will be missing
+               wherever this file is not copied.
+      Fix      Add `CACHE_DIR=` (with an empty or placeholder value, never the
+               real one) to .env.example, or remove it from .env if nothing uses
+               it.
+
+  10  ! CACHE_DIR references APP_HOME, which is not defined in .env or the env
+        files loaded with it
+        warning | EG016 unresolved-reference | .env:9:11
+
+      Why      Loaders that expand references substitute an empty string for an
+               undefined APP_HOME, so CACHE_DIR silently ends up incomplete (for
+               example a URL without a host).
+      Fix      Define `APP_HOME=` in .env (checked: .env and .env.example), give
+               the reference a default such as `${APP_HOME:-value}`, or add
+               APP_HOME to scanner.ignore_variables in .envguard.yaml if the
+               process environment provides it.
+
+  11  ! REDIS_URL points to a local address in production (.env.production)
+        warning | EG015 unsafe-production-value | .env.production:4:11
+
+      Why      Inside a production container or server, localhost is the machine
+               itself, not your database or API; this is almost always a
+               development value that slipped through.
+      Fix      Set REDIS_URL in .env.production to the production host.
+
+  12  ! DEBUG is defined 2 times in .env.production (lines 7 and 8)
+        warning | EG006 duplicate-key | .env.production:8:1
+
+      Why      Most loaders (dotenv, python-dotenv, Docker) silently use the
+               last definition, so editing the first one has no effect and the
+               file says two different things.
+      Fix      Keep one definition of DEBUG in .env.production: delete line 8 or
+               the earlier one at line 7, keeping the value you intend.
+      Evidence line 7: false; line 8: true
+      Related  .env.production:7:1
+
+  13  ! DEBUG is enabled in production (.env.production)
+        warning | EG015 unsafe-production-value | .env.production:8:7
+
+      Why      debug mode in production exposes stack traces, settings and
+               sometimes an interactive console to anyone who triggers an error.
+      Fix      Set `DEBUG=false` in .env.production.
+
+  14  ! STRIPE_SECRET_KEY is declared for production but not for staging
+        warning | EG013 environment-drift | .env.production.example:2:1
+
+      Why      Environments that are supposed to run the same code should need
+               the same variables; a variable documented for only some of them
+               is often forgotten when the next deploy reaches the others.
+      Fix      1. Add `STRIPE_SECRET_KEY=` to .env.staging.example, or move it
+                  to .env.example if every environment needs it.
+               2. If it really applies only to production, add
+                  `# envguard-ignore EG013` above .env.production.example:2.
+
+  15  ! STAGING_BANNER is declared for staging but not for production
+        warning | EG013 environment-drift | .env.staging.example:2:1
+
+      Why      Environments that are supposed to run the same code should need
+               the same variables; a variable documented for only some of them
+               is often forgotten when the next deploy reaches the others.
+      Fix      1. Add `STAGING_BANNER=` to .env.production.example, or move it
+                  to .env.example if every environment needs it.
+               2. If it really applies only to staging, add
+                  `# envguard-ignore EG013` above .env.staging.example:2.
+
+  16  ! docker-compose.yml interpolates ${POSTGRES_PASSWORD}, which is not
+        defined in .env (the file Compose reads) or any template
+        warning | EG011 compose-undefined-variable | docker-compose.yml:17:28
+
+      Why      Compose substitutes an empty string for an unset
+               POSTGRES_PASSWORD and only prints a warning, so the container
+               starts with a broken value.
+      Fix      Add `POSTGRES_PASSWORD=` with a value to .env and document it in
+               a template, or give it a default in the Compose file:
+               `${POSTGRES_PASSWORD:-value}`.
+
+  17  i LEGACY_API_KEY is declared in .env.example but never read by the code,
+        env files, Compose files or workflows
+        info | EG004 declared-but-unused | .env.example:9:1
+
+      Why      Unused variables make templates longer and send people looking
+               for values nothing needs; they are often left over after a
+               refactor. Note: 1 dynamic lookup in this app (a variable name
+               computed at run time) could not be analyzed and may read it.
+      Fix      1. If nothing needs LEGACY_API_KEY, remove it from .env.example:9
+                  and from the real env files.
+               2. If a tool outside the scanned code reads it (Prisma, Docker, a
+                  framework), add LEGACY_API_KEY to scanner.ignore_variables in
+                  .envguard.yaml.
+
+  18  i workflows use secret FLY_API_TOKEN, but no template or schema documents
+        it
+        info | EG012 ci-secret-undocumented | .github/workflows/deploy.yml:14:30
+
+      Why      Whoever sets up a fork, a new environment or a new repository has
+               to discover FLY_API_TOKEN by reading workflow files; a missing
+               one usually shows up as a failed deploy.
+      Fix      Document it: add `FLY_API_TOKEN=` to .env.example with a comment
+               such as
+               `# CI: set in GitHub -> Settings -> Secrets and variables -> Actions (Secrets tab)`,
+               or declare it under `variables:` in .envguard.yaml.
+
+  19  i workflows use variable DEPLOY_REGION, but no template or schema
+        documents it
+        info | EG012 ci-secret-undocumented | .github/workflows/deploy.yml:15:30
+
+      Why      Whoever sets up a fork, a new environment or a new repository has
+               to discover DEPLOY_REGION by reading workflow files; a missing
+               one usually shows up as a failed deploy.
+      Fix      Document it: add `DEPLOY_REGION=` to .env.example with a comment
+               such as
+               `# CI: set in GitHub -> Settings -> Secrets and variables -> Actions (Variables tab)`,
+               or declare it under `variables:` in .envguard.yaml.
+
+  20  i WORKER_CONCURRENCY is read by the code but not declared in any env file,
+        template or schema
+        info | EG003 used-but-undeclared | worker/main.py:6:30
+
+      Why      The code falls back to a default, so nothing breaks if
+               WORKER_CONCURRENCY is unset, but it is invisible to anyone
+               configuring the app and the default may be wrong for production.
+      Fix      1. Document it by adding `WORKER_CONCURRENCY= # optional` to
+                  .env.example (read at worker/main.py:6).
+               2. If you do not want it documented, add WORKER_CONCURRENCY to
+                  scanner.ignore_variables in .envguard.yaml.
+
+Environment matrix
+  App . (repository root)
+    VARIABLE              default  production
+    CACHE_DIR                +         -
+    CDN_URL                  -         +
+    DATABASE_URL             +         +
+    DEBUG                    +         +
+    FEATURE_NEW_CHECKOUT     +         -
+    LEGACY_API_KEY           -         -
+    LOG_LEVEL                +         +
+    PORT                     +         +
+    REDIS_URL                +         +
+    SENTRY_DSN               -         -
+    SESSION_SECRET           o         +
+    STRIPE_SECRET_KEY        -         x
+    WORKERS                  +         +
+    Templates only, no env file yet: staging
+  + set  o empty  x missing (required by a template)  - not required
+
+CI inventory  what GitHub Actions workflows expect
+  Secrets  DATABASE_URL   .github/workflows/deploy.yml:13:29
+           FLY_API_TOKEN  .github/workflows/deploy.yml:14:30
+  Vars     DEPLOY_REGION  .github/workflows/deploy.yml:15:30
+
+Good to know
+  * 1 dynamic env lookup (like `process.env[name]`) could not be analyzed;
+    variables read that way are not checked.
+  * Git checks (EG008, EG009) were skipped: run EnvGuard inside a git work tree
+    with git installed.
+
+Next steps
+  1. Fix the 6 errors first: they break deploys or expose secrets.
+  2. Learn more about a rule: `envguard explain EG014` (all rules:
+     `envguard explain --list`).
+  3. Run `envguard check` in CI: it exits 1 on errors and annotates pull
+     requests in GitHub Actions.

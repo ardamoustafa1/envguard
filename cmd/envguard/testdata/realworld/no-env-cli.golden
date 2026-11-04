@@ -1,0 +1,6 @@
+internal/config/config.go
+  25:20  • info     EG003  WCGREP_CONFIG_DIR is read by the code but not declared in any env file, template or schema
+  38:36  • info     EG003  WCGREP_COLOR is read by the code but not declared in any env file, template or schema
+
+✗ 0 errors · ⚠ 0 warnings · 2 info · 5 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG003`.

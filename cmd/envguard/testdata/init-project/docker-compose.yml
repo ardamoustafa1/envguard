@@ -1,0 +1,5 @@
+services:
+  api:
+    image: "api:${IMAGE_TAG:-latest}"
+    environment:
+      COMPOSE_ONLY_VAR: ${COMPOSE_ONLY_VAR}

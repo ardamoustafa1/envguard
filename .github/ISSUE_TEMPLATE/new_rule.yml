@@ -1,0 +1,52 @@
+name: New rule proposal
+description: Propose a new check.
+labels: ["new-rule"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Rules must be low noise. Say how you would keep false positives down.
+        Use fake values in all examples.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Which mistake does this catch, and what breaks because of it?
+    validations:
+      required: true
+  - type: textarea
+    id: bad
+    attributes:
+      label: Example of a bad configuration
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: good
+    attributes:
+      label: Example of the fixed configuration
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Proposed default severity
+      options:
+        - error
+        - warning
+        - info
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: False-positive risk
+      description: Legitimate setups that would trigger the rule, and how to avoid reporting them.
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs
+      description: Which sources does it compare (code, env files, templates, Compose, workflows, schema)?

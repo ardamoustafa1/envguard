@@ -1,0 +1,16 @@
+version: 1
+profiles: [production-safety]
+variables:
+  LOG_LEVEL:
+    type: enum
+    values: [debug, info, warn, error]
+    production: { must_not_be: debug }
+  CACHE_ENABLED:
+    type: bool
+    production: { must_be: true }
+  CDN_URL:
+    type: url
+    production: { pattern: "^https://" }
+  DEBUG:
+    type: bool
+    production: { must_be: false }

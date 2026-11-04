@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "envguard",
+    "version": "test"
+  },
+  "command": "diff",
+  "root": ".",
+  "diff": {
+    "a": "staging",
+    "b": "production",
+    "apps": [
+      {
+        "app_root": ".",
+        "a_files": [
+          ".env.example",
+          ".env.staging.example"
+        ],
+        "b_files": [
+          ".env.production"
+        ],
+        "a_from_templates": true,
+        "b_from_templates": false,
+        "only_in_a": [
+          "LEGACY_API_KEY",
+          "SENTRY_DSN",
+          "STAGING_BANNER"
+        ],
+        "only_in_b": [],
+        "common": 8
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+const db = process.env.DATABASE_URL;
+const port = process.env.PORT || 3000;
+const stripe = process.env.STRIPE_SECRET_KEY;
+const sentry = process.env.SENTRY_DSN;
+const analytics = process.env.ANALYTICS_ID || "none";
+const workers = Number(process.env.WORKERS ?? "4");
+const mode = process.env.NODE_ENV;
+const key = "X";
+const dynamic = process.env[key];
+export { db, port, stripe, sentry, analytics, workers, mode, dynamic };

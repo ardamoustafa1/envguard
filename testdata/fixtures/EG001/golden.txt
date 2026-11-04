@@ -1,0 +1,19 @@
+positive/.env  error  EG001 missing-variable  CACHE_TTL is declared in positive/.env.example but missing from positive/.env
+  variable: CACHE_TTL
+  why: Anything that reads CACHE_TTL in the default environment gets no value, which usually fails only at runtime or silently falls back to a default.
+  fix: Add `CACHE_TTL=` to positive/.env (it is declared in positive/.env.example:4) and set its value. If it is not needed there, mark it optional in the template (`CACHE_TTL= # optional`) or put `# envguard-ignore EG001` on the line above it in positive/.env.example.
+  related: positive/.env.example:4:1
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md
+positive/.env  error  EG001 missing-variable  DATABASE_URL is declared in positive/.env.example but missing from positive/.env
+  variable: DATABASE_URL
+  why: Anything that reads DATABASE_URL in the default environment gets no value, which usually fails only at runtime or silently falls back to a default.
+  fix: Add `DATABASE_URL=` to positive/.env (it is declared in positive/.env.example:1) and set its value. If it is not needed there, mark it optional in the template (`DATABASE_URL= # optional`) or put `# envguard-ignore EG001` on the line above it in positive/.env.example.
+  related: positive/.env.example:1:1
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md
+positive/.env.production  error  EG001 missing-variable  STRIPE_SECRET_KEY is declared in positive/.env.production.example but missing from positive/.env.production
+  variable: STRIPE_SECRET_KEY
+  why: Anything that reads STRIPE_SECRET_KEY in the production environment gets no value, which usually fails only at runtime or silently falls back to a default.
+  fix: Add `STRIPE_SECRET_KEY=` to positive/.env.production (it is declared in positive/.env.production.example:1) and set its value. If it is not needed there, mark it optional in the template (`STRIPE_SECRET_KEY= # optional`) or put `# envguard-ignore EG001` on the line above it in positive/.env.production.example.
+  related: positive/.env.production.example:1:1
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG001-missing-variable.md
+(3 findings, 2 suppressed)

@@ -1,0 +1,131 @@
+EnvGuard doctor | .
+
+Scanned
+  Env files    2 real | 2 templates
+  Compose      3 files
+  Workflows    0 files
+  Source code  0 files
+  Variables    18
+  App roots    3 | ., negative, positive
+  Config       none (zero-config defaults)
+  Git          not available (not a git repository (or not accessible))
+
+Findings  x 2 errors | ! 6 warnings | 0 info
+
+  1  x B is declared in negative/.env.example but missing from negative/.env
+       error | EG001 missing-variable | negative/.env
+
+     Why      Anything that reads B in the default environment gets no value,
+              which usually fails only at runtime or silently falls back to a
+              default.
+     Fix      1. Add `B=` to negative/.env (it is declared in
+                 negative/.env.example:1) and set its value.
+              2. If it is not needed there, mark it optional in the template
+                 (`B= # optional`) or put `# envguard-ignore EG001` on the line
+                 above it in negative/.env.example.
+     Related  negative/.env.example:1:1
+
+  2  x TEMPLATE_VAR is declared in positive/.env.example but missing from
+       positive/.env
+       error | EG001 missing-variable | positive/.env
+
+     Why      Anything that reads TEMPLATE_VAR in the default environment gets
+              no value, which usually fails only at runtime or silently falls
+              back to a default.
+     Fix      1. Add `TEMPLATE_VAR=` to positive/.env (it is declared in
+                 positive/.env.example:1) and set its value.
+              2. If it is not needed there, mark it optional in the template
+                 (`TEMPLATE_VAR= # optional`) or put `# envguard-ignore EG001`
+                 on the line above it in positive/.env.example.
+     Related  positive/.env.example:1:1
+
+  3  ! A is set in negative/.env but not documented in any template
+       warning | EG002 undocumented-variable | negative/.env:1:1
+
+     Why      Teammates, CI and deploy targets learn which variables exist from
+              the templates; without an entry, A will be missing wherever this
+              file is not copied.
+     Fix      Add `A=` (with an empty or placeholder value, never the real one)
+              to negative/.env.example, or remove it from negative/.env if
+              nothing uses it.
+
+  4  ! DEFINED_VAR is set in positive/.env but not documented in any template
+       warning | EG002 undocumented-variable | positive/.env:1:1
+
+     Why      Teammates, CI and deploy targets learn which variables exist from
+              the templates; without an entry, DEFINED_VAR will be missing
+              wherever this file is not copied.
+     Fix      Add `DEFINED_VAR=` (with an empty or placeholder value, never the
+              real one) to positive/.env.example, or remove it from
+              positive/.env if nothing uses it.
+
+  5  ! positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is
+       no positive/deploy/.env next to it and it is not declared in
+       positive/.env.example
+       warning | EG011 compose-undefined-variable | positive/deploy/compose.prod.yaml:3:19
+
+     Why      Compose substitutes an empty string for an unset PROD_ONLY and
+              only prints a warning, so the container starts with a broken
+              value.
+     Fix      Create positive/deploy/.env with `PROD_ONLY=<value>` (Compose
+              reads it automatically), declare `PROD_ONLY=` in a template so
+              others know to set it, or give it a default:
+              `${PROD_ONLY:-value}`.
+
+  6  ! positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not
+       defined in positive/.env (the file Compose reads) or any template
+       warning | EG011 compose-undefined-variable | positive/docker-compose.yml:5:39
+
+     Why      Compose substitutes an empty string for an unset DB_PASSWORD and
+              only prints a warning, so the container starts with a broken
+              value.
+     Fix      Add `DB_PASSWORD=` with a value to positive/.env and document it
+              in a template, or give it a default in the Compose file:
+              `${DB_PASSWORD:-value}`.
+     Related  positive/docker-compose.yml:10:16
+
+  7  ! positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not
+       defined in positive/.env (the file Compose reads) or any template
+       warning | EG011 compose-undefined-variable | positive/docker-compose.yml:9:16
+
+     Why      The reference uses ${REQUIRED_TOKEN:?...}, so `docker compose up`
+              aborts when it is unset.
+     Fix      Add `REQUIRED_TOKEN=` with a value to positive/.env and document
+              it in a template, or give it a default in the Compose file:
+              `${REQUIRED_TOKEN:-value}`.
+
+  8  ! service api: env_file positive/missing.env does not exist
+       warning | EG011 compose-undefined-variable | positive/docker-compose.yml:12:9
+
+     Why      `docker compose up` fails for this service when a required
+              env_file is missing.
+     Fix      Create positive/missing.env (for example by copying its template),
+              or make it optional with the long syntax:
+                env_file:
+                  - path: ./missing.env
+                    required: false
+
+Environment matrix
+  App negative
+    VARIABLE  default
+    A            +
+    B            x
+
+  App positive
+    VARIABLE      default
+    DEFINED_VAR      +
+    TEMPLATE_VAR     x
+  + set  o empty  x missing (required by a template)  - not required
+
+Good to know
+  * Git checks (EG008, EG009) were skipped: run EnvGuard inside a git work tree
+    with git installed.
+
+Next steps
+  1. Fix the 2 errors first: they break deploys or expose secrets.
+  2. Learn more about a rule: `envguard explain EG001` (all rules:
+     `envguard explain --list`).
+  3. Run `envguard init` to generate .envguard.yaml with types and required
+     flags for every variable.
+  4. Run `envguard check` in CI: it exits 1 on errors and annotates pull
+     requests in GitHub Actions.

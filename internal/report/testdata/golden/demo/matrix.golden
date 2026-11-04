@@ -1,0 +1,18 @@
+App . (repository root)
+  VARIABLE              default  production
+  CACHE_DIR                ✓         –
+  CDN_URL                  –         ✓
+  DATABASE_URL             ✓         ✓
+  DEBUG                    ✓         ✓
+  FEATURE_NEW_CHECKOUT     ✓         –
+  LEGACY_API_KEY           –         –
+  LOG_LEVEL                ✓         ✓
+  PORT                     ✓         ✓
+  REDIS_URL                ✓         ✓
+  SENTRY_DSN               –         –
+  SESSION_SECRET           ○         ✓
+  STRIPE_SECRET_KEY        –         ✗
+  WORKERS                  ✓         ✓
+  Templates only, no env file yet: staging
+
+✓ set  ○ empty  ✗ missing (required by a template)  – not required

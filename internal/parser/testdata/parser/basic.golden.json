@@ -1,0 +1,248 @@
+{
+  "Filename": "testdata/parser/basic.env",
+  "Entries": [
+    {
+      "Key": "APP_NAME",
+      "Value": "demo",
+      "RawValue": "demo",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 20
+      },
+      "ValuePos": {
+        "Line": 2,
+        "Column": 10,
+        "Offset": 29
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "PORT",
+      "Value": "8080",
+      "RawValue": "8080",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 3,
+        "Column": 1,
+        "Offset": 34
+      },
+      "ValuePos": {
+        "Line": 3,
+        "Column": 8,
+        "Offset": 41
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "INDENTED",
+      "Value": "yes",
+      "RawValue": "yes",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 2,
+        "Offset": 47
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 11,
+        "Offset": 56
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "NODE_ENV",
+      "Value": "production",
+      "RawValue": "production",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 5,
+        "Column": 8,
+        "Offset": 67
+      },
+      "ValuePos": {
+        "Line": 5,
+        "Column": 17,
+        "Offset": 76
+      },
+      "HasExport": true,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "SPACED_EXPORT",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 6,
+        "Column": 10,
+        "Offset": 96
+      },
+      "ValuePos": {
+        "Line": 6,
+        "Column": 26,
+        "Offset": 112
+      },
+      "HasExport": true,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "EMPTY",
+      "Value": "",
+      "RawValue": "",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 7,
+        "Column": 1,
+        "Offset": 114
+      },
+      "ValuePos": {
+        "Line": 7,
+        "Column": 7,
+        "Offset": 120
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "EMPTY_DOUBLE",
+      "Value": "",
+      "RawValue": "\"\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 8,
+        "Column": 1,
+        "Offset": 121
+      },
+      "ValuePos": {
+        "Line": 8,
+        "Column": 14,
+        "Offset": 134
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "EMPTY_SINGLE",
+      "Value": "",
+      "RawValue": "''",
+      "Quote": "single",
+      "KeyPos": {
+        "Line": 9,
+        "Column": 1,
+        "Offset": 137
+      },
+      "ValuePos": {
+        "Line": 9,
+        "Column": 14,
+        "Offset": 150
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "TRAILING_WS",
+      "Value": "value",
+      "RawValue": "value",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 10,
+        "Column": 1,
+        "Offset": 153
+      },
+      "ValuePos": {
+        "Line": 10,
+        "Column": 13,
+        "Offset": 165
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "dotted.key",
+      "Value": "1",
+      "RawValue": "1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 11,
+        "Column": 1,
+        "Offset": 175
+      },
+      "ValuePos": {
+        "Line": 11,
+        "Column": 12,
+        "Offset": 186
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "dashed-key",
+      "Value": "2",
+      "RawValue": "2",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 12,
+        "Column": 1,
+        "Offset": 188
+      },
+      "ValuePos": {
+        "Line": 12,
+        "Column": 12,
+        "Offset": 199
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "export",
+      "Value": "not-a-prefix",
+      "RawValue": "not-a-prefix",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 13,
+        "Column": 1,
+        "Offset": 201
+      },
+      "ValuePos": {
+        "Line": 13,
+        "Column": 8,
+        "Offset": 208
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

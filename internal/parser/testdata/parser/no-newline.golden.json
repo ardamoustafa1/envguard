@@ -1,0 +1,28 @@
+{
+  "Filename": "testdata/parser/no-newline.env",
+  "Entries": [
+    {
+      "Key": "NO_NEWLINE",
+      "Value": "last",
+      "RawValue": "last",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "ValuePos": {
+        "Line": 1,
+        "Column": 12,
+        "Offset": 11
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

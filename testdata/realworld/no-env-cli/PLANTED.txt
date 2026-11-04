@@ -1,0 +1,1 @@
+None. wcgrep is a command-line tool with no env files; its optional env vars are documented in the README only.

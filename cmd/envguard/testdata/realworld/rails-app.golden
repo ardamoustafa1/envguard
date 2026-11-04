@@ -1,0 +1,46 @@
+.env
+       ✗ error    EG001  APP_HOST is declared in .env.example but missing from .env
+       ✗ error    EG001  AWS_ACCESS_KEY_ID is declared in .env.example but missing from .env
+       ✗ error    EG001  AWS_BUCKET is declared in .env.example but missing from .env
+       ✗ error    EG001  AWS_REGION is declared in .env.example but missing from .env
+       ✗ error    EG001  AWS_SECRET_ACCESS_KEY is declared in .env.example but missing from .env
+       ✗ error    EG001  CORS_ORIGINS is declared in .env.example but missing from .env
+       ✗ error    EG001  DATABASE_URL is declared in .env.example but missing from .env
+       ✗ error    EG001  FORCE_SSL is declared in .env.example but missing from .env
+       ✗ error    EG001  GIT_SHA is declared in .env.example but missing from .env
+       ✗ error    EG001  MAILER_FROM is declared in .env.example but missing from .env
+       ✗ error    EG001  RAILS_MASTER_KEY is declared in .env.example but missing from .env
+       ✗ error    EG001  SENTRY_DSN is declared in .env.example but missing from .env
+       ✗ error    EG001  SENTRY_ENVIRONMENT is declared in .env.example but missing from .env
+       ✗ error    EG001  SENTRY_TRACES_SAMPLE_RATE is declared in .env.example but missing from .env
+       ✗ error    EG001  SIDEKIQ_CONCURRENCY is declared in .env.example but missing from .env
+       ✗ error    EG001  SIDEKIQ_WEB_USERNAME is declared in .env.example but missing from .env
+       ✗ error    EG001  SMTP_ADDRESS is declared in .env.example but missing from .env
+       ✗ error    EG001  SMTP_PASSWORD is declared in .env.example but missing from .env
+       ✗ error    EG001  SMTP_PORT is declared in .env.example but missing from .env
+       ✗ error    EG001  SMTP_USERNAME is declared in .env.example but missing from .env
+       ✗ error    EG001  WEB_CONCURRENCY is declared in .env.example but missing from .env
+  9:1  ⚠ warning  EG006  PORT is defined 2 times in .env (lines 1 and 9)
+
+.env.example
+  17:1  • info     EG004  DATABASE_URL is declared in .env.example but never read by the code, env files, Compose files or workflows
+  33:1  • info     EG004  AWS_ACCESS_KEY_ID is declared in .env.example but never read by the code, env files, Compose files or workflows
+  34:1  • info     EG004  AWS_SECRET_ACCESS_KEY is declared in .env.example but never read by the code, env files, Compose files or workflows
+  36:1  • info     EG004  AWS_BUCKET is declared in .env.example but never read by the code, env files, Compose files or workflows
+  46:1  • info     EG004  RAILS_MASTER_KEY is declared in .env.example but never read by the code, env files, Compose files or workflows
+
+.github/workflows/ci.yml
+  63:30  • info     EG012  workflows use secret CODECOV_TOKEN, but no template or schema documents it
+
+app/mailers/invoice_mailer.rb
+  6:22  ✗ error    EG003  SUPPORT_EMAIL is read by the code but not declared in any env file, template or schema
+
+config/boot.rb
+  1:6  • info     EG003  BUNDLE_GEMFILE is read by the code but not declared in any env file, template or schema
+
+config/puma.rb
+   2:32  • info     EG003  RAILS_MIN_THREADS is read by the code but not declared in any env file, template or schema
+  11:20  • info     EG003  PIDFILE is read by the code but not declared in any env file, template or schema
+
+✗ 22 errors · ⚠ 1 warning · 9 info · 29 files
+Run `envguard doctor` to see why each problem matters and how to fix it, or `envguard explain EG001`.

@@ -1,0 +1,23 @@
+{
+  "name": "@acme/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@acme/db": "workspace:*",
+    "bullmq": "^5.20.0",
+    "ioredis": "^5.4.1",
+    "nodemailer": "^6.9.15"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.0",
+    "@types/nodemailer": "^6.4.16",
+    "tsx": "^4.19.1"
+  }
+}

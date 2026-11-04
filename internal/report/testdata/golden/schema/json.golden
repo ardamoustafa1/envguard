@@ -1,0 +1,766 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "envguard",
+    "version": "test"
+  },
+  "command": "check",
+  "root": ".",
+  "process_env": false,
+  "stats": {
+    "env_files": 3,
+    "templates": 2,
+    "compose_files": 0,
+    "workflows": 0,
+    "source_files": 0,
+    "languages": [],
+    "variables": 13,
+    "app_roots": [
+      ".",
+      "negative",
+      "positive"
+    ],
+    "dynamic_lookups": 0
+  },
+  "summary": {
+    "errors": 0,
+    "warnings": 30,
+    "info": 0,
+    "suppressed": 0
+  },
+  "findings": [
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "NODE_ENV is set in negative/.env.development but not documented in any template",
+      "variable": "NODE_ENV",
+      "location": {
+        "file": "negative/.env.development",
+        "line": 2,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, NODE_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `NODE_ENV=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.development if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "DATABASE_URL is set in negative/.env.development but not documented in any template",
+      "variable": "DATABASE_URL",
+      "location": {
+        "file": "negative/.env.development",
+        "line": 3,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, DATABASE_URL will be missing wherever this file is not copied.",
+      "fix": "Add `DATABASE_URL=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.development if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "APP_DEBUG is set in negative/.env.production but not documented in any template",
+      "variable": "APP_DEBUG",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 2,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, APP_DEBUG will be missing wherever this file is not copied.",
+      "fix": "Add `APP_DEBUG=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "FLASK_DEBUG is set in negative/.env.production but not documented in any template",
+      "variable": "FLASK_DEBUG",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 3,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, FLASK_DEBUG will be missing wherever this file is not copied.",
+      "fix": "Add `FLASK_DEBUG=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "NODE_ENV is set in negative/.env.production but not documented in any template",
+      "variable": "NODE_ENV",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 4,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, NODE_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `NODE_ENV=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "RAILS_ENV is set in negative/.env.production but not documented in any template",
+      "variable": "RAILS_ENV",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 5,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, RAILS_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `RAILS_ENV=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "APP_ENV is set in negative/.env.production but not documented in any template",
+      "variable": "APP_ENV",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 6,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, APP_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `APP_ENV=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "DATABASE_URL is set in negative/.env.production but not documented in any template",
+      "variable": "DATABASE_URL",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 7,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, DATABASE_URL will be missing wherever this file is not copied.",
+      "fix": "Add `DATABASE_URL=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "REDIS_HOST is set in negative/.env.production but not documented in any template",
+      "variable": "REDIS_HOST",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 8,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, REDIS_HOST will be missing wherever this file is not copied.",
+      "fix": "Add `REDIS_HOST=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "EMPTY_VALUE_IS_IGNORED is set in negative/.env.production but not documented in any template",
+      "variable": "EMPTY_VALUE_IS_IGNORED",
+      "location": {
+        "file": "negative/.env.production",
+        "line": 12,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, EMPTY_VALUE_IS_IGNORED will be missing wherever this file is not copied.",
+      "fix": "Add `EMPTY_VALUE_IS_IGNORED=` (with an empty or placeholder value, never the real one) to negative/.env.example, or remove it from negative/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "DEBUG must be false in production but is on (positive/.env.production)",
+      "variable": "DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 1,
+        "column": 7
+      },
+      "evidence": "",
+      "why": "The schema (.envguard.yaml:14) constrains DEBUG in production; violating it usually means a development or test setting is about to be deployed.",
+      "fix": "Set `DEBUG=false` in positive/.env.production.",
+      "related": [
+        {
+          "file": ".envguard.yaml",
+          "line": 14,
+          "column": 3
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "APP_DEBUG is set in positive/.env.production but not documented in any template",
+      "variable": "APP_DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 2,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, APP_DEBUG will be missing wherever this file is not copied.",
+      "fix": "Add `APP_DEBUG=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "APP_DEBUG is enabled in production (positive/.env.production)",
+      "variable": "APP_DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 2,
+        "column": 11
+      },
+      "evidence": "",
+      "why": "Laravel debug mode in production exposes stack traces, settings and sometimes an interactive console to anyone who triggers an error.",
+      "fix": "Set `APP_DEBUG=false` in positive/.env.production.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "FLASK_DEBUG is set in positive/.env.production but not documented in any template",
+      "variable": "FLASK_DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 3,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, FLASK_DEBUG will be missing wherever this file is not copied.",
+      "fix": "Add `FLASK_DEBUG=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "FLASK_DEBUG is enabled in production (positive/.env.production)",
+      "variable": "FLASK_DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 3,
+        "column": 13
+      },
+      "evidence": "",
+      "why": "Flask debug mode in production exposes stack traces, settings and sometimes an interactive console to anyone who triggers an error.",
+      "fix": "Set `FLASK_DEBUG=false` in positive/.env.production.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "DJANGO_DEBUG is set in positive/.env.production but not documented in any template",
+      "variable": "DJANGO_DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 4,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, DJANGO_DEBUG will be missing wherever this file is not copied.",
+      "fix": "Add `DJANGO_DEBUG=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "DJANGO_DEBUG is enabled in production (positive/.env.production)",
+      "variable": "DJANGO_DEBUG",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 4,
+        "column": 14
+      },
+      "evidence": "",
+      "why": "Django debug mode in production exposes stack traces, settings and sometimes an interactive console to anyone who triggers an error.",
+      "fix": "Set `DJANGO_DEBUG=false` in positive/.env.production.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "NODE_ENV is set in positive/.env.production but not documented in any template",
+      "variable": "NODE_ENV",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 5,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, NODE_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `NODE_ENV=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "NODE_ENV is development, but production must use \"production\" (positive/.env.production)",
+      "variable": "NODE_ENV",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 5,
+        "column": 10
+      },
+      "evidence": "",
+      "why": "Frameworks switch off caching, minification and security defaults outside \"production\", and some enable verbose errors.",
+      "fix": "Set `NODE_ENV=production` in positive/.env.production.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "RAILS_ENV is set in positive/.env.production but not documented in any template",
+      "variable": "RAILS_ENV",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 6,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, RAILS_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `RAILS_ENV=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "RAILS_ENV is staging, but production must use \"production\" (positive/.env.production)",
+      "variable": "RAILS_ENV",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 6,
+        "column": 11
+      },
+      "evidence": "",
+      "why": "Frameworks switch off caching, minification and security defaults outside \"production\", and some enable verbose errors.",
+      "fix": "Set `RAILS_ENV=production` in positive/.env.production.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "APP_ENV is set in positive/.env.production but not documented in any template",
+      "variable": "APP_ENV",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 7,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, APP_ENV will be missing wherever this file is not copied.",
+      "fix": "Add `APP_ENV=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "APP_ENV is local in production (positive/.env.production)",
+      "variable": "APP_ENV",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 7,
+        "column": 9
+      },
+      "evidence": "",
+      "why": "Laravel and similar frameworks enable development behavior (debug pages, relaxed security) for local and development environments.",
+      "fix": "Set `APP_ENV=production` in positive/.env.production.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "DATABASE_URL is set in positive/.env.production but not documented in any template",
+      "variable": "DATABASE_URL",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 8,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, DATABASE_URL will be missing wherever this file is not copied.",
+      "fix": "Add `DATABASE_URL=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "DATABASE_URL points to a local address in production (positive/.env.production)",
+      "variable": "DATABASE_URL",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 8,
+        "column": 14
+      },
+      "evidence": "",
+      "why": "Inside a production container or server, localhost is the machine itself, not your database or API; this is almost always a development value that slipped through.",
+      "fix": "Set DATABASE_URL in positive/.env.production to the production host.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG002",
+      "rule_name": "undocumented-variable",
+      "severity": "warning",
+      "message": "REDIS_HOST is set in positive/.env.production but not documented in any template",
+      "variable": "REDIS_HOST",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 9,
+        "column": 1
+      },
+      "evidence": "",
+      "why": "Teammates, CI and deploy targets learn which variables exist from the templates; without an entry, REDIS_HOST will be missing wherever this file is not copied.",
+      "fix": "Add `REDIS_HOST=` (with an empty or placeholder value, never the real one) to positive/.env.example, or remove it from positive/.env.production if nothing uses it.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG002-undocumented-variable.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "REDIS_HOST points to a local address in production (positive/.env.production)",
+      "variable": "REDIS_HOST",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 9,
+        "column": 12
+      },
+      "evidence": "",
+      "why": "Inside a production container or server, localhost is the machine itself, not your database or API; this is almost always a development value that slipped through.",
+      "fix": "Set REDIS_HOST in positive/.env.production to the production host.",
+      "related": [],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "LOG_LEVEL must not be debug in production (positive/.env.production)",
+      "variable": "LOG_LEVEL",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 10,
+        "column": 11
+      },
+      "evidence": "",
+      "why": "The schema (.envguard.yaml:4) constrains LOG_LEVEL in production; violating it usually means a development or test setting is about to be deployed.",
+      "fix": "Change LOG_LEVEL in positive/.env.production to a production-appropriate value.",
+      "related": [
+        {
+          "file": ".envguard.yaml",
+          "line": 4,
+          "column": 3
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "CACHE_ENABLED must be true in production but is no (positive/.env.production)",
+      "variable": "CACHE_ENABLED",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 11,
+        "column": 15
+      },
+      "evidence": "",
+      "why": "The schema (.envguard.yaml:8) constrains CACHE_ENABLED in production; violating it usually means a development or test setting is about to be deployed.",
+      "fix": "Set `CACHE_ENABLED=true` in positive/.env.production.",
+      "related": [
+        {
+          "file": ".envguard.yaml",
+          "line": 8,
+          "column": 3
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    },
+    {
+      "rule_id": "EG015",
+      "rule_name": "unsafe-production-value",
+      "severity": "warning",
+      "message": "CDN_URL does not match the production pattern \"^https://\" (positive/.env.production)",
+      "variable": "CDN_URL",
+      "location": {
+        "file": "positive/.env.production",
+        "line": 12,
+        "column": 9
+      },
+      "evidence": "",
+      "why": "The schema (.envguard.yaml:11) constrains CDN_URL in production; violating it usually means a development or test setting is about to be deployed.",
+      "fix": "Set CDN_URL in positive/.env.production to a value matching \"^https://\".",
+      "related": [
+        {
+          "file": ".envguard.yaml",
+          "line": 11,
+          "column": 3
+        }
+      ],
+      "docs_url": "https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG015-unsafe-production-value.md"
+    }
+  ],
+  "matrix": [
+    {
+      "app_root": "negative",
+      "environments": [
+        "development",
+        "production"
+      ],
+      "template_only_environments": [
+        "default"
+      ],
+      "files": {
+        "development": [
+          "negative/.env.development"
+        ],
+        "production": [
+          "negative/.env.production"
+        ]
+      },
+      "variables": [
+        {
+          "name": "APP_DEBUG",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "APP_ENV",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "CACHE_ENABLED",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "CDN_URL",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "DATABASE_URL",
+          "cells": {
+            "development": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "DEBUG",
+          "cells": {
+            "development": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "EMPTY_VALUE_IS_IGNORED",
+          "cells": {
+            "development": "absent",
+            "production": "empty"
+          }
+        },
+        {
+          "name": "FLASK_DEBUG",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "LOG_LEVEL",
+          "cells": {
+            "development": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "NODE_ENV",
+          "cells": {
+            "development": "set",
+            "production": "set"
+          }
+        },
+        {
+          "name": "RAILS_ENV",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        },
+        {
+          "name": "REDIS_HOST",
+          "cells": {
+            "development": "absent",
+            "production": "set"
+          }
+        }
+      ]
+    },
+    {
+      "app_root": "positive",
+      "environments": [
+        "production"
+      ],
+      "template_only_environments": [
+        "default"
+      ],
+      "files": {
+        "production": [
+          "positive/.env.production"
+        ]
+      },
+      "variables": [
+        {
+          "name": "APP_DEBUG",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "APP_ENV",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "CACHE_ENABLED",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "CDN_URL",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "DATABASE_URL",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "DEBUG",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "DJANGO_DEBUG",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "FLASK_DEBUG",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "LOG_LEVEL",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "NODE_ENV",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "RAILS_ENV",
+          "cells": {
+            "production": "set"
+          }
+        },
+        {
+          "name": "REDIS_HOST",
+          "cells": {
+            "production": "set"
+          }
+        }
+      ]
+    }
+  ],
+  "ci": {
+    "secrets": [],
+    "vars": []
+  },
+  "notes": []
+}

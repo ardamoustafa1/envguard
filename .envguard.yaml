@@ -1,0 +1,52 @@
+# EnvGuard's own configuration (dogfooding: CI runs `envguard check` on this
+# repository). Test fixtures and the demo app are broken on purpose.
+version: 1
+fail_on: warning
+exclude:
+  - "testdata/**"
+  - "**/testdata/**"
+  - "examples/**"
+  - "dist/**"
+  - "bin/**"
+variables:
+  # Read by the envguard binary to adapt its output to the terminal.
+  WT_SESSION:
+    description: Set by Windows Terminal; enables Unicode symbols on Windows.
+  TERM_PROGRAM:
+    description: Set by many terminals (VS Code, iTerm2); enables Unicode symbols on Windows.
+  ConEmuANSI:
+    description: Set to ON by ConEmu/cmder; enables Unicode symbols on Windows.
+  # install.sh
+  ENVGUARD_INSTALL_DIR:
+    description: install.sh target directory (default /usr/local/bin as root, else ~/.local/bin).
+  ENVGUARD_RELEASES_URL:
+    description: install.sh release base URL, for mirrors.
+    type: url
+    schemes: [https, http]
+  ENVGUARD_VERIFY_SIGNATURE:
+    description: install.sh verifies the Sigstore signature of checksums.txt when 1.
+    type: enum
+    values: ["0", "1"]
+  # npm launcher and build script
+  ENVGUARD_BINARY:
+    description: npm launcher override; path of an envguard binary to run instead of the platform package.
+  NPM_PACKAGE_NAME:
+    description: scripts/npm/build.mjs main npm package name (default envguard-cli).
+  NPM_PLATFORM_PREFIX:
+    description: scripts/npm/build.mjs prefix of the per-platform npm packages (default = package name).
+  # Developer tools in tests (skipped unless set)
+  ENVGUARD_WRITE_BENCH:
+    description: Test helper; names an empty directory to write the 20,000-file benchmark monorepo into.
+  ENVGUARD_WRITE_HOSTILE:
+    description: Test helper; names an empty directory to write the hostile test repository into.
+  # GitHub Actions secrets used by .github/workflows/release.yml
+  # (Settings → Secrets and variables → Actions). See docs/installation.md.
+  HOMEBREW_TAP_GITHUB_TOKEN:
+    description: "CI secret: fine-grained PAT with contents: write on ardamoustafa1/homebrew-tap."
+    sensitive: true
+  SCOOP_BUCKET_GITHUB_TOKEN:
+    description: "CI secret: fine-grained PAT with contents: write on ardamoustafa1/scoop-bucket."
+    sensitive: true
+  NPM_TOKEN:
+    description: "CI secret: npm granular access token with publish rights for the envguard-cli packages."
+    sensitive: true

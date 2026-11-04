@@ -1,0 +1,25 @@
+positive/deploy/compose.prod.yaml:3:19  warning  EG011 compose-undefined-variable  positive/deploy/compose.prod.yaml interpolates ${PROD_ONLY}, but there is no positive/deploy/.env next to it and it is not declared in positive/.env.example
+  variable: PROD_ONLY
+  why: Compose substitutes an empty string for an unset PROD_ONLY and only prints a warning, so the container starts with a broken value.
+  fix: Create positive/deploy/.env with `PROD_ONLY=<value>` (Compose reads it automatically), declare `PROD_ONLY=` in a template so others know to set it, or give it a default: `${PROD_ONLY:-value}`.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md
+positive/docker-compose.yml:5:39  warning  EG011 compose-undefined-variable  positive/docker-compose.yml interpolates ${DB_PASSWORD}, which is not defined in positive/.env (the file Compose reads) or any template
+  variable: DB_PASSWORD
+  why: Compose substitutes an empty string for an unset DB_PASSWORD and only prints a warning, so the container starts with a broken value.
+  fix: Add `DB_PASSWORD=` with a value to positive/.env and document it in a template, or give it a default in the Compose file: `${DB_PASSWORD:-value}`.
+  related: positive/docker-compose.yml:10:16
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md
+positive/docker-compose.yml:9:16  warning  EG011 compose-undefined-variable  positive/docker-compose.yml interpolates ${REQUIRED_TOKEN}, which is not defined in positive/.env (the file Compose reads) or any template
+  variable: REQUIRED_TOKEN
+  why: The reference uses ${REQUIRED_TOKEN:?...}, so `docker compose up` aborts when it is unset.
+  fix: Add `REQUIRED_TOKEN=` with a value to positive/.env and document it in a template, or give it a default in the Compose file: `${REQUIRED_TOKEN:-value}`.
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md
+positive/docker-compose.yml:12:9  warning  EG011 compose-undefined-variable  service api: env_file positive/missing.env does not exist
+  why: `docker compose up` fails for this service when a required env_file is missing.
+  fix: Create positive/missing.env (for example by copying its template), or make it optional with the long syntax:
+       
+           env_file:
+             - path: ./missing.env
+               required: false
+  docs: https://github.com/ardamoustafa1/envguard/blob/main/docs/rules/EG011-compose-undefined-variable.md
+(4 findings, 0 suppressed)

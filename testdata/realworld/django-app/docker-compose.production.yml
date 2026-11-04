@@ -1,0 +1,28 @@
+services:
+  django:
+    build:
+      context: .
+      args:
+        BUILD_ENVIRONMENT: production
+    image: shop_production_django
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    ports:
+      - "5000:5000"
+
+  postgres:
+    image: postgres:16
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.production/.postgres
+
+  redis:
+    image: redis:7
+
+volumes:
+  production_postgres_data: {}

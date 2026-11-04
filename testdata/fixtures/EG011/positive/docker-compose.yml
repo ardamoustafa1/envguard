@@ -1,0 +1,14 @@
+services:
+  api:
+    image: "api:${TAG:-latest}"
+    environment:
+      DATABASE_URL: "postgres://app:${DB_PASSWORD}@db/app"
+      DEFINED: ${DEFINED_VAR}
+      FROM_TEMPLATE: ${TEMPLATE_VAR}
+      ESCAPED: "$$NOT_A_VAR"
+      TOKEN: ${REQUIRED_TOKEN:?set REQUIRED_TOKEN}
+      AGAIN: ${DB_PASSWORD}
+    env_file:
+      - ./missing.env
+      - path: ./optional.env
+        required: false

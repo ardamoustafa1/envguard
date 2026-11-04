@@ -1,0 +1,12 @@
+{
+  "name": "demo-app",
+  "private": true,
+  "description": "A deliberately misconfigured app for trying EnvGuard",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5"
+  }
+}

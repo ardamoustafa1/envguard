@@ -1,0 +1,2 @@
+EG003 apps/worker/src/index.ts SMTP_URL - read via process.env.SMTP_URL with no default but declared in no env file, template, compose file or workflow
+EG001 apps/api/.env.production CORS_ORIGIN - declared in apps/api/.env.production.example (and .env.example) but missing from the real apps/api/.env.production

@@ -1,0 +1,81 @@
+# envguard diff: environment matrix and two-environment comparison.
+
+# Without arguments: the full matrix for each app root, never values.
+exitcode 0 envguard --root demo diff
+cmp stdout matrix.golden
+! stdout 'pa55word'
+
+# Two environments (aliases allowed): only the differences.
+exitcode 0 envguard --root demo diff stage prod
+cmp stdout stage-prod.golden
+
+# --exit-code turns differences (or missing variables) into exit code 1.
+exitcode 1 envguard --root demo diff staging production --exit-code
+exitcode 0 envguard --root same diff default production --exit-code
+stdout '^✓ No differences: default and production define the same variables\.$'
+exitcode 1 envguard --root demo diff --exit-code
+
+# JSON for both modes.
+exitcode 0 envguard --root demo diff staging production --format json
+stdout '"schema_version": 1'
+stdout '"only_in_a": \['
+exitcode 0 envguard --root demo diff --format json --output m.json
+! stdout .
+grep '"matrix": \[' m.json
+grep '"STRIPE_SECRET_KEY"' m.json
+
+# --env limits matrix columns; --app limits app roots.
+exitcode 0 envguard --root demo diff --env production --app .
+stdout '^  VARIABLE +production$'
+
+# Errors: unknown environment (never echoed), wrong argument count, bad format.
+exitcode 2 envguard --root demo diff staging nowhere
+stderr '^envguard: unknown environment \(second argument\): no env file or template for it; known environments: default, production, staging$'
+! stderr nowhere
+exitcode 2 envguard --root demo diff --env nowhere
+stderr '--env: value 1 names no environment'
+exitcode 2 envguard --root demo diff staging
+stderr 'diff takes no arguments \(full matrix\) or two environments'
+exitcode 2 envguard --root demo diff --format sarif
+stderr '^envguard: --format: unknown format; want one of pretty, json$'
+exitcode 2 envguard --root badconfig diff
+stderr 'invalid configuration'
+
+-- same/.env --
+A=1
+-- same/.env.production --
+A=2
+-- badconfig/.envguard.yaml --
+version: 1
+exlude: [x]
+-- matrix.golden --
+App . (repository root)
+  VARIABLE              default  production
+  CACHE_DIR                ✓         –
+  CDN_URL                  –         ✓
+  DATABASE_URL             ✓         ✓
+  DEBUG                    ✓         ✓
+  FEATURE_NEW_CHECKOUT     ✓         –
+  LEGACY_API_KEY           –         –
+  LOG_LEVEL                ✓         ✓
+  PORT                     ✓         ✓
+  REDIS_URL                ✓         ✓
+  SENTRY_DSN               –         –
+  SESSION_SECRET           ○         ✓
+  STRIPE_SECRET_KEY        –         ✗
+  WORKERS                  ✓         ✓
+  Templates only, no env file yet: staging
+
+✓ set  ○ empty  ✗ missing (required by a template)  – not required
+-- stage-prod.golden --
+Comparing staging → production
+
+App .
+  staging: .env.example, .env.staging.example (templates)
+  production: .env.production
+  - LEGACY_API_KEY  only in staging
+  - SENTRY_DSN      only in staging
+  - STAGING_BANNER  only in staging
+  8 variables in both
+
+3 variables differ in 1 app root.

@@ -1,0 +1,29 @@
+# envguard check --process-env validates the process environment.
+
+env PORT=8080
+env LOG_LEVEL=info
+env DATABASE_URL=postgres://db.internal:5432/app
+env REDIS_URL=redis://cache.internal:6379
+env SESSION_SECRET=set-by-platform
+env WORKERS=4
+env DEBUG=false
+env CDN_URL=https://cdn.example.com
+env STRIPE_SECRET_KEY=set-by-platform
+env LEGACY_API_KEY=x
+
+exitcode 0 envguard --root demo check --process-env --env production
+stdout '^✓ No problems found · process environment$'
+
+env WORKERS=0
+env STRIPE_SECRET_KEY=
+exitcode 1 envguard --root demo check --process-env --env prod
+stdout '^\(process environment\)$'
+stdout 'WORKERS in the process environment has the invalid value 0: is below the minimum 1'
+stdout 'STRIPE_SECRET_KEY is empty in the process environment'
+stdout '· process environment$'
+
+exitcode 0 envguard --root demo check --process-env --env production --fail-on never --quiet
+! stdout .
+
+exitcode 2 envguard --root demo check --process-env --env production,staging
+stderr '^envguard: --process-env checks exactly one environment; pass a single --env$'

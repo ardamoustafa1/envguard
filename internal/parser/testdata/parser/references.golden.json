@@ -1,0 +1,467 @@
+{
+  "Filename": "testdata/parser/references.env",
+  "Entries": [
+    {
+      "Key": "HOST",
+      "Value": "localhost",
+      "RawValue": "localhost",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 1,
+        "Column": 1,
+        "Offset": 0
+      },
+      "ValuePos": {
+        "Line": 1,
+        "Column": 6,
+        "Offset": 5
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "URL",
+      "Value": "http://$HOST:${PORT}/x",
+      "RawValue": "http://$HOST:${PORT}/x",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 2,
+        "Column": 1,
+        "Offset": 15
+      },
+      "ValuePos": {
+        "Line": 2,
+        "Column": 5,
+        "Offset": 19
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "HOST",
+          "Pos": {
+            "Line": 2,
+            "Column": 12,
+            "Offset": 26
+          },
+          "Braced": false,
+          "HasDefault": false
+        },
+        {
+          "Name": "PORT",
+          "Pos": {
+            "Line": 2,
+            "Column": 18,
+            "Offset": 32
+          },
+          "Braced": true,
+          "HasDefault": false
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "WITH_DEFAULT",
+      "Value": "${MISSING:-fallback}",
+      "RawValue": "${MISSING:-fallback}",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 3,
+        "Column": 1,
+        "Offset": 42
+      },
+      "ValuePos": {
+        "Line": 3,
+        "Column": 14,
+        "Offset": 55
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "MISSING",
+          "Pos": {
+            "Line": 3,
+            "Column": 14,
+            "Offset": 55
+          },
+          "Braced": true,
+          "HasDefault": true
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "DASH_DEFAULT",
+      "Value": "${MISSING-fallback}",
+      "RawValue": "${MISSING-fallback}",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 4,
+        "Column": 1,
+        "Offset": 76
+      },
+      "ValuePos": {
+        "Line": 4,
+        "Column": 14,
+        "Offset": 89
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "MISSING",
+          "Pos": {
+            "Line": 4,
+            "Column": 14,
+            "Offset": 89
+          },
+          "Braced": true,
+          "HasDefault": true
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "ASSIGN_DEFAULT",
+      "Value": "${MISSING:=fallback}",
+      "RawValue": "${MISSING:=fallback}",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 5,
+        "Column": 1,
+        "Offset": 109
+      },
+      "ValuePos": {
+        "Line": 5,
+        "Column": 16,
+        "Offset": 124
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "MISSING",
+          "Pos": {
+            "Line": 5,
+            "Column": 16,
+            "Offset": 124
+          },
+          "Braced": true,
+          "HasDefault": true
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "REQUIRED",
+      "Value": "${NEEDED:?must be set}",
+      "RawValue": "${NEEDED:?must be set}",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 6,
+        "Column": 1,
+        "Offset": 145
+      },
+      "ValuePos": {
+        "Line": 6,
+        "Column": 10,
+        "Offset": 154
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "NEEDED",
+          "Pos": {
+            "Line": 6,
+            "Column": 10,
+            "Offset": 154
+          },
+          "Braced": true,
+          "HasDefault": false
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "ALT",
+      "Value": "${OTHER:+alt}",
+      "RawValue": "${OTHER:+alt}",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 7,
+        "Column": 1,
+        "Offset": 177
+      },
+      "ValuePos": {
+        "Line": 7,
+        "Column": 5,
+        "Offset": 181
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "OTHER",
+          "Pos": {
+            "Line": 7,
+            "Column": 5,
+            "Offset": 181
+          },
+          "Braced": true,
+          "HasDefault": false
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "NESTED",
+      "Value": "${OUTER:-${INNER}}",
+      "RawValue": "${OUTER:-${INNER}}",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 8,
+        "Column": 1,
+        "Offset": 195
+      },
+      "ValuePos": {
+        "Line": 8,
+        "Column": 8,
+        "Offset": 202
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "OUTER",
+          "Pos": {
+            "Line": 8,
+            "Column": 8,
+            "Offset": 202
+          },
+          "Braced": true,
+          "HasDefault": true
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "QUOTED",
+      "Value": "pre-${A}-$B_C-end",
+      "RawValue": "\"pre-${A}-$B_C-end\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 9,
+        "Column": 1,
+        "Offset": 221
+      },
+      "ValuePos": {
+        "Line": 9,
+        "Column": 8,
+        "Offset": 228
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": [
+        {
+          "Name": "A",
+          "Pos": {
+            "Line": 9,
+            "Column": 13,
+            "Offset": 233
+          },
+          "Braced": true,
+          "HasDefault": false
+        },
+        {
+          "Name": "B_C",
+          "Pos": {
+            "Line": 9,
+            "Column": 18,
+            "Offset": 238
+          },
+          "Braced": false,
+          "HasDefault": false
+        }
+      ],
+      "IgnoreRules": null
+    },
+    {
+      "Key": "ESCAPED",
+      "Value": "$NOPE and ${NOPE2}",
+      "RawValue": "\"\\$NOPE and \\${NOPE2}\"",
+      "Quote": "double",
+      "KeyPos": {
+        "Line": 10,
+        "Column": 1,
+        "Offset": 248
+      },
+      "ValuePos": {
+        "Line": 10,
+        "Column": 9,
+        "Offset": 256
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "SINGLE",
+      "Value": "$NOPE ${NOPE}",
+      "RawValue": "'$NOPE ${NOPE}'",
+      "Quote": "single",
+      "KeyPos": {
+        "Line": 11,
+        "Column": 1,
+        "Offset": 279
+      },
+      "ValuePos": {
+        "Line": 11,
+        "Column": 8,
+        "Offset": 286
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "BACKTICK",
+      "Value": "$NOPE",
+      "RawValue": "`$NOPE`",
+      "Quote": "backtick",
+      "KeyPos": {
+        "Line": 12,
+        "Column": 1,
+        "Offset": 302
+      },
+      "ValuePos": {
+        "Line": 12,
+        "Column": 10,
+        "Offset": 311
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "DOUBLE_DOLLAR",
+      "Value": "$$NOPE",
+      "RawValue": "$$NOPE",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 13,
+        "Column": 1,
+        "Offset": 319
+      },
+      "ValuePos": {
+        "Line": 13,
+        "Column": 15,
+        "Offset": 333
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "DIGIT",
+      "Value": "$1",
+      "RawValue": "$1",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 14,
+        "Column": 1,
+        "Offset": 340
+      },
+      "ValuePos": {
+        "Line": 14,
+        "Column": 7,
+        "Offset": 346
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "TRAILING",
+      "Value": "price$",
+      "RawValue": "price$",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 15,
+        "Column": 1,
+        "Offset": 349
+      },
+      "ValuePos": {
+        "Line": 15,
+        "Column": 10,
+        "Offset": 358
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "UNCLOSED",
+      "Value": "${OPEN",
+      "RawValue": "${OPEN",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 16,
+        "Column": 1,
+        "Offset": 365
+      },
+      "ValuePos": {
+        "Line": 16,
+        "Column": 10,
+        "Offset": 374
+      },
+      "HasExport": false,
+      "InlineComment": "",
+      "References": null,
+      "IgnoreRules": null
+    },
+    {
+      "Key": "COMMENTED",
+      "Value": "$YES",
+      "RawValue": "$YES",
+      "Quote": "none",
+      "KeyPos": {
+        "Line": 17,
+        "Column": 1,
+        "Offset": 381
+      },
+      "ValuePos": {
+        "Line": 17,
+        "Column": 11,
+        "Offset": 391
+      },
+      "HasExport": false,
+      "InlineComment": "$NO",
+      "References": [
+        {
+          "Name": "YES",
+          "Pos": {
+            "Line": 17,
+            "Column": 11,
+            "Offset": 391
+          },
+          "Braced": false,
+          "HasDefault": false
+        }
+      ],
+      "IgnoreRules": null
+    }
+  ],
+  "Problems": null,
+  "Directives": null,
+  "FileIgnoreRules": null
+}

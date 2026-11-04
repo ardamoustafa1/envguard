@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+staticfiles/
+media/
+.coverage
+htmlcov/
+
+# Environment
+.env
+.envs/.production/
