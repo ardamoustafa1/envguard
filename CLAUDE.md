@@ -59,9 +59,12 @@ regardless of what else it achieves.
    `crypto/tls`) may appear anywhere in the dependency graph. Enforced by
    `TestOffline` (`cmd/envguard/offline_test.go`, runs `go list -deps`).
    Known exception: `github.com/spf13/pflag` (required by cobra) imports
-   `net` only for IP-address flag parsing; it is the single entry in
-   `netAllowlist`. Any new third-party package importing `net` fails the test
-   until reviewed and justified there.
+   `net` only for IP-address flag parsing. On Windows only,
+   `golang.org/x/sys/windows` (syscall bindings used by termenv/x/term for
+   console modes) also imports `net` for socket-related types; EnvGuard calls
+   only its console functions. Those two are the entries of `netAllowlist`
+   (the first CI run on Windows found the second). Any new third-party package
+   importing `net` fails the test until reviewed and justified there.
 2. **Read-only.** EnvGuard never modifies user files. The exceptions are
    `envguard init`, which writes `.envguard.yaml` (and `.env.example` with
    `--example`), refuses to overwrite existing files unless `--force` is

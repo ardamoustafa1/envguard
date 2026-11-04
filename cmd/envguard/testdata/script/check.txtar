@@ -74,7 +74,7 @@ exitcode 1 envguard --root demo check --format json --output out/report.json
 exists out/report.json
 grep '"rule_id": "EG007"' out/report.json
 exitcode 2 envguard --root demo check --output out
-stderr '^envguard: --output: open: is a directory$'
+stderr '^envguard: --output: open: .+$'
 
 # Inside GitHub Actions, check defaults to annotations and writes a job summary.
 env GITHUB_ACTIONS=true
@@ -104,7 +104,7 @@ stderr '\.envguard\.yaml:2:1: unknown key "exlude"'
 exitcode 2 envguard --root demo check extra
 stderr '^envguard: check takes no arguments; run `envguard check --help` for its flags$'
 exitcode 2 envguard --root does-not-exist check
-stderr '^envguard: --root: cannot read "does-not-exist" \(no such file or directory\); pass the directory of the repository to check, or run envguard from it$'
+stderr '^envguard: --root: cannot read "does-not-exist" \(.+\); pass the directory of the repository to check, or run envguard from it$'
 exitcode 2 envguard --root demo/package.json check
 stderr '^envguard: --root: "demo/package.json" is a file, not a directory; pass the directory of the repository to check$'
 

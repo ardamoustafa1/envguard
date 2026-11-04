@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
+	"strings"
 	"testing"
 )
 
@@ -135,6 +137,9 @@ func TestInspectUnusualNames(t *testing.T) {
 	write(t, root, ".gitignore", "*.env\n")
 	var wantTracked, wantIgnored, queried []string
 	for _, n := range names {
+		if runtime.GOOS == "windows" && strings.Contains(n, `\`) {
+			continue // a backslash is a path separator there: a different directory layout
+		}
 		tracked := n + "/.env.example"
 		ignored := n + "/real.env"
 		if err := os.MkdirAll(filepath.Join(root, n), 0o755); err != nil {

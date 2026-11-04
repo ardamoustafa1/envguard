@@ -16,6 +16,10 @@ const modulePath = "github.com/ardamoustafa1/envguard"
 var netAllowlist = map[string]string{
 	// cobra's flag library; uses net.ParseIP / net.IPMask for IP flag types.
 	"github.com/spf13/pflag": "IP flag parsing only",
+	// Windows-only: the syscall bindings pulled in by termenv and x/term for
+	// console modes. They define socket-related types in the same package;
+	// EnvGuard calls only the console functions, never a socket one.
+	"golang.org/x/sys/windows": "Windows syscall bindings; only console functions are used",
 }
 
 // networkClients may not appear anywhere in the dependency graph.
