@@ -1,6 +1,30 @@
 package generate
 
-import "testing"
+import (
+	"strings"
+	"testing"
+
+	"github.com/ardamoustafa1/envguard/internal/config"
+)
+
+func TestGeneratedConfigKeepsSourceNamesInComments(t *testing.T) {
+	v := &variable{name: "REAL", readNoDflt: true,
+		usedAt:     []string{"source\nfail_on: never\n#x.js:1"},
+		declaredAt: []string{"template\r\nvariables: bad:1"},
+		refAt:      []string{"compose\nversion: 2.yml:1"},
+	}
+	data := renderConfig(map[string]*variable{"REAL": v}, []string{"REAL"}, &Result{})
+	cfg, err := config.Parse(data, ".envguard.yaml")
+	if err != nil {
+		t.Fatalf("a source filename corrupted generated YAML: %v\n%s", err, data)
+	}
+	if cfg.FailOn != "" || !cfg.Variables["REAL"].Required {
+		t.Errorf("source filename altered settings: %#v", cfg)
+	}
+	if !strings.Contains(string(data), `source\nfail_on: never\n#x.js:1`) {
+		t.Errorf("source filename is not visibly escaped: %s", data)
+	}
+}
 
 func TestInferType(t *testing.T) {
 	tests := []struct {

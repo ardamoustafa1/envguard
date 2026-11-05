@@ -125,7 +125,12 @@ func (w *walker) skip(rel string, r SkipReason) {
 // rootPatterns returns patterns from .git/info/exclude, which applies to the
 // whole repository like a root .gitignore.
 func (w *walker) rootPatterns() []gitignore.Pattern {
-	return readIgnoreFile(filepath.Join(w.root, ".git", "info", "exclude"), nil)
+	p := filepath.Join(w.root, ".git", "info", "exclude")
+	resolved, err := filepath.EvalSymlinks(p)
+	if err != nil || !within(w.root, resolved) {
+		return nil
+	}
+	return readIgnoreFile(resolved, nil)
 }
 
 // walkDir walks the real (symlink-free) directory dir, whose path relative to
@@ -406,6 +411,10 @@ func matchAny(patterns []string, rel string) bool {
 // readIgnoreFile parses a .gitignore-style file. Missing or unreadable files
 // yield no patterns.
 func readIgnoreFile(p string, domain []string) []gitignore.Pattern {
+	info, err := os.Lstat(p)
+	if err != nil || !info.Mode().IsRegular() {
+		return nil
+	}
 	f, err := os.Open(p) // #nosec G304 -- path is built from the walked tree
 	if err != nil {
 		return nil

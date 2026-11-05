@@ -134,7 +134,7 @@ homebrew_casks:
         # does not block it. Integrity is covered by the signed checksums.
         install_steps: |
           if OS.mac?
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/envguard"]
+            run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{HOMEBREW_PREFIX}/bin/envguard"]
           end
 
 scoops:

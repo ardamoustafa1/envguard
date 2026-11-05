@@ -47,6 +47,14 @@ func detectLibraries(root string, files []discovery.File) map[string]library {
 func readLibraries(appDir string) library {
 	var libs library
 	for _, g := range pythonDependencyGlobs {
+		// Check the directory before Glob: Lstat on a matched file does not
+		// stop a symlinked requirements/ parent from escaping the app root.
+		if dir := filepath.Dir(filepath.FromSlash(g)); dir != "." {
+			info, err := os.Lstat(filepath.Join(appDir, dir))
+			if err != nil || !info.IsDir() {
+				continue
+			}
+		}
 		matches, err := filepath.Glob(filepath.Join(appDir, filepath.FromSlash(g)))
 		if err != nil {
 			continue

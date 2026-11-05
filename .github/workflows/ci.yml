@@ -111,3 +111,42 @@ jobs:
           sleep 1
           ENVGUARD_RELEASES_URL=http://127.0.0.1:8765 ENVGUARD_INSTALL_DIR="$RUNNER_TEMP/bin" sh install.sh "$version"
           "$RUNNER_TEMP/bin/envguard" version | grep -q "envguard $version"
+      - name: Keep the generated Scoop package for Windows testing
+        uses: actions/upload-artifact@v4
+        with:
+          name: scoop-snapshot
+          path: |
+            dist/scoop/envguard.json
+            dist/envguard_*_windows_amd64.zip
+            dist/checksums.txt
+            dist/metadata.json
+          if-no-files-found: error
+          retention-days: 3
+
+  scoop:
+    name: Scoop install (Windows x64)
+    needs: release-dry-run
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+      - uses: actions/download-artifact@v5
+        with:
+          name: scoop-snapshot
+          path: ${{ runner.temp }}/scoop-snapshot
+      - name: Install the generated package with an isolated Scoop
+        shell: pwsh
+        run: ./scripts/test-scoop.ps1 -SnapshotDir "$env:RUNNER_TEMP/scoop-snapshot" -EvidenceDir "$env:RUNNER_TEMP/scoop-evidence"
+      - name: Keep Scoop test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scoop-windows-x64-evidence
+          path: ${{ runner.temp }}/scoop-evidence
+          if-no-files-found: warn
+          retention-days: 3

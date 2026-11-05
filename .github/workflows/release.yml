@@ -28,7 +28,8 @@ jobs:
           fetch-depth: 0 # GoReleaser needs the tags for the changelog
       - uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          # go.mod sets the supported minimum, not the release compiler patch.
+          go-version: stable
           cache: true
       - name: Test
         run: go test ./...

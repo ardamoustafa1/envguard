@@ -36,12 +36,15 @@ jobs:
         id: release
         shell: bash
         run: |
-          if curl -fsSLI -o /dev/null "https://github.com/${GITHUB_REPOSITORY}/releases/latest"; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::notice::No release yet; skipping the action test."
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
+          # With no releases GitHub redirects to the releases list with HTTP 200.
+          url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${GITHUB_REPOSITORY}/releases/latest") || url=""
+          case "$url" in
+            "https://github.com/${GITHUB_REPOSITORY}/releases/tag/v"[0-9]*)
+              echo "exists=true" >> "$GITHUB_OUTPUT" ;;
+            *)
+              echo "::notice::No release yet; skipping the action test."
+              echo "exists=false" >> "$GITHUB_OUTPUT" ;;
+          esac
 
       - name: doctor never fails with fail-on never
         id: doctor
@@ -92,11 +95,15 @@ jobs:
       - name: Is there a release yet?
         id: release
         run: |
-          if curl -fsSLI -o /dev/null "https://github.com/${GITHUB_REPOSITORY}/releases/latest"; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
+          # With no releases GitHub redirects to the releases list with HTTP 200.
+          url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${GITHUB_REPOSITORY}/releases/latest") || url=""
+          case "$url" in
+            "https://github.com/${GITHUB_REPOSITORY}/releases/tag/v"[0-9]*)
+              echo "exists=true" >> "$GITHUB_OUTPUT" ;;
+            *)
+              echo "::notice::No release yet; skipping the action test."
+              echo "exists=false" >> "$GITHUB_OUTPUT" ;;
+          esac
       - name: check with SARIF upload
         id: envguard
         if: steps.release.outputs.exists == 'true'

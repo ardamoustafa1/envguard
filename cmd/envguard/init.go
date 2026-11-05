@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -91,7 +92,7 @@ func runInit(stdout io.Writer, gopts *globalOptions, opts *initOptions) error {
 	if opts.dryRun {
 		_, err := fmt.Fprintf(stdout, "# --- .envguard.yaml ---\n%s", res.Config)
 		if err == nil && res.Example != nil {
-			_, err = fmt.Fprintf(stdout, "\n# --- %s ---\n%s", exampleRel, res.Example)
+			_, err = fmt.Fprintf(stdout, "\n# --- %s ---\n%s", mask.Printable(strings.ReplaceAll(exampleRel, "\n", `\n`)), res.Example)
 		}
 		return err
 	}
