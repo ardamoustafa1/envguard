@@ -959,7 +959,9 @@ All of it lives outside the binary and must never add network code to it.
   the default doctor command, unless args has `--fail-on` or `--fail-on=...`),
   optional SARIF + `github/codeql-action/upload-sarif`.
   `.github/workflows/action-test.yml` tests it on 3 OSes (skips until a
-  release exists).
+  release exists). Both the test guard and the `latest` resolver require a
+  canonical `/releases/tag/v...` redirect; GitHub's HTTP 200 empty releases
+  list is not a published release. The resolver explains when none exists.
 - `.pre-commit-hooks.yaml`: `envguard` hook, `language: golang`,
   `pass_filenames: false`, `always_run: true`.
 - CI (`ci.yml`): test (3 OSes), lint, shellcheck, **dogfood** (`go run

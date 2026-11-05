@@ -56,8 +56,11 @@ runs:
         repo="ardamoustafa1/envguard"
         version="${INPUT_VERSION#v}"
         if [ -z "$version" ] || [ "$version" = latest ]; then
-          url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${repo}/releases/latest")
-          version="${url##*/v}"
+          url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/${repo}/releases/latest") || url=""
+          case "$url" in
+            "https://github.com/${repo}/releases/tag/v"[0-9]*) version="${url##*/v}" ;;
+            *) echo "::error title=EnvGuard::no published release found; supply a released version or try again after the first release"; exit 1 ;;
+          esac
         fi
         case "$version" in
           [0-9]*) ;;

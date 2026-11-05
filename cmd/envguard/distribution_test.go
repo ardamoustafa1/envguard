@@ -5,12 +5,108 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"testing"
 
 	"go.yaml.in/yaml/v3"
 )
+
+func TestActionReleaseDetection(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("mock executable uses a POSIX script")
+	}
+	bash, err := exec.LookPath("bash")
+	if err != nil {
+		t.Skip("bash not installed")
+	}
+	var workflow struct {
+		Jobs map[string]struct {
+			Steps []struct{ Name, Run string }
+		}
+	}
+	data, err := os.ReadFile(filepath.Join(repoRoot, ".github", "workflows", "action-test.yml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := yaml.Unmarshal(data, &workflow); err != nil {
+		t.Fatal(err)
+	}
+	scripts := map[string]string{}
+	for name, job := range workflow.Jobs {
+		for _, step := range job.Steps {
+			if step.Name == "Is there a release yet?" {
+				scripts[name] = step.Run
+			}
+		}
+	}
+	if len(scripts) != 2 {
+		t.Fatalf("release availability guards = %d, want 2", len(scripts))
+	}
+	var action struct {
+		Runs struct{ Steps []struct{ Name, Run string } }
+	}
+	data, err = os.ReadFile(filepath.Join(repoRoot, "action.yml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := yaml.Unmarshal(data, &action); err != nil {
+		t.Fatal(err)
+	}
+	for _, step := range action.Runs.Steps {
+		if step.Name == "Resolve version and platform" {
+			scripts["resolver"] = step.Run
+		}
+	}
+	if scripts["resolver"] == "" {
+		t.Fatal("composite version resolver missing")
+	}
+	for name, script := range scripts {
+		for _, tt := range []struct {
+			name, url, curlCode string
+			exists              bool
+		}{
+			{"empty releases redirects with HTTP 200", "https://github.com/ardamoustafa1/envguard/releases", "0", false},
+			{"published release tag", "https://github.com/ardamoustafa1/envguard/releases/tag/v1.2.3", "0", true},
+			{"HTTP error", "", "22", false},
+			{"unexpected redirect", "https://example.invalid/releases/tag/v1.2.3", "0", false},
+		} {
+			t.Run(name+"/"+tt.name, func(t *testing.T) {
+				dir := t.TempDir()
+				curl := filepath.Join(dir, "curl")
+				if err := os.WriteFile(curl, []byte("#!/bin/sh\nprintf '%s' \"$MOCK_RELEASE_URL\"\nexit \"$MOCK_CURL_EXIT\"\n"), 0o700); err != nil {
+					t.Fatal(err)
+				}
+				output := filepath.Join(dir, "github-output")
+				cmd := exec.Command(bash, "-c", script)
+				cmd.Env = append(os.Environ(), "PATH="+dir+string(os.PathListSeparator)+os.Getenv("PATH"),
+					"MOCK_RELEASE_URL="+tt.url, "MOCK_CURL_EXIT="+tt.curlCode,
+					"GITHUB_OUTPUT="+output, "GITHUB_REPOSITORY=ardamoustafa1/envguard",
+					"INPUT_VERSION=latest", "RUNNER_OS=Linux", "RUNNER_ARCH=X64", "TOOL_CACHE="+dir)
+				out, err := cmd.CombinedOutput()
+				result, readErr := os.ReadFile(output)
+				if name != "resolver" {
+					want := "exists=false"
+					if tt.exists {
+						want = "exists=true"
+					}
+					if err != nil || readErr != nil || strings.TrimSpace(string(result)) != want {
+						t.Errorf("release guard: exit %v, output %q, log %s; want %s", err, result, out, want)
+					}
+					return
+				}
+				if tt.exists {
+					if err != nil || !strings.Contains(string(result), "version=1.2.3\n") {
+						t.Errorf("version resolver: exit %v, output %q, log %s", err, result, out)
+					}
+				} else if err == nil || !strings.Contains(string(out), "no published release") {
+					t.Errorf("version resolver must explain missing release: exit %v, log %s", err, out)
+				}
+			})
+		}
+	}
+}
 
 func TestReleaseUsesLatestPatchedGo(t *testing.T) {
 	data, err := os.ReadFile(filepath.Join(repoRoot, ".github", "workflows", "release.yml"))
