@@ -136,12 +136,30 @@ runs:
         # shellcheck disable=SC2086
         set -- $ARGS
         if [ "$#" -eq 0 ]; then set -- check; fi
-        case "$1" in
+        # Locate the command after global flags, skipping their values. With
+        # flags alone the root command runs doctor. Preserve explicit thresholds.
+        command=doctor
+        found_command=false
+        skip_value=false
+        explicit_fail_on=false
+        for arg in "$@"; do
+          if [ "$skip_value" = true ]; then skip_value=false; continue; fi
+          case "$arg" in
+            --fail-on | --fail-on=*) explicit_fail_on=true ;;
+          esac
+          if [ "$found_command" = true ]; then continue; fi
+          case "$arg" in
+            --root | --config | --format | --output | -o | --env | --app | --fail-on) skip_value=true ;;
+            --) command=; found_command=true ;;
+            -*) ;;
+            *) command="$arg"; found_command=true ;;
+          esac
+        done
+        case "$command" in
           check | doctor)
-            case " $ARGS " in
-              *" --fail-on"*) ;; # explicit --fail-on in args wins
-              *) if [ -n "$FAIL_ON" ]; then set -- "$@" --fail-on "$FAIL_ON"; fi ;;
-            esac ;;
+            if [ "$explicit_fail_on" = false ] && [ -n "$FAIL_ON" ]; then
+              set -- "$@" --fail-on "$FAIL_ON"
+            fi ;;
         esac
         # GITHUB_ACTIONS=true makes `check` print annotations and write a job summary.
         envguard --root "$WD" "$@"

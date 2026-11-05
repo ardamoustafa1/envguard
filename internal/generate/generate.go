@@ -245,7 +245,9 @@ func sources(v *variable) string {
 	if len(v.refAt) > 0 {
 		parts = append(parts, "referenced in "+list(v.refAt))
 	}
-	return mask.Printable(strings.Join(parts, "; "))
+	// A filename can contain a newline. Keep every location on the comment
+	// line so it cannot become generated YAML content.
+	return mask.Printable(strings.ReplaceAll(strings.Join(parts, "; "), "\n", `\n`))
 }
 
 func list(items []string) string {

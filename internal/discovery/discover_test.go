@@ -57,6 +57,18 @@ func discover(t *testing.T, opts Options) *Inventory {
 	return inv
 }
 
+func TestGitExcludeCannotEscapeRoot(t *testing.T) {
+	root := t.TempDir()
+	outside := t.TempDir()
+	write(t, outside, "info/exclude", "app.js\n")
+	write(t, root, "app.js", "x")
+	symlink(t, outside, filepath.Join(root, ".git"))
+	inv := discover(t, Options{Root: root})
+	if !slices.Contains(paths(inv.Files), "app.js") {
+		t.Error("an external .git/info/exclude changed repository discovery")
+	}
+}
+
 // goldenView is the inventory without the machine-specific Root.
 type goldenView struct {
 	Files     []File

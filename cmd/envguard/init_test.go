@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -12,6 +13,66 @@ import (
 )
 
 const initFixture = "testdata/init-project"
+
+func TestInitDryRunEscapesAppHeading(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows rejects escape characters in file names")
+	}
+	root := t.TempDir()
+	app := "bad\x1b[31mapp"
+	dir := filepath.Join(root, app)
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "package.json"), []byte("{}"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "app.js"), []byte("const x = process.env.REAL;\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--root", root, "init", "--app", app, "--example", "--dry-run"}, &stdout, &stderr); code != exitOK {
+		t.Fatalf("exit %d: %s", code, stderr.String())
+	}
+	if strings.Contains(stdout.String()+stderr.String(), "\x1b") {
+		t.Errorf("init emitted a raw terminal escape: %q", stdout.String())
+	}
+	if !strings.Contains(stdout.String(), `bad\x1b[31mapp/.env.example`) {
+		t.Errorf("missing safely displayed app path: %q", stdout.String())
+	}
+}
+
+func TestInitDryRunAppHeadingCannotInjectYAML(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows rejects newlines in file names")
+	}
+	root := t.TempDir()
+	app := "app\nfail_on: never\n#"
+	dir := filepath.Join(root, app)
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	for name, content := range map[string]string{"package.json": "{}", "app.js": "console.log('safe');\n"} {
+		if err := os.WriteFile(filepath.Join(dir, name), []byte(content), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--root", root, "init", "--app", app, "--example", "--dry-run"}, &stdout, &stderr); code != exitOK {
+		t.Fatalf("exit %d: %s", code, stderr.String())
+	}
+	// This app has no env reads, so the preview contains only YAML and comments.
+	cfg, err := config.Parse(stdout.Bytes(), "preview.yaml")
+	if err != nil {
+		t.Fatalf("preview is no longer usable YAML: %v\n%s", err, stdout.String())
+	}
+	if cfg.FailOn != "" {
+		t.Errorf("app heading injected fail_on=%q into generated config", cfg.FailOn)
+	}
+	if !strings.Contains(stdout.String(), `# --- app\nfail_on: never\n#/.env.example ---`) {
+		t.Errorf("app heading is not kept on one line: %q", stdout.String())
+	}
+}
 
 // TestInitGolden snapshots `init --dry-run --example`. Regenerate with:
 // go test ./cmd/envguard -run TestInitGolden -update

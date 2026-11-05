@@ -3,6 +3,7 @@ package scanner
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"path/filepath"
@@ -36,8 +37,19 @@ func detectFrameworks(root string, files []discovery.File) map[string]framework 
 }
 
 func readFramework(p string) framework {
-	data, err := os.ReadFile(p) // #nosec G304 -- package.json inside the scanned root
-	if err != nil || len(data) > 1<<20 {
+	// Auxiliary metadata is outside the discovery file list: apply the same
+	// regular-file and size safeguards before opening it, and do not follow links.
+	info, err := os.Lstat(p)
+	if err != nil || !info.Mode().IsRegular() || info.Size() > maxDependencyFile {
+		return fwNone
+	}
+	f, err := os.Open(p) // #nosec G304 -- package.json inside the scanned root
+	if err != nil {
+		return fwNone
+	}
+	defer func() { _ = f.Close() }()
+	data, err := io.ReadAll(io.LimitReader(f, maxDependencyFile+1))
+	if err != nil || len(data) > maxDependencyFile {
 		return fwNone
 	}
 	var pkg struct {

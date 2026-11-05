@@ -3,6 +3,9 @@ package scanner
 import (
 	"bytes"
 	"cmp"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -287,10 +290,18 @@ func jsDestructuring(fc *fileCtx) []Usage {
 	if !bytes.Contains(src, []byte(".env")) {
 		return nil
 	}
+	// Keep offsets, but remove comments and string contents before splitting
+	// properties. Their commas and equals signs are not JS syntax here.
+	code := bytes.Clone(src)
+	for i, k := range fc.kinds {
+		if k != kCode && code[i] != '\n' {
+			code[i] = ' '
+		}
+	}
 	var out []Usage
 	listIdx := jsDestructRE.SubexpIndex("list")
 	srcIdx := jsDestructRE.SubexpIndex("src")
-	for _, m := range jsDestructRE.FindAllSubmatchIndex(src, -1) {
+	for _, m := range jsDestructRE.FindAllSubmatchIndex(code, -1) {
 		if fc.kinds[m[0]] != kCode || !prevOK(src, m[0]) {
 			continue
 		}
@@ -301,7 +312,7 @@ func jsDestructuring(fc *fileCtx) []Usage {
 		pattern := "destructuring " + from
 		ls, le := m[2*listIdx], m[2*listIdx+1]
 		off := ls
-		for _, item := range strings.Split(string(src[ls:le]), ",") {
+		for _, item := range strings.Split(string(code[ls:le]), ",") {
 			itemStart := off
 			off += len(item) + 1
 			trimmed := strings.TrimLeft(item, " \t\r\n")
@@ -346,16 +357,17 @@ func goStructTags(fc *fileCtx) []Usage {
 	if !bytes.Contains(src, []byte(`env:"`)) {
 		return nil
 	}
+	tags := goFieldTags(src)
 	var prefixes []string
 	prefixed := false
 	if bytes.Contains(src, []byte(`envPrefix:"`)) {
-		prefixed = true
-		for _, sp := range fc.spans {
+		for _, sp := range tags {
 			if sp.open != "`" {
 				continue
 			}
 			body := src[sp.start+1 : max(sp.start+1, sp.end-1)]
 			if m := goPrefixRE.FindSubmatch(body); m != nil {
+				prefixed = true
 				if p := string(m[1]); !slices.Contains(prefixes, p) {
 					prefixes = append(prefixes, p)
 				}
@@ -365,7 +377,7 @@ func goStructTags(fc *fileCtx) []Usage {
 	}
 	var out []Usage
 	nameIdx := goTagRE.SubexpIndex("name")
-	for _, sp := range fc.spans {
+	for _, sp := range tags {
 		if sp.open != "`" {
 			continue
 		}
@@ -393,6 +405,38 @@ func goStructTags(fc *fileCtx) []Usage {
 		}
 	}
 	return out
+}
+
+// goFieldTags uses Go's syntax tree to distinguish actual struct tags from
+// ordinary raw strings, including examples containing env/envPrefix text.
+func goFieldTags(src []byte) []span {
+	fset := token.NewFileSet()
+	f, _ := parser.ParseFile(fset, "", src, parser.SkipObjectResolution)
+	offset := 0
+	if f == nil || f.Name == nil || f.Name.Name == "" || f.Name.Name == "_" {
+		// Detector tables and editor fragments may omit the package clause.
+		const header = "package envguard\n"
+		offset = len(header)
+		fset = token.NewFileSet()
+		f, _ = parser.ParseFile(fset, "", append([]byte(header), src...), parser.SkipObjectResolution)
+	}
+	if f == nil {
+		return nil
+	}
+	var tags []span
+	ast.Inspect(f, func(n ast.Node) bool {
+		field, ok := n.(*ast.Field)
+		if !ok || field.Tag == nil || !strings.HasPrefix(field.Tag.Value, "`") {
+			return true
+		}
+		start := fset.Position(field.Tag.Pos()).Offset - offset
+		end := fset.Position(field.Tag.End()).Offset - offset
+		if start >= 0 && end <= len(src) && end > start {
+			tags = append(tags, span{start: start, end: end, open: "`"})
+		}
+		return true
+	})
+	return tags
 }
 
 var (

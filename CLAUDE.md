@@ -160,6 +160,7 @@ docs                package `docs`: embeds docs/rules/*.md via go:embed and pars
 - **internal/config** — (implemented) `Load(Flags) (*Settings, error)`.
   - File lookup: `--config` (must exist) else `<root>/.envguard.yaml` or
     `.envguard.yml`; both present is an error; none is fine (defaults).
+    Non-regular files (including FIFOs) are rejected before opening them.
   - Shape: `config.File` — `version` (required, must be 1), `fail_on`,
     `include`, `exclude`, `environments` (name → `{files, templates}` globs),
     `rules` (`EGxxx` → error|warning|info|off), `ignore` (list of
@@ -207,6 +208,8 @@ docs                package `docs`: embeds docs/rules/*.md via go:embed and pars
     go-git's pure-Go matcher). **Gitignored directories are pruned; gitignored
     files are skipped except env files/templates**, which are kept with
     `GitIgnored: true` (rules need `.env` content; EG009 needs the flag).
+    Auxiliary ignore files must be regular files; `.git/info/exclude` is
+    used only when its resolved path stays inside the scanned root.
   - Safety: symlinks resolving outside root → `symlink-outside-root`;
     links to an ancestor/self or link cycles → `symlink-loop`; directory
     symlinks inside root are **not followed** (`symlink-duplicate`, content is
@@ -297,7 +300,9 @@ docs                package `docs`: embeds docs/rules/*.md via go:embed and pars
     (`requirements*.txt`, `requirements/*.txt`, `pyproject.toml`, `Pipfile`,
     `setup.py`, `setup.cfg`) are searched for `django-environ`; a detector
     with `appLib` then runs in modules that do not import `environ`
-    themselves (settings are split over base/production modules).
+    themselves (settings are split over base/production modules). Dependency
+    globs reject symlinked directories before listing them, as well as symlink
+    files, so external requirements cannot change detection.
   - Detector regexes **must not start with `\b`**: it defeats Go's literal-prefix
     search (≈3x slower on large repos). `prevOK` already rejects matches
     glued to a longer name (`TestMatchesGluedToIdentifiersAreRejected`). A
@@ -325,7 +330,9 @@ docs                package `docs`: embeds docs/rules/*.md via go:embed and pars
     UPPER_CASE, so `process.env.hasOwnProperty` is ignored), `skipNames` /
     `skipPrefixes` (Vite built-ins, `$_SERVER` request keys like `HTTP_*`).
     Custom extractors: JS destructuring (`{ A, B = "d", ...rest }` — rest is
-    Dynamic), Go `env:"X"` struct tags in raw strings (`envDefault` = default;
+    Dynamic; comments and string contents are blanked before splitting), Go
+    `env:"X"` tags on AST struct fields (`envDefault` = default; ordinary raw
+    strings are never tags;
     files using `envPrefix` report every tag name as an *inferred* usage, bare
     and with each prefix, because prefixes change names), shell.
   - Shell (`.sh`, skipped if the shebang is not a shell): `${X}`, `$X`,
@@ -342,6 +349,8 @@ docs                package `docs`: embeds docs/rules/*.md via go:embed and pars
     directive in the first 512 bytes, or under a `pages/` dir but not
     `pages/api/`; public = `NEXT_PUBLIC_*`, `NODE_ENV`) and Vite (client file =
     under the app's `src/`; public = `VITE_*`). Next wins if both are listed.
+    `package.json` metadata must be a regular non-symlink file and is read
+    through a 1 MiB limit, so metadata FIFOs and oversized files cannot stall it.
   - `IsWellKnown(name, hasDefault)`: PATH, HOME, USER, SHELL, PWD, TERM, LANG,
     TZ, TMPDIR, CI, NODE_ENV, HOSTNAME, AWS_REGION, AWS_DEFAULT_REGION, the
     terminal conventions (NO_COLOR, FORCE_COLOR, COLORTERM, ...), ambient
@@ -433,7 +442,9 @@ docs                package `docs`: embeds docs/rules/*.md via go:embed and pars
   (`GENERAL` otherwise), all with empty values (`# optional: the code has a
   default` when every read has one). **It never copies any value**: template
   values are only used for type inference; real env files are not read.
-  Guarded by `TestInitNeverCopiesValues`.
+  Guarded by `TestInitNeverCopiesValues`. Newlines in source-location comments
+  are escaped so filenames cannot inject generated YAML; dry-run app headings
+  are terminal-safe.
 - **internal/project** — (implemented) `Build(settings, inventory, Options)`
   reads and parses every env file/template (the only I/O; unreadable files get
   `ReadErr`, never content) into `Project{Apps, EnvFiles, Settings, Inventory}`.
@@ -923,7 +934,11 @@ All of it lives outside the binary and must never add network code to it.
   goreleaser job (contents/packages write, id-token for cosign; also moves
   the major tag `v1` for stable releases), npm job (id-token for
   provenance, `NPM_TOKEN`, `environment: npm`, skips already-published
-  versions, prereleases get dist-tag `next`).
+  versions, prereleases get dist-tag `next`). The release compiler follows
+  `go-version: stable` for security patches; go.mod keeps the supported minimum.
+  The generated Homebrew postflight hook targets `HOMEBREW_PREFIX/bin/envguard`;
+  it uses the InstallSteps DSL's `run` method. Neither `staged_path` nor
+  `system_command` is a method in that DSL.
 - npm (esbuild pattern): `npm/envguard/bin/envguard.js` launcher template
   (no postinstall, no network; `ENVGUARD_BINARY` override; clear errors for
   unsupported platforms or a missing optional dep) and
@@ -940,7 +955,8 @@ All of it lives outside the binary and must never add network code to it.
 - `action.yml` (composite): resolves the version, caches the binary in the
   tool cache (`actions/cache`), installs via install.sh (checksum), runs
   `envguard --root <working-directory> <args>` (args split without eval;
-  `fail-on` appended for check/doctor unless args has `--fail-on`),
+  `fail-on` appended for check/doctor, including leading global flags and
+  the default doctor command, unless args has `--fail-on` or `--fail-on=...`),
   optional SARIF + `github/codeql-action/upload-sarif`.
   `.github/workflows/action-test.yml` tests it on 3 OSes (skips until a
   release exists).

@@ -39,6 +39,8 @@ variables:
     description: Test helper; names an empty directory to write the 20,000-file benchmark monorepo into.
   ENVGUARD_WRITE_HOSTILE:
     description: Test helper; names an empty directory to write the hostile test repository into.
+  ENVGUARD_FIFO_TEST_ROOT:
+    description: Test subprocess helper; names the temporary repository containing a FIFO safety fixture.
   # GitHub Actions secrets used by .github/workflows/release.yml
   # (Settings → Secrets and variables → Actions). See docs/installation.md.
   HOMEBREW_TAP_GITHUB_TOKEN:
