@@ -970,6 +970,12 @@ All of it lives outside the binary and must never add network code to it.
   secrets — add new ones there), release dry run (goreleaser check +
   snapshot without signing, npm build + smoke test, install.sh against the
   snapshot served locally).
+  Its snapshot job uploads the generated Scoop manifest and Windows x64 zip
+  to an ephemeral Windows job. `scripts/test-scoop.ps1` bootstraps an official
+  commit-pinned Scoop under RUNNER_TEMP, preserves the package hash while
+  replacing only the x64 download URL with localhost, then tests the installed
+  shim's version, demo findings and uninstall. This tests Windows x64 packaging;
+  it neither publishes a release nor exercises live SARIF/cache services.
 - docs/installation.md documents every method and verification.
 
 ### Documentation and community files
