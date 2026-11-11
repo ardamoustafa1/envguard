@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/bmatcuk/doublestar/v4 v4.10.4
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/charmbracelet/x/term v0.2.1
+	github.com/charmbracelet/x/term v0.2.2
 	github.com/go-git/go-git/v5 v5.19.3
 	github.com/muesli/termenv v0.16.0
 	github.com/rogpeppe/go-internal v1.16.0
