@@ -81,12 +81,18 @@ func Find(root, explicit string) (string, error) {
 				File: displayPath(explicit), Message: "config path is a directory, expected a file",
 			}}}
 		}
+		if !info.Mode().IsRegular() {
+			return "", nonRegularConfig(explicit)
+		}
 		return explicit, nil
 	}
 	var found []string
 	for _, name := range fileNames {
 		p := filepath.Join(root, name)
 		if info, err := os.Stat(p); err == nil && !info.IsDir() {
+			if !info.Mode().IsRegular() {
+				return "", nonRegularConfig(p)
+			}
 			found = append(found, p)
 		}
 	}
@@ -105,6 +111,10 @@ func Find(root, explicit string) (string, error) {
 
 // LoadFile reads, strictly decodes and validates a config file.
 func LoadFile(path string) (*File, error) {
+	// Check before opening: opening a FIFO can wait forever for a writer.
+	if info, err := os.Stat(path); err == nil && !info.Mode().IsRegular() {
+		return nil, nonRegularConfig(path)
+	}
 	f, err := os.Open(path) // #nosec G304 -- reading the user's chosen config file is the point
 	if err != nil {
 		return nil, &Error{File: displayPath(path), Problems: []Problem{{File: displayPath(path), Message: "cannot read config file: " + errText(err)}}}
@@ -118,6 +128,11 @@ func LoadFile(path string) (*File, error) {
 		return nil, &Error{File: displayPath(path), Problems: []Problem{{File: displayPath(path), Message: "config file is larger than 1 MiB"}}}
 	}
 	return Parse(data, displayPath(path))
+}
+
+func nonRegularConfig(path string) *Error {
+	name := displayPath(path)
+	return &Error{File: name, Problems: []Problem{{File: name, Message: "config path is not a regular file"}}}
 }
 
 // Parse strictly decodes and validates config data. name is used in messages.

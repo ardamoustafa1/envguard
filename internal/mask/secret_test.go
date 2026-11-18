@@ -75,6 +75,7 @@ func TestNotSecrets(t *testing.T) {
 		{"DATABASE_URL", "postgres://postgres:postgres@localhost:5432/app"},
 		{"DATABASE_URL", "postgres://user:password@db:5432/app"},
 		{"DATABASE_URL", "postgres://localhost/app"},
+		{"DATABASE_URL", "postgres://u:p@db/x"}, // one-character password: a placeholder
 		{"REDIS_URL", "redis://127.0.0.1:6379"},
 		{"PORT", "8080"},
 		{"LOG_LEVEL", "debug"},

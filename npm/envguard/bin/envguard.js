@@ -28,7 +28,7 @@ function binaryPath() {
     fail(
       `unsupported platform ${key}. Prebuilt binaries exist for: ${Object.keys(PLATFORM_PACKAGES).join(", ")}.\n` +
         "Install EnvGuard another way (Homebrew, go install, Docker, install.sh): " +
-        "https://github.com/YOUR_GITHUB_USER/envguard/blob/main/docs/installation.md"
+        "https://github.com/ardamoustafa1/envguard/blob/main/docs/installation.md"
     );
   }
   const exe = process.platform === "win32" ? "envguard.exe" : "envguard";
