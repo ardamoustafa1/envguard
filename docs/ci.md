@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ardamoustafa1/envguard@v1
+      - uses: ardamoustafa1/envguard@v0.1.0
 ```
 
 The action downloads the release binary, verifies its SHA-256 checksum, caches
@@ -76,7 +76,7 @@ it and runs `envguard --root <working-directory> <args>`.
 
 | Input | Default | Meaning |
 |---|---|---|
-| `version` | `latest` | Version to install: `1.2.3`, `v1.2.3` or `latest`. |
+| `version` | `latest` | Version to install: `0.1.0`, `v0.1.0` or `latest`. |
 | `args` | `check` | Arguments for envguard, split on whitespace (never evaluated), for example `check --env production` or `doctor`. |
 | `working-directory` | `.` | Directory to analyze, passed as `--root`. |
 | `fail-on` | `error` | Threshold appended to `check` and `doctor`. An explicit `--fail-on` in `args` wins. Empty keeps the command default. |
@@ -89,9 +89,9 @@ Outputs: `version` (the installed version) and `sarif-file` (its path, when
 Pin `version` for reproducible builds:
 
 ```yaml
-      - uses: ardamoustafa1/envguard@v1
+      - uses: ardamoustafa1/envguard@v0.1.0
         with:
-          version: 1.2.3
+          version: 0.1.0
           args: check --env production,staging
           fail-on: warning
           working-directory: apps/api
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ardamoustafa1/envguard@v1
+      - uses: ardamoustafa1/envguard@v0.1.0
         with:
           sarif: true
 ```
@@ -127,7 +127,7 @@ read-only, so the SARIF upload fails with a permissions error. Either enable
 SARIF only for non-fork runs:
 
 ```yaml
-      - uses: ardamoustafa1/envguard@v1
+      - uses: ardamoustafa1/envguard@v0.1.0
         with:
           sarif: ${{ github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'push' }}
 ```
@@ -178,7 +178,7 @@ distroless and has no shell, and GitLab runs `script:` lines through one. If
 you build your own CI image, copy the binary into it instead:
 
 ```dockerfile
-COPY --from=ghcr.io/ardamoustafa1/envguard:1.2.3 /usr/local/bin/envguard /usr/local/bin/envguard
+COPY --from=ghcr.io/ardamoustafa1/envguard:0.1.0 /usr/local/bin/envguard /usr/local/bin/envguard
 ```
 
 ## CircleCI
@@ -245,7 +245,7 @@ Fail a container early when configuration is missing:
 
 ```dockerfile
 FROM node:22-slim
-COPY --from=ghcr.io/ardamoustafa1/envguard:1.2.3 /usr/local/bin/envguard /usr/local/bin/envguard
+COPY --from=ghcr.io/ardamoustafa1/envguard:0.1.0 /usr/local/bin/envguard /usr/local/bin/envguard
 WORKDIR /app
 COPY . .
 # The templates (.env.example, .env.production.example) and .envguard.yaml
@@ -269,7 +269,7 @@ metadata:
 spec:
   initContainers:
     - name: envguard
-      image: ghcr.io/ardamoustafa1/envguard:1.2.3
+      image: ghcr.io/ardamoustafa1/envguard:0.1.0
       workingDir: /config
       args: ["check", "--process-env", "--env", "production"]
       envFrom:

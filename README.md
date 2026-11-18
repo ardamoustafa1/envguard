@@ -11,7 +11,6 @@
   <a href="https://github.com/ardamoustafa1/envguard/releases/latest"><img src="https://img.shields.io/github/v/release/ardamoustafa1/envguard" alt="Release"></a>
   <a href="https://goreportcard.com/report/github.com/ardamoustafa1/envguard"><img src="https://goreportcard.com/badge/github.com/ardamoustafa1/envguard" alt="Go Report Card"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/ardamoustafa1/envguard" alt="License: MIT"></a>
-  <a href="https://www.npmjs.com/package/envguard-cli"><img src="https://img.shields.io/npm/v/envguard-cli?label=npm" alt="npm"></a>
 </p>
 
 <p align="center">
@@ -21,20 +20,16 @@
 ## Try it in 10 seconds
 
 ```bash
-npx envguard-cli                                                    # no install
-brew install ardamoustafa1/tap/envguard                          # macOS, Linux
-go install github.com/ardamoustafa1/envguard/cmd/envguard@latest
-docker run --rm -v "$PWD:/repo" ghcr.io/ardamoustafa1/envguard check
+go install github.com/ardamoustafa1/envguard/cmd/envguard@v0.1.0
+envguard check
 ```
 
 Run it in any repository. It needs no config, makes no network calls and
-never changes your files. Plain `envguard` prints a health report;
+never changes your files when checking. Plain `envguard` prints a health report;
 `envguard check` is the short, CI-friendly version that exits `1` on errors.
 
-> The npm package is called `envguard-cli` because the name `envguard` is not
-> available. The command it installs is still `envguard`. More ways to
-> install (Scoop, deb/rpm/apk, install script, checksums and signatures):
-> [docs/installation.md](docs/installation.md).
+For a prebuilt binary, see the [releases page](https://github.com/ardamoustafa1/envguard/releases)
+and the [installation guide](docs/installation.md).
 
 ## What it catches
 
@@ -235,10 +230,8 @@ step fails on errors:
 ```yaml
 steps:
   - uses: actions/checkout@v5
-  - uses: ardamoustafa1/envguard@v1
+  - uses: ardamoustafa1/envguard@v0.1.0
 ```
-
-> Screenshot placeholder: pull request annotations (`docs/images/pr-annotations.png`).
 
 Inputs for a version pin, `--env`, `fail-on` and a SARIF upload to code
 scanning are in [docs/ci.md](docs/ci.md), together with GitLab CI and CircleCI.

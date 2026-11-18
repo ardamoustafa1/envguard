@@ -2,7 +2,7 @@
 #
 #   repos:
 #     - repo: https://github.com/ardamoustafa1/envguard
-#       rev: v1.2.3
+#       rev: v0.1.0
 #       hooks:
 #         - id: envguard
 #

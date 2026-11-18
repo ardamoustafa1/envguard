@@ -2,11 +2,11 @@ name: release
 
 # Push a tag like v1.2.3 to release. GoReleaser builds and publishes the
 # archives, checksums (signed keylessly with cosign), SBOMs, deb/rpm/apk,
-# the Docker image on ghcr.io, the Homebrew cask and the Scoop manifest;
-# the npm job then publishes the npm packages with provenance.
+# and the Docker image on ghcr.io. Homebrew, Scoop and npm uploads require
+# their own credentials.
 on:
   push:
-    tags: ["v*"]
+    tags: ["v[0-9]+.[0-9]+.[0-9]+*"]
 
 # Nothing by default; each job asks for exactly what it needs.
 permissions: {}
@@ -51,8 +51,8 @@ jobs:
           # Fine-grained PATs with contents: write on the tap / bucket repos.
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
           SCOOP_BUCKET_GITHUB_TOKEN: ${{ secrets.SCOOP_BUCKET_GITHUB_TOKEN }}
-      - name: Move the major tag for the GitHub Action (v1 → this release)
-        if: ${{ !contains(github.ref_name, '-') }}
+      - name: Update the stable major tag for the GitHub Action
+        if: ${{ !startsWith(github.ref_name, 'v0.') && !contains(github.ref_name, '-') }}
         env:
           TAG: ${{ github.ref_name }}
         run: |
@@ -98,6 +98,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set -euo pipefail
+          if [ -z "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "::notice::NPM_TOKEN is not configured; the npm packages were built but not published."
+            exit 0
+          fi
           while read -r pkg; do
             [ -n "$pkg" ] || continue
             version=$(node -p "require('./dist/npm/$pkg/package.json').version")
@@ -109,3 +113,31 @@ jobs:
             fi
             (cd "dist/npm/$pkg" && npm publish --provenance --access public --tag "$tag")
           done < dist/npm/publish-order.txt
+
+  install:
+    name: Test published install (${{ matrix.os }})
+    needs: goreleaser
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install from the published release and run the CLI
+        id: envguard
+        uses: ./
+        with:
+          version: ${{ github.ref_name }}
+          args: version
+      - name: Check the installed version
+        shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
+          RESOLVED_VERSION: ${{ steps.envguard.outputs.version }}
+        run: |
+          set -euo pipefail
+          test "$RESOLVED_VERSION" = "${TAG#v}"
+          envguard version | grep -F "envguard $RESOLVED_VERSION"

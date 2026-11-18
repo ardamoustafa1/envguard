@@ -87,7 +87,9 @@ func Entropy(s string) float64 {
 
 // urlHasRealPassword reports a URL whose password is not a placeholder, not
 // equal to the user name and not on a local host (local development
-// credentials such as postgres:postgres@localhost are not secrets).
+// credentials such as postgres:postgres@localhost are not secrets). A
+// password shorter than minURLPassword (`u:p@db`) is a placeholder in
+// practice: nobody deploys a one-to-three character password.
 func urlHasRealPassword(v string) bool {
 	if !strings.Contains(v, "://") {
 		return false
@@ -97,8 +99,10 @@ func urlHasRealPassword(v string) bool {
 		return false
 	}
 	pw, ok := u.User.Password()
-	return ok && pw != "" && pw != u.User.Username() && !IsPlaceholder("", pw)
+	return ok && len(pw) >= minURLPassword && pw != u.User.Username() && !IsPlaceholder("", pw)
 }
+
+const minURLPassword = 4
 
 var (
 	placeholderExact = map[string]bool{

@@ -121,6 +121,7 @@ homebrew_casks:
       owner: ardamoustafa1
       name: homebrew-tap
       token: "{{ envOrDefault \"HOMEBREW_TAP_GITHUB_TOKEN\" \"\" }}"
+    skip_upload: '{{ eq (envOrDefault "HOMEBREW_TAP_GITHUB_TOKEN" "") "" }}'
     directory: Casks
     homepage: https://github.com/ardamoustafa1/envguard
     description: Catch environment-variable and configuration mistakes before you deploy
@@ -144,6 +145,7 @@ scoops:
       owner: ardamoustafa1
       name: scoop-bucket
       token: "{{ envOrDefault \"SCOOP_BUCKET_GITHUB_TOKEN\" \"\" }}"
+    skip_upload: '{{ eq (envOrDefault "SCOOP_BUCKET_GITHUB_TOKEN" "") "" }}'
     homepage: https://github.com/ardamoustafa1/envguard
     description: Catch environment-variable and configuration mistakes before you deploy.
     license: MIT
