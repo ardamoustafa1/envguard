@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-11-04
+- Added a user-level EnvGuard skill for Codex and Claude Code.
+- Refreshed the README and added dedicated logo variants for light and dark themes.
+
+## [0.1.0] - 2026-11-18
 
 First release.
 
@@ -30,9 +33,10 @@ First release.
 - Secret detection for templates and tracked files. Values are masked in all
   output.
 - Distribution: GoReleaser archives for Linux, macOS and Windows (amd64 and
-  arm64) with signed checksums and SBOMs, the `envguard-cli` npm package,
-  a multi-arch Docker image, a Homebrew cask, a Scoop manifest, deb, rpm and
-  apk packages, `install.sh`, a GitHub Action and a pre-commit hook.
+  arm64) with signed checksums and SBOMs, a multi-arch Docker image, deb, rpm
+  and apk packages, `install.sh`, a GitHub Action and a pre-commit hook.
+  Release tooling also builds npm packages, a Homebrew cask and a Scoop
+  manifest.
 - Leak canary, offline and determinism tests that enforce the core
   principles.
 

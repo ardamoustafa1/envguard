@@ -1,11 +1,14 @@
 <p align="center">
-  <img src="docs/logo.svg" alt="EnvGuard" width="300">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg">
+    <img src="docs/logo.svg" alt="EnvGuard" width="320" height="77">
+  </picture>
 </p>
 
-<h1 align="center">Catch missing environment variables before deploy</h1>
+<h1 align="center">Catch missing environment variables before deployment</h1>
 
 <p align="center">
-  EnvGuard checks that your code, <code>.env</code> files, Docker Compose, and GitHub Actions agree on which variables your app needs.
+  Check that your code, <code>.env</code> files, Docker Compose, and GitHub Actions agree on which variables your app needs.
 </p>
 
 <p align="center">
@@ -27,6 +30,7 @@
 for macOS, Linux, or Windows and put it on your `PATH`. Then run this in your project:
 
 ```sh
+envguard version
 envguard check
 ```
 
@@ -34,6 +38,12 @@ If you have Go 1.26 or newer, you can install with
 `go install github.com/ardamoustafa1/envguard/cmd/envguard@v0.1.0`.
 See the [installation guide](docs/installation.md) for Docker, Linux packages,
 and signature verification.
+
+| Where you work | How to use EnvGuard |
+|---|---|
+| Terminal | Run `envguard check` in a project. |
+| Codex or Claude Code | [Install the skill once](#codex-and-claude-code) for all your local projects. |
+| Pull requests | [Add a GitHub Actions step](#github-actions) to check every change. |
 
 ## Codex and Claude Code
 
@@ -81,7 +91,6 @@ $ envguard check --env production
 .env.production
         ✗ error    EG001  STRIPE_SECRET_KEY is declared in .env.production.example but missing from .env.production
 ```
-
 
 | Problem | What EnvGuard checks |
 |---|---|
@@ -242,3 +251,4 @@ Start with the [contributor guide](CONTRIBUTING.md) or
 [security policy](SECURITY.md) for private vulnerability reporting.
 
 EnvGuard is open source under the [MIT license](LICENSE).
+[Browse the changelog](CHANGELOG.md) or [report an issue](https://github.com/ardamoustafa1/envguard/issues/new/choose).
